@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\BotFeedback;
 use App\Models\Complaint;
 use App\Models\Conversation;
+use App\Models\DataRequest;
 use App\Models\KnowledgeArticle;
 use App\Models\Message;
+use App\Models\Reservation;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
@@ -94,6 +96,8 @@ class DashboardController extends Controller
             'complaints_new' => Complaint::where('status', 'new')->count(),
             'complaints_processing' => Complaint::where('status', 'processing')->count(),
             'complaints_resolved' => Complaint::where('status', 'resolved')->count(),
+            'reservations_pending' => Reservation::where('status', 'pending')->count(),
+            'data_requests_new' => DataRequest::where('status', 'submitted')->count(),
             'total_articles' => KnowledgeArticle::where('is_active', true)->count(),
             'total_messages' => Message::count(),
         ];

@@ -108,11 +108,19 @@
                     <textarea id="public-chat-input"
                               rows="1"
                               maxlength="1000"
-                              placeholder="Ketik pertanyaan Anda seputar data statistik Karanganyar..."
+                              placeholder="Ketik pertanyaan Anda atau tekan ikon mikrofon untuk berbicara..."
                               class="w-full px-4 py-3 pr-14 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-all shadow-sm leading-relaxed"
                               style="max-height: 120px;"></textarea>
                     <span id="chat-char-counter" class="absolute bottom-3 right-3 text-[10px] text-slate-400 font-mono">0/1000</span>
                 </div>
+
+                {{-- Microphone Voice Input Button --}}
+                <button type="button" id="voice-input-btn" onclick="toggleVoiceRecording()" title="Bicara dengan Suara (Voice-to-Text)"
+                        class="h-12 w-12 rounded-2xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 border border-slate-300 flex items-center justify-center transition-all shrink-0 cursor-pointer relative group">
+                    <span id="voice-mic-icon" class="iconify text-xl group-hover:scale-110 transition-transform" data-icon="lucide:mic"></span>
+                    <span id="voice-pulse-ring" class="hidden absolute inset-0 rounded-2xl border-2 border-rose-500 animate-ping"></span>
+                </button>
+
                 <button type="submit" id="public-send-btn"
                         class="h-12 w-12 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white flex items-center justify-center transition-all shrink-0 shadow-lg shadow-blue-600/30 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         disabled>
@@ -326,6 +334,9 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
             `;
         }
 
+        // Clean text content for text-to-speech
+        const rawContentSafe = escapeHtml(content).replace(/'/g, "\\'");
+
         wrapper.innerHTML = `
             <div class="flex gap-3 max-w-2xl">
                 <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm p-1 mt-0.5">
@@ -333,6 +344,13 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
                 </div>
                 <div class="min-w-0">
                     <div class="bg-white border border-slate-200/90 rounded-3xl rounded-tl-sm p-4 sm:p-5 shadow-sm">
+                        <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+                            <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider">Asisten Statistik Terpadu</span>
+                            <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
+                                <span class="iconify text-sm" data-icon="lucide:volume-2"></span>
+                                <span>Dengarkan</span>
+                            </button>
+                        </div>
                         <div class="text-xs sm:text-sm text-slate-800 leading-relaxed">${formatBotContent(content)}</div>
                         ${sourcesHtml}
                         ${quickChipsHtml}
@@ -346,6 +364,147 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
 
     messagesArea.appendChild(wrapper);
     scrollToBottom();
+}
+
+// -------------------------------------------------------------
+// VOICE INPUT (SPEECH-TO-TEXT) USING WEB SPEECH API
+// -------------------------------------------------------------
+let recognition = null;
+let isRecording = false;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'id-ID'; // Bahasa Indonesia
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onstart = function() {
+        isRecording = true;
+        const micIcon = document.getElementById('voice-mic-icon');
+        const pulseRing = document.getElementById('voice-pulse-ring');
+        const voiceBtn = document.getElementById('voice-input-btn');
+        if (pulseRing) pulseRing.classList.remove('hidden');
+        if (voiceBtn) voiceBtn.className = 'h-12 w-12 rounded-2xl bg-rose-50 text-rose-600 border border-rose-400 flex items-center justify-center transition-all shrink-0 cursor-pointer relative';
+        if (micIcon) micIcon.setAttribute('data-icon', 'lucide:mic-off');
+        chatInput.placeholder = 'Sedang mendengarkan suara Anda... (Bicaralah sekarang)';
+    };
+
+    recognition.onresult = function(event) {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            transcript += event.results[i][0].transcript;
+        }
+        chatInput.value = transcript;
+        chatInput.dispatchEvent(new Event('input'));
+    };
+
+    recognition.onerror = function(event) {
+        console.warn('Speech recognition error:', event.error);
+        stopVoiceRecording();
+    };
+
+    recognition.onend = function() {
+        stopVoiceRecording();
+    };
+}
+
+function toggleVoiceRecording() {
+    if (!recognition) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Fitur Mikrofon',
+            text: 'Browser Anda belum mendukung Web Speech Recognition. Disarankan menggunakan Google Chrome atau Microsoft Edge terbaru.',
+            confirmButtonColor: '#2563eb'
+        });
+        return;
+    }
+
+    if (isRecording) {
+        recognition.stop();
+    } else {
+        try {
+            recognition.start();
+        } catch (e) {
+            console.warn(e);
+        }
+    }
+}
+
+function stopVoiceRecording() {
+    isRecording = false;
+    const micIcon = document.getElementById('voice-mic-icon');
+    const pulseRing = document.getElementById('voice-pulse-ring');
+    const voiceBtn = document.getElementById('voice-input-btn');
+    if (pulseRing) pulseRing.classList.add('hidden');
+    if (voiceBtn) voiceBtn.className = 'h-12 w-12 rounded-2xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 border border-slate-300 flex items-center justify-center transition-all shrink-0 cursor-pointer relative group';
+    if (micIcon) micIcon.setAttribute('data-icon', 'lucide:mic');
+    chatInput.placeholder = 'Ketik pertanyaan Anda atau tekan ikon mikrofon untuk berbicara...';
+}
+
+// -------------------------------------------------------------
+// TEXT-TO-SPEECH (SPEECH SYNTHESIS)
+// -------------------------------------------------------------
+let currentUtterance = null;
+let activeSpeakerBtn = null;
+
+function speakText(rawText, btnElement) {
+    if (!('speechSynthesis' in window)) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Fitur Suara',
+            text: 'Perangkat atau browser Anda belum mendukung sintesis suara (Text-to-Speech).',
+            confirmButtonColor: '#2563eb'
+        });
+        return;
+    }
+
+    // If currently speaking this message, stop it
+    if (window.speechSynthesis.speaking && activeSpeakerBtn === btnElement) {
+        window.speechSynthesis.cancel();
+        resetSpeakerButton(btnElement);
+        return;
+    }
+
+    // Cancel any previous speech
+    window.speechSynthesis.cancel();
+    if (activeSpeakerBtn) {
+        resetSpeakerButton(activeSpeakerBtn);
+    }
+
+    // Clean Markdown tags, HTML tags, and asterisks for smooth speaking
+    let cleanText = rawText
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\*\*/g, '')
+        .replace(/\*/g, '')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/[•\-_]/g, ' ')
+        .trim();
+
+    currentUtterance = new SpeechSynthesisUtterance(cleanText);
+    currentUtterance.lang = 'id-ID';
+    currentUtterance.rate = 1.0;
+    currentUtterance.pitch = 1.0;
+
+    btnElement.innerHTML = `<span class="iconify text-sm text-rose-600 animate-pulse" data-icon="lucide:square"></span> <span class="text-rose-600">Berhenti</span>`;
+    activeSpeakerBtn = btnElement;
+
+    currentUtterance.onend = function() {
+        resetSpeakerButton(btnElement);
+    };
+
+    currentUtterance.onerror = function() {
+        resetSpeakerButton(btnElement);
+    };
+
+    window.speechSynthesis.speak(currentUtterance);
+}
+
+function resetSpeakerButton(btn) {
+    if (btn) {
+        btn.innerHTML = `<span class="iconify text-sm" data-icon="lucide:volume-2"></span> <span>Dengarkan</span>`;
+    }
+    activeSpeakerBtn = null;
 }
 
 function sendQuickMessage(text) {

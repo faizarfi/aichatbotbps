@@ -203,25 +203,31 @@
             @php
             $services = [
                 [
-                    'icon' => 'lucide:file-bar-chart-2',
-                    'title' => 'Permintaan Data Statistik',
-                    'desc' => 'Dapatkan data statistik dasar & sektoral untuk keperluan riset, skripsi, akademik, instansi pemerintah, dan swasta secara gratis.',
-                    'badge' => 'Gratis & Resmi',
+                    'icon' => 'lucide:map-pin',
+                    'title' => 'Peta 17 Kecamatan Karanganyar',
+                    'desc' => 'Eksplorasi data statistik kependudukan, luas wilayah, kepadatan, dan sektor unggulan di setiap kecamatan se-Kabupaten Karanganyar.',
+                    'badge' => 'Peta Tematik',
+                    'icon_color' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
+                    'url' => route('districts.index'),
+                    'action' => 'Jelajahi Peta Wilayah',
+                ],
+                [
+                    'icon' => 'lucide:calendar-clock',
+                    'title' => 'Reservasi Tatap Muka PST',
+                    'desc' => 'Jadwalkan kunjungan tatap muka langsung ke ruang PST Kantor BPS Karanganyar dengan tiket reservasi digital ber-QR Code.',
+                    'badge' => 'Tiket Digital',
                     'icon_color' => 'bg-blue-50 text-blue-700 border-blue-200',
+                    'url' => route('reservasi.create'),
+                    'action' => 'Booking Jadwal Konsultasi',
                 ],
                 [
-                    'icon' => 'lucide:book-open-check',
-                    'title' => 'Publikasi & Sensus Berkala',
-                    'desc' => 'Akses dan unduh publikasi resmi seperti Karanganyar Dalam Angka (KDA), Indikator Kesejahteraan, Sensus Pertanian, dan Ekonomi.',
-                    'badge' => 'Format PDF',
+                    'icon' => 'lucide:database',
+                    'title' => 'Permintaan Data & ROMANTIK',
+                    'desc' => 'Pengajuan permohonan data mikro, data sektoral, dan rekomendasi kegiatan statistik resmi dengan pelacak status real-time.',
+                    'badge' => 'Format Resmi',
                     'icon_color' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                ],
-                [
-                    'icon' => 'lucide:messages-square',
-                    'title' => 'Konsultasi Statistik (PST)',
-                    'desc' => 'Konsultasikan metodologi penelitian, definisi operasional indikator, rekomendasi survei (ROMANTIK), dan metadata statistik bersama ahli BPS.',
-                    'badge' => 'Bimbingan Ahli',
-                    'icon_color' => 'bg-purple-50 text-purple-700 border-purple-200',
+                    'url' => route('layanan-data.create'),
+                    'action' => 'Ajukan Permohonan Data',
                 ],
                 [
                     'icon' => 'lucide:bot',
@@ -229,6 +235,8 @@
                     'desc' => 'Tanyakan berbagai informasi statistik kapan saja tanpa antre. Dilengkapi fitur pengalihan langsung ke petugas bila butuh respon mendalam.',
                     'badge' => 'Online 24/7',
                     'icon_color' => 'bg-cyan-50 text-cyan-700 border-cyan-200',
+                    'url' => route('chat.index'),
+                    'action' => 'Mulai Konsultasi Bot',
                 ],
                 [
                     'icon' => 'lucide:ticket',
@@ -236,13 +244,17 @@
                     'desc' => 'Saluran aspirasi dan pengaduan pelayanan publik transparan dengan nomor tiket unik serta pemantauan status tindak lanjut berkala.',
                     'badge' => 'Resmi & Berkode',
                     'icon_color' => 'bg-rose-50 text-rose-700 border-rose-200',
+                    'url' => route('aduan.create'),
+                    'action' => 'Buat Laporan Aduan',
                 ],
                 [
-                    'icon' => 'lucide:clock-4',
-                    'title' => 'Jadwal PST & Tatap Muka',
-                    'desc' => 'Layanan langsung di Kantor BPS Karanganyar buka Senin–Jumat (08.00–15.30 WIB). Ruang pelayanan nyaman, ramah disabilitas, dan ber-AC.',
-                    'badge' => 'Layanan Kantor',
+                    'icon' => 'lucide:search',
+                    'title' => 'Pelacak Status Layanan',
+                    'desc' => 'Cek status tindak lanjut tiket aduan masyarakat, kode reservasi kunjungan, maupun permohonan data mikro Anda kapan saja.',
+                    'badge' => 'Lacak Mandiri',
                     'icon_color' => 'bg-amber-50 text-amber-700 border-amber-200',
+                    'url' => route('status-aduan'),
+                    'action' => 'Cek Status Tiket',
                 ],
             ];
             @endphp
@@ -266,8 +278,8 @@
                     </p>
                 </div>
                 <div class="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between">
-                    <a href="{{ route('chat.index') }}" class="text-xs font-extrabold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 group-hover:gap-2 transition-all">
-                        <span>Tanyakan ke Asisten</span>
+                    <a href="{{ $svc['url'] }}" class="text-xs font-extrabold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 group-hover:gap-2 transition-all">
+                        <span>{{ $svc['action'] }}</span>
                         <span class="iconify" data-icon="lucide:arrow-right"></span>
                     </a>
                 </div>

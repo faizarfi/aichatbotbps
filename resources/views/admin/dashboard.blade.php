@@ -33,77 +33,82 @@
     </div>
 
     {{-- Live Statistics Grid --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {{-- Percakapan Hari Ini --}}
-        <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md transition-all">
-            <div class="flex items-center justify-between mb-3">
+        <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-center justify-between mb-2.5">
                 <span class="text-xs font-semibold text-slate-400">Hari Ini</span>
-                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                    <span class="iconify text-lg" data-icon="lucide:messages-square"></span>
+                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <span class="iconify text-base" data-icon="lucide:messages-square"></span>
                 </div>
             </div>
             <p id="stat-conversations-today" class="text-2xl font-black text-slate-900">{{ $stats['conversations_today'] }}</p>
-            <p class="text-xs text-slate-500 mt-1">Percakapan masuk</p>
+            <p class="text-[11px] text-slate-500 mt-1">Chat Masuk</p>
         </div>
 
         {{-- Menunggu Petugas --}}
         <a href="{{ route('admin.conversations.index', ['status' => 'waiting']) }}"
-           class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:border-amber-300 transition-all group">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-amber-600">Perlu Tindakan</span>
-                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="iconify text-lg" data-icon="lucide:clock"></span>
+           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-amber-300 transition-all group">
+            <div class="flex items-center justify-between mb-2.5">
+                <span class="text-xs font-semibold text-amber-600">Antrean</span>
+                <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="iconify text-base" data-icon="lucide:clock"></span>
                 </div>
             </div>
             <p id="stat-conversations-waiting" class="text-2xl font-black text-amber-600">{{ $stats['conversations_waiting'] }}</p>
-            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                <span>Menunggu Petugas</span>
-                <span class="iconify text-slate-400" data-icon="lucide:chevron-right"></span>
-            </p>
+            <p class="text-[11px] text-slate-500 mt-1">Menunggu Petugas</p>
         </a>
 
         {{-- Aduan Baru --}}
         <a href="{{ route('admin.complaints.index', ['status' => 'new']) }}"
-           class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:border-rose-300 transition-all group">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-rose-600">Tiket Masuk</span>
-                <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="iconify text-lg" data-icon="lucide:ticket"></span>
+           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-rose-300 transition-all group">
+            <div class="flex items-center justify-between mb-2.5">
+                <span class="text-xs font-semibold text-rose-600">Tiket Aduan</span>
+                <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="iconify text-base" data-icon="lucide:ticket"></span>
                 </div>
             </div>
             <p id="stat-complaints-new" class="text-2xl font-black text-rose-600">{{ $stats['complaints_new'] }}</p>
-            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                <span>Aduan Belum Diproses</span>
-                <span class="iconify text-slate-400" data-icon="lucide:chevron-right"></span>
-            </p>
+            <p class="text-[11px] text-slate-500 mt-1">Aduan Baru</p>
         </a>
 
-        {{-- Aduan Diproses --}}
-        <div class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md transition-all">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-slate-400">Proses</span>
-                <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                    <span class="iconify text-lg" data-icon="lucide:loader-2"></span>
+        {{-- Reservasi Pending --}}
+        <a href="{{ route('admin.reservations.index', ['status' => 'pending']) }}"
+           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group">
+            <div class="flex items-center justify-between mb-2.5">
+                <span class="text-xs font-semibold text-blue-600">Reservasi</span>
+                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="iconify text-base" data-icon="lucide:calendar-clock"></span>
                 </div>
             </div>
-            <p id="stat-complaints-processing" class="text-2xl font-black text-slate-900">{{ $stats['complaints_processing'] }}</p>
-            <p class="text-xs text-slate-500 mt-1">Aduan sedang ditangani</p>
-        </div>
+            <p class="text-2xl font-black text-blue-700">{{ $stats['reservations_pending'] ?? 0 }}</p>
+            <p class="text-[11px] text-slate-500 mt-1">Jadwal PST Baru</p>
+        </a>
+
+        {{-- Permintaan Data --}}
+        <a href="{{ route('admin.data-requests.index', ['status' => 'submitted']) }}"
+           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all group">
+            <div class="flex items-center justify-between mb-2.5">
+                <span class="text-xs font-semibold text-emerald-600">Data Mikro</span>
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="iconify text-base" data-icon="lucide:database"></span>
+                </div>
+            </div>
+            <p class="text-2xl font-black text-emerald-700">{{ $stats['data_requests_new'] ?? 0 }}</p>
+            <p class="text-[11px] text-slate-500 mt-1">Permohonan Masuk</p>
+        </a>
 
         {{-- Basis Pengetahuan --}}
         <a href="{{ route('admin.articles.index') }}"
-           class="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all group">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-semibold text-emerald-600">Database</span>
-                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="iconify text-lg" data-icon="lucide:book-open"></span>
+           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-slate-300 transition-all group">
+            <div class="flex items-center justify-between mb-2.5">
+                <span class="text-xs font-semibold text-slate-500">Database</span>
+                <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span class="iconify text-base" data-icon="lucide:book-open"></span>
                 </div>
             </div>
             <p class="text-2xl font-black text-slate-900">{{ $stats['total_articles'] }}</p>
-            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                <span>Artikel Basis Data Aktif</span>
-                <span class="iconify text-slate-400" data-icon="lucide:chevron-right"></span>
-            </p>
+            <p class="text-[11px] text-slate-500 mt-1">Artikel FAQ Aktif</p>
         </a>
     </div>
 

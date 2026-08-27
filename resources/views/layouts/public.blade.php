@@ -37,19 +37,31 @@
                 </a>
 
                 {{-- Desktop Nav Menu --}}
-                <div class="hidden md:flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80">
-                    <a href="{{ route('home') }}" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl {{ request()->routeIs('home') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                <div class="hidden md:flex items-center gap-0.5 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80">
+                    <a href="{{ route('home') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('home') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
                         Beranda
                     </a>
-                    <a href="{{ route('chat.index') }}" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl {{ request()->routeIs('chat.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all flex items-center gap-1.5">
-                        <span class="iconify text-base text-blue-600" data-icon="lucide:message-square-text"></span>
-                        <span>Chatbot 24/7</span>
+                    <a href="{{ route('chat.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('chat.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all flex items-center gap-1">
+                        <span class="iconify text-sm text-blue-600" data-icon="lucide:message-square-text"></span>
+                        <span>Chatbot</span>
                     </a>
-                    <a href="{{ route('aduan.create') }}" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl {{ request()->routeIs('aduan.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                    <a href="{{ route('districts.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('districts.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                        Peta
+                    </a>
+                    <a href="{{ route('calculators.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('calculators.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                        Kalkulator
+                    </a>
+                    <a href="{{ route('reservasi.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('reservasi.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                        Reservasi
+                    </a>
+                    <a href="{{ route('layanan-data.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('layanan-data.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                        Data Mikro
+                    </a>
+                    <a href="{{ route('survei.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('survei.*') ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                        Survei SKM
+                    </a>
+                    <a href="{{ route('aduan.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('aduan.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
                         Aduan
-                    </a>
-                    <a href="{{ route('status-aduan') }}" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl {{ request()->routeIs('status-aduan') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
-                        Cek Status
                     </a>
                 </div>
 
@@ -115,11 +127,26 @@
                 <span class="iconify text-base text-blue-600" data-icon="lucide:bot"></span>
                 <span>Chatbot Statistik 24 Jam</span>
             </a>
+            <a href="{{ route('districts.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('districts.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+                Peta 17 Kecamatan
+            </a>
+            <a href="{{ route('calculators.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('calculators.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+                Kalkulator Statistik Interaktif
+            </a>
+            <a href="{{ route('reservasi.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('reservasi.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+                Reservasi Tatap Muka PST
+            </a>
+            <a href="{{ route('layanan-data.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('layanan-data.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+                Permintaan Data & ROMANTIK
+            </a>
+            <a href="{{ route('survei.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('survei.*') ? 'bg-amber-50 text-amber-700' : 'text-slate-700 hover:bg-slate-50' }}">
+                Survei Kepuasan Masyarakat (SKM)
+            </a>
             <a href="{{ route('aduan.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('aduan.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
                 Pengaduan Layanan
             </a>
             <a href="{{ route('status-aduan') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('status-aduan') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
-                Lacak Status Tiket
+                Lacak Status Tiket Aduan
             </a>
 
             <div class="pt-3 border-t border-slate-100 space-y-2">

@@ -61,6 +61,24 @@
                         <span id="badge-complaints" class="hidden px-2 py-0.5 text-[10px] font-black rounded-full bg-rose-100 text-rose-800 border border-rose-300">0</span>
                     </a>
 
+                    {{-- Reservasi Tatap Muka PST --}}
+                    <a href="{{ route('admin.reservations.index') }}"
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.reservations*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="iconify text-lg {{ request()->routeIs('admin.reservations*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:calendar-clock"></span>
+                            <span>Reservasi PST</span>
+                        </div>
+                    </a>
+
+                    {{-- Permintaan Data & ROMANTIK --}}
+                    <a href="{{ route('admin.data-requests.index') }}"
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.data-requests*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="iconify text-lg {{ request()->routeIs('admin.data-requests*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:database"></span>
+                            <span>Permintaan Data</span>
+                        </div>
+                    </a>
+
                     {{-- Laporan Rekapitulasi PDF --}}
                     <a href="{{ route('admin.reports.index') }}"
                        class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.reports*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
@@ -69,6 +87,15 @@
                             <span>Laporan PDF</span>
                         </div>
                         <span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-blue-100 text-blue-800">Cetak</span>
+                    </a>
+
+                    {{-- Survei Kepuasan Masyarakat (IKM) --}}
+                    <a href="{{ route('admin.surveys.index') }}"
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.surveys*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="iconify text-lg {{ request()->routeIs('admin.surveys*') ? 'text-amber-500' : 'text-slate-400' }}" data-icon="lucide:star"></span>
+                            <span>Survei IKM / SKM</span>
+                        </div>
                     </a>
 
                     {{-- Basis Pengetahuan Submenu --}}
