@@ -1,0 +1,111 @@
+<?php
+
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KnowledgeCategoryController;
+use App\Http\Controllers\Admin\KnowledgeArticleController;
+use App\Http\Controllers\Admin\ConversationController;
+use App\Http\Controllers\Admin\ComplaintController as AdminComplaintController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicChatController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Halaman Publik
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Chatbot Publik
+Route::get('/chat', [PublicChatController::class, 'index'])->name('chat.index');
+Route::get('/chat/messages', [PublicChatController::class, 'messages'])->name('chat.messages');
+Route::post('/chat/message', [PublicChatController::class, 'store'])
+    ->middleware('throttle:60,1')
+    ->name('chat.message');
+Route::post('/chat/request-officer', [PublicChatController::class, 'requestOfficer'])
+    ->middleware('throttle:15,1')
+    ->name('chat.request-officer');
+Route::post('/chat/feedback', [PublicChatController::class, 'feedback'])
+    ->middleware('throttle:30,1')
+    ->name('chat.feedback');
+
+// Layanan Aduan Publik
+Route::get('/aduan', [ComplaintController::class, 'create'])->name('aduan.create');
+Route::post('/aduan', [ComplaintController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('aduan.store');
+Route::get('/status-aduan', [ComplaintController::class, 'status'])
+    ->middleware('throttle:20,1')
+    ->name('status-aduan');
+
+// Kebijakan Privasi
+Route::get('/kebijakan-privasi', function () {
+    return view('kebijakan-privasi');
+})->name('kebijakan-privasi');
+
+/*
+|--------------------------------------------------------------------------
+| Autentikasi Laravel Breeze & Password Reset
+|--------------------------------------------------------------------------
+*/
+
+require __DIR__.'/auth.php';
+
+// Redirect alias /admin/login ke /login
+Route::get('/admin/login', function () {
+    return redirect()->route('login');
+})->name('admin.login');
+
+/*
+|--------------------------------------------------------------------------
+| Area Terproteksi Admin & Petugas BPS
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:admin,petugas'])->prefix('admin')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard/stats', [DashboardController::class, 'getLiveStats'])->name('admin.dashboard.stats');
+
+    // Profil Pengguna Breeze
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Basis Pengetahuan - Kategori
+    Route::resource('categories', KnowledgeCategoryController::class, ['as' => 'admin'])->except(['show']);
+
+    // Basis Pengetahuan - Artikel
+    Route::resource('articles', KnowledgeArticleController::class, ['as' => 'admin'])->except(['show']);
+    Route::patch('articles/{article}/toggle', [KnowledgeArticleController::class, 'toggleActive'])->name('admin.articles.toggle');
+
+    // Percakapan Live & Antrean
+    Route::get('/percakapan', [ConversationController::class, 'index'])->name('admin.conversations.index');
+    Route::get('/percakapan/{conversation}', [ConversationController::class, 'show'])->name('admin.conversations.show');
+    Route::get('/percakapan/{conversation}/messages', [ConversationController::class, 'getMessages'])->name('admin.conversations.messages');
+    Route::post('/percakapan/{conversation}/reply', [ConversationController::class, 'reply'])->name('admin.conversations.reply');
+    Route::post('/percakapan/{conversation}/takeover', [ConversationController::class, 'takeOver'])->name('admin.conversations.takeover');
+    Route::post('/percakapan/{conversation}/close', [ConversationController::class, 'close'])->name('admin.conversations.close');
+
+    // Pengelolaan Aduan
+    Route::get('/aduan', [AdminComplaintController::class, 'index'])->name('admin.complaints.index');
+    Route::get('/aduan/{complaint}', [AdminComplaintController::class, 'show'])->name('admin.complaints.show');
+    Route::post('/aduan/{complaint}/status', [AdminComplaintController::class, 'updateStatus'])->name('admin.complaints.status');
+    Route::get('/aduan/lampiran/{attachment}', [AdminComplaintController::class, 'downloadAttachment'])->name('admin.complaints.download');
+
+    // Laporan & Rekapitulasi PDF
+    Route::get('/laporan', [ReportController::class, 'index'])->name('admin.reports.index');
+    Route::get('/laporan/pdf', [ReportController::class, 'downloadPdf'])->name('admin.reports.pdf');
+    Route::get('/laporan/preview', [ReportController::class, 'previewPdf'])->name('admin.reports.preview');
+
+    // Pengelolaan Pengguna (Hanya Admin)
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('users', UserController::class, ['as' => 'admin'])->except(['show']);
+        Route::patch('users/{user}/toggle', [UserController::class, 'toggleActive'])->name('admin.users.toggle');
+    });
+});
