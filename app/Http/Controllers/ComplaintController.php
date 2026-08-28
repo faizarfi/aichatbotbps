@@ -50,6 +50,7 @@ class ComplaintController extends Controller
             // Simpan aduan
             $complaint = Complaint::create([
                 'ticket_number' => $ticketNumber,
+                'user_id' => auth()->id(),
                 'reporter_name' => $validated['reporter_name'],
                 'reporter_contact' => $validated['reporter_contact'],
                 'category' => $validated['category'],

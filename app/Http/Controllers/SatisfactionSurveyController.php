@@ -36,6 +36,7 @@ class SatisfactionSurveyController extends Controller
         $overall = round(($validated['quality_score'] + $validated['speed_score'] + $validated['friendliness_score'] + $validated['facility_score']) / 4, 2);
 
         $survey = SatisfactionSurvey::create([
+            'user_id' => auth()->id(),
             'respondent_name' => $validated['respondent_name'] ?: 'Masyarakat Umum (Anonim)',
             'respondent_email' => $validated['respondent_email'],
             'respondent_phone' => $validated['respondent_phone'],

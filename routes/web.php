@@ -15,6 +15,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DataRequestController;
 use App\Http\Controllers\DistrictStatisticController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicChatController;
 use App\Http\Controllers\ReservationController;
@@ -42,11 +43,13 @@ Route::post('/chat/feedback', [PublicChatController::class, 'feedback'])
     ->middleware('throttle:30,1')
     ->name('chat.feedback');
 
-// Layanan Aduan Publik
-Route::get('/aduan', [ComplaintController::class, 'create'])->name('aduan.create');
-Route::post('/aduan', [ComplaintController::class, 'store'])
-    ->middleware('throttle:10,1')
-    ->name('aduan.store');
+// Layanan Aduan (Wajib Login untuk Mengajukan)
+Route::middleware('auth')->group(function () {
+    Route::get('/aduan', [ComplaintController::class, 'create'])->name('aduan.create');
+    Route::post('/aduan', [ComplaintController::class, 'store'])
+        ->middleware('throttle:10,1')
+        ->name('aduan.store');
+});
 Route::get('/status-aduan', [ComplaintController::class, 'status'])
     ->middleware('throttle:20,1')
     ->name('status-aduan');
@@ -57,22 +60,35 @@ Route::get('/peta-statistik', [DistrictStatisticController::class, 'index'])->na
 // Kalkulator Statistik Interaktif
 Route::get('/kalkulator-statistik', [CalculatorController::class, 'index'])->name('calculators.index');
 
-// Reservasi Konsultasi Tatap Muka PST
-Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi.create');
-Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
+// Reservasi Konsultasi Tatap Muka PST (Wajib Login untuk Mengajukan)
+Route::middleware('auth')->group(function () {
+    Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi.create');
+    Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
+});
 Route::get('/reservasi/tiket/{code}', [ReservationController::class, 'ticket'])->name('reservasi.ticket');
 Route::get('/lacak-reservasi', [ReservationController::class, 'track'])->name('reservasi.track');
 
-// Permohonan Data Mikro & Rekomendasi Statistik (ROMANTIK)
-Route::get('/layanan-data', [DataRequestController::class, 'create'])->name('layanan-data.create');
-Route::post('/layanan-data', [DataRequestController::class, 'store'])->name('layanan-data.store');
+// Permohonan Data Mikro & Rekomendasi Statistik (Wajib Login untuk Mengajukan)
+Route::middleware('auth')->group(function () {
+    Route::get('/layanan-data', [DataRequestController::class, 'create'])->name('layanan-data.create');
+    Route::post('/layanan-data', [DataRequestController::class, 'store'])->name('layanan-data.store');
+});
 Route::get('/lacak-layanan-data', [DataRequestController::class, 'track'])->name('layanan-data.track');
 Route::get('/layanan-data/download/{dataRequest}', [DataRequestController::class, 'downloadResult'])->name('layanan-data.download');
 
-// Survei Kepuasan Masyarakat (SKM / IKPS)
-Route::get('/survei-kepuasan', [SatisfactionSurveyController::class, 'create'])->name('survei.create');
-Route::post('/survei-kepuasan', [SatisfactionSurveyController::class, 'store'])->name('survei.store');
+// Survei Kepuasan Masyarakat (Wajib Login untuk Mengisi)
+Route::middleware('auth')->group(function () {
+    Route::get('/survei-kepuasan', [SatisfactionSurveyController::class, 'create'])->name('survei.create');
+    Route::post('/survei-kepuasan', [SatisfactionSurveyController::class, 'store'])->name('survei.store');
+});
 Route::get('/survei-kepuasan/sukses/{survey}', [SatisfactionSurveyController::class, 'success'])->name('survei.success');
+
+// Profil Pengguna Masyarakat (Wajib Login)
+Route::middleware('auth')->group(function () {
+    Route::get('/profil-saya', [MyProfileController::class, 'show'])->name('my-profile.show');
+    Route::patch('/profil-saya', [MyProfileController::class, 'update'])->name('my-profile.update');
+    Route::delete('/profil-saya', [MyProfileController::class, 'destroy'])->name('my-profile.destroy');
+});
 
 // Kebijakan Privasi
 Route::get('/kebijakan-privasi', function () {

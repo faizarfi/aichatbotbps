@@ -12,6 +12,7 @@ class Reservation extends Model
 
     protected $fillable = [
         'booking_code',
+        'user_id',
         'visitor_name',
         'visitor_email',
         'visitor_phone',
@@ -30,6 +31,14 @@ class Reservation extends Model
         return [
             'reservation_date' => 'date',
         ];
+    }
+
+    /**
+     * Pengguna (masyarakat) yang mengajukan reservasi ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function assignedOfficer(): BelongsTo

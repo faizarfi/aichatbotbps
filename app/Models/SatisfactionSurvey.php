@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SatisfactionSurvey extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'respondent_name',
         'respondent_email',
         'respondent_phone',
@@ -32,6 +34,14 @@ class SatisfactionSurvey extends Model
             'facility_score' => 'integer',
             'overall_score' => 'decimal:2',
         ];
+    }
+
+    /**
+     * Pengguna (masyarakat) yang mengisi survei ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function getIkmScoreAttribute(): float

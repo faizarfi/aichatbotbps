@@ -50,6 +50,7 @@ class DataRequestController extends Controller
 
         $dataRequest = DataRequest::create([
             'ticket_number' => $ticketNumber,
+            'user_id' => auth()->id(),
             'applicant_name' => $validated['applicant_name'],
             'applicant_email' => $validated['applicant_email'],
             'applicant_phone' => $validated['applicant_phone'],

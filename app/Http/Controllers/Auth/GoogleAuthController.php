@@ -83,17 +83,16 @@ class GoogleAuthController extends Controller
 
         Auth::login($user, true);
 
-        // Hapus session URL intended agar tidak ada bekas redirect admin
-        session()->forget('url.intended');
-
         // Jika petugas/admin masuk via Google, arahkan ke dashboard admin
+        // (hapus intended URL agar staff tidak terjebak ke halaman layanan publik)
         if ($user->isStaff()) {
+            session()->forget('url.intended');
             return redirect()->route('admin.dashboard')
                 ->with('success', 'Selamat datang kembali di Panel Petugas BPS, ' . $user->name . '!');
         }
 
-        // Masyarakat umum / guest selalu diarahkan ke Beranda Publik
-        return redirect()->route('home')
+        // Masyarakat umum diarahkan ke halaman yang ingin diakses sebelum login
+        return redirect()->intended(route('home'))
             ->with('success', 'Selamat datang, ' . $user->name . '! Anda berhasil masuk menggunakan Akun Google.');
     }
 }

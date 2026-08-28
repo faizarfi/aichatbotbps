@@ -10,6 +10,7 @@ class Complaint extends Model
 {
     protected $fillable = [
         'ticket_number',
+        'user_id',
         'conversation_id',
         'category',
         'reporter_name',
@@ -27,6 +28,14 @@ class Complaint extends Model
             'reporter_contact' => 'encrypted',
             'resolved_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Pengguna (masyarakat) yang menyampaikan aduan ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

@@ -12,6 +12,7 @@ class DataRequest extends Model
 
     protected $fillable = [
         'ticket_number',
+        'user_id',
         'applicant_name',
         'applicant_email',
         'applicant_phone',
@@ -28,6 +29,14 @@ class DataRequest extends Model
         'officer_notes',
         'assigned_to',
     ];
+
+    /**
+     * Pengguna (masyarakat) yang mengajukan permohonan data ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function assignedOfficer(): BelongsTo
     {

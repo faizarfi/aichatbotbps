@@ -40,6 +40,7 @@ class ReservationController extends Controller
 
         $reservation = Reservation::create([
             'booking_code' => $bookingCode,
+            'user_id' => auth()->id(),
             'visitor_name' => $validated['visitor_name'],
             'visitor_email' => $validated['visitor_email'],
             'visitor_phone' => $validated['visitor_phone'],

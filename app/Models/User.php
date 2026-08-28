@@ -111,4 +111,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(Complaint::class, 'assigned_to');
     }
+
+    /**
+     * Reservasi yang diajukan oleh pengguna ini (masyarakat).
+     */
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    /**
+     * Permohonan data yang diajukan oleh pengguna ini (masyarakat).
+     */
+    public function dataRequests(): HasMany
+    {
+        return $this->hasMany(DataRequest::class);
+    }
+
+    /**
+     * Aduan yang disampaikan oleh pengguna ini (masyarakat).
+     */
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class);
+    }
+
+    /**
+     * Survei kepuasan yang diisi oleh pengguna ini (masyarakat).
+     */
+    public function surveys(): HasMany
+    {
+        return $this->hasMany(SatisfactionSurvey::class);
+    }
 }

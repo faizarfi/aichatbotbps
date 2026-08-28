@@ -22,15 +22,15 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between h-16 sm:h-20">
                 {{-- Brand Identity --}}
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group min-w-0 flex-1 sm:flex-initial mr-2 sm:mr-0">
                     <div class="relative shrink-0">
-                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS Karanganyar" class="w-10 h-10 sm:w-11 sm:h-11 object-contain group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS Karanganyar" class="w-8 h-8 sm:w-11 sm:h-11 object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
-                    <div>
-                        <span class="text-sm sm:text-base font-black text-slate-900 tracking-tight block leading-tight group-hover:text-blue-700 transition-colors">
+                    <div class="min-w-0">
+                        <span class="text-xs sm:text-base font-black text-slate-900 tracking-tight block leading-tight group-hover:text-blue-700 transition-colors truncate">
                             BPS Kabupaten Karanganyar
                         </span>
-                        <span class="text-[11px] font-bold text-blue-700 tracking-wide uppercase block">
+                        <span class="text-[9px] sm:text-[11px] font-bold text-blue-700 tracking-wide uppercase block truncate">
                             Pelayanan Statistik Terpadu
                         </span>
                     </div>
@@ -74,12 +74,16 @@
                                 <span>Dashboard Admin</span>
                             </a>
                         @else
-                            <div class="px-3 py-1.5 bg-slate-100 rounded-xl border border-slate-200 flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
-                                    {{ substr(auth()->user()->name, 0, 1) }}
-                                </div>
+                            <a href="{{ route('my-profile.show') }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 flex items-center gap-2 transition-all">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ auth()->user()->avatar }}" alt="" class="w-6 h-6 rounded-full object-cover" referrerpolicy="no-referrer">
+                                @else
+                                    <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                                        {{ substr(auth()->user()->name, 0, 1) }}
+                                    </div>
+                                @endif
                                 <span class="text-xs font-bold text-slate-800 max-w-[120px] truncate">{{ auth()->user()->name }}</span>
-                            </div>
+                            </a>
                         @endif
 
                         <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -107,11 +111,13 @@
                 </div>
 
                 {{-- Mobile Menu Button --}}
-                <div class="flex items-center md:hidden gap-2">
-                    <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1">
-                        <span class="iconify text-base" data-icon="lucide:bot"></span>
+                <div class="flex items-center md:hidden gap-1.5 shrink-0">
+                    @if(!request()->routeIs('chat.*'))
+                    <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Buka Chatbot">
+                        <span class="iconify text-lg" data-icon="lucide:bot"></span>
                     </a>
-                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200" aria-label="Menu">
+                    @endif
+                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer" aria-label="Menu">
                         <span class="iconify text-2xl" data-icon="lucide:menu"></span>
                     </button>
                 </div>
@@ -157,9 +163,10 @@
                             <span>Panel Admin ({{ auth()->user()->name }})</span>
                         </a>
                     @else
-                        <div class="p-2.5 bg-slate-100 rounded-xl text-center text-xs font-bold text-slate-800">
-                            👤 {{ auth()->user()->name }} (Pengguna)
-                        </div>
+                        <a href="{{ route('my-profile.show') }}" class="p-2.5 bg-slate-100 rounded-xl text-center text-xs font-bold text-slate-800 flex items-center justify-center gap-2 hover:bg-blue-50 hover:text-blue-700 transition-all">
+                            <span class="iconify text-base" data-icon="lucide:user-circle"></span>
+                            👤 {{ auth()->user()->name }} — Profil Saya
+                        </a>
                     @endif
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

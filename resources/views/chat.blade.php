@@ -4,37 +4,37 @@
 @section('meta_description', 'Konsultasikan data statistik resmi, informasi publikasi, jadwal PST, dan tata cara pengaduan BPS Kabupaten Karanganyar.')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-2 sm:px-6 py-4 sm:py-8">
+<div class="max-w-4xl mx-auto px-1.5 sm:px-6 py-2 sm:py-6">
     {{-- Chat Box Card --}}
-    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-slate-200/60 overflow-hidden flex flex-col h-[calc(100dvh-125px)] sm:h-[calc(100vh-175px)] min-h-[480px]">
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl sm:shadow-2xl shadow-slate-200/60 overflow-hidden flex flex-col h-[calc(100dvh-5rem)] sm:h-[calc(100vh-160px)] min-h-[480px]">
 
         {{-- Chat Header --}}
-        <div class="px-4 sm:px-6 py-3.5 sm:py-4.5 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 flex items-center justify-between text-white shadow-lg">
-            <div class="flex items-center gap-3 min-w-0">
+        <div class="px-3 sm:px-6 py-2.5 sm:py-4 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 flex items-center justify-between text-white shadow-lg gap-2">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                 <div class="relative shrink-0">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white p-1.5 flex items-center justify-center shadow-md">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white p-1 sm:p-1.5 flex items-center justify-center shadow-md">
                         <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
-                    <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
                 </div>
-                <div class="min-w-0">
-                    <div class="flex items-center gap-2">
-                        <h2 class="text-sm sm:text-base font-black text-white tracking-tight truncate">Asisten Statistik BPS</h2>
-                        <span id="chat-status-pill" class="shrink-0 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
+                        <h2 class="text-xs sm:text-base font-bold sm:font-black text-white tracking-tight leading-tight">Asisten Statistik</h2>
+                        <span id="chat-status-pill" class="shrink-0 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
                             Bot Aktif
                         </span>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-blue-200 truncate mt-0.5 font-medium">BPS Kabupaten Karanganyar • 24 Jam</p>
+                    <p class="text-[10px] sm:text-xs text-blue-200/90 truncate mt-0.5 font-medium">BPS Karanganyar • 24 Jam</p>
                 </div>
             </div>
 
             {{-- Actions --}}
-            <div class="flex items-center gap-2 shrink-0">
-                <button id="btn-request-officer" onclick="requestOfficerHandoff()" class="px-3 sm:px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-2 active:scale-95 shadow-sm" title="Hubungkan ke Petugas">
-                    <span class="iconify text-base text-cyan-300" data-icon="lucide:user-headset"></span>
+            <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+                <button id="btn-request-officer" onclick="requestOfficerHandoff()" class="p-2 sm:px-3.5 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer" title="Hubungkan ke Petugas">
+                    <span class="iconify text-base text-cyan-300" data-icon="lucide:headset"></span>
                     <span class="hidden sm:inline">Hubungi Petugas</span>
                 </button>
-                <button onclick="resetConversation()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95" title="Mulai Sesi Baru">
+                <button onclick="resetConversation()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer" title="Mulai Sesi Baru">
                     <span class="iconify text-base" data-icon="lucide:refresh-cw"></span>
                     <span class="hidden md:inline">Mulai Baru</span>
                 </button>
@@ -42,15 +42,15 @@
         </div>
 
         {{-- Messages Scroll Area --}}
-        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5 bg-gradient-to-b from-slate-50/80 to-slate-100/40">
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3.5 sm:space-y-5 bg-gradient-to-b from-slate-50/80 to-slate-100/40">
 
             {{-- Bot Welcome Bubble --}}
-            <div class="flex gap-3 max-w-2xl">
-                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm p-1 mt-0.5">
+            <div class="flex gap-2 sm:gap-3 max-w-2xl">
+                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm p-1 mt-0.5">
                     <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                 </div>
                 <div class="min-w-0 space-y-1">
-                    <div class="bg-white border border-slate-200/90 rounded-3xl rounded-tl-sm p-4 sm:p-5 shadow-sm text-slate-800 space-y-3">
+                    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-sm text-slate-800 space-y-2.5 sm:space-y-3">
                         <p class="text-xs sm:text-sm leading-relaxed">
                             Halo! Selamat datang di <strong>Layanan Informasi BPS Kabupaten Karanganyar</strong>.
                         </p>
@@ -58,27 +58,27 @@
                             Saya dapat membantu Anda mencari informasi publikasi resmi (seperti <em>Karanganyar Dalam Angka</em>), data kependudukan, angka kemiskinan, PDRB, jadwal konsultasi Pelayanan Statistik Terpadu (PST), hingga pengaduan layanan.
                         </p>
                     </div>
-                    <span class="text-[10px] text-slate-400 font-semibold ml-2 block">Asisten AI • BPS Karanganyar</span>
+                    <span class="text-[10px] text-slate-400 font-semibold ml-1.5 block">Asisten AI • BPS Karanganyar</span>
                 </div>
             </div>
 
             {{-- Quick Topic Chips --}}
-            <div id="quick-questions-wrapper" class="ml-11 sm:ml-12 pt-1 space-y-2">
-                <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Topik Populer Cepat:</p>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="sendQuickMessage('Cara memperoleh data statistik BPS Karanganyar')" class="px-3.5 py-2 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-1.5 active:scale-98">
+            <div id="quick-questions-wrapper" class="ml-0 sm:ml-12 pt-1 space-y-2">
+                <p class="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Topik Populer Cepat:</p>
+                <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                    <button onclick="sendQuickMessage('Cara memperoleh data statistik BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
                         <span>📊 Cara Memperoleh Data</span>
                     </button>
-                    <button onclick="sendQuickMessage('Jadwal dan jam buka operasional PST')" class="px-3.5 py-2 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-1.5 active:scale-98">
+                    <button onclick="sendQuickMessage('Jadwal dan jam buka operasional PST')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
                         <span>🕒 Jadwal Layanan PST</span>
                     </button>
-                    <button onclick="sendQuickMessage('Publikasi Karanganyar Dalam Angka (KDA)')" class="px-3.5 py-2 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-1.5 active:scale-98">
+                    <button onclick="sendQuickMessage('Publikasi Karanganyar Dalam Angka (KDA)')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
                         <span>📖 Karanganyar Dalam Angka</span>
                     </button>
-                    <button onclick="sendQuickMessage('Data kemiskinan dan garis kemiskinan Karanganyar')" class="px-3.5 py-2 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-1.5 active:scale-98">
+                    <button onclick="sendQuickMessage('Data kemiskinan dan garis kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
                         <span>📉 Angka Kemiskinan</span>
                     </button>
-                    <button onclick="sendQuickMessage('Alamat kantor dan kontak BPS Karanganyar')" class="px-3.5 py-2 text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-1.5 active:scale-98">
+                    <button onclick="sendQuickMessage('Alamat kantor dan kontak BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
                         <span>📍 Alamat & Kontak Resmi</span>
                     </button>
                 </div>
@@ -86,56 +86,56 @@
         </div>
 
         {{-- Typing Indicator --}}
-        <div id="typing-indicator" class="hidden px-4 sm:px-6 py-2.5 bg-slate-50 border-t border-slate-100">
-            <div class="flex items-center gap-2.5 text-slate-400">
-                <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                    <span class="iconify text-xs" data-icon="lucide:bot"></span>
+        <div id="typing-indicator" class="hidden px-3 sm:px-6 py-2 bg-slate-50 border-t border-slate-100">
+            <div class="flex items-center gap-2 text-slate-400">
+                <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                    <span class="iconify text-[10px] sm:text-xs" data-icon="lucide:bot"></span>
                 </div>
-                <div class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">
+                <div class="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style="animation-delay: 0ms;"></span>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style="animation-delay: 150ms;"></span>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style="animation-delay: 300ms;"></span>
-                    <span class="text-[11px] font-semibold text-slate-600 ml-1">Menyiapkan jawaban data...</span>
+                    <span class="text-[10px] sm:text-[11px] font-semibold text-slate-600 ml-1">Menyiapkan jawaban data...</span>
                 </div>
             </div>
         </div>
 
         {{-- Input Bar --}}
-        <div class="p-3 sm:p-5 border-t border-slate-100 bg-white shadow-inner">
-            <form id="public-chat-form" class="flex items-end gap-2.5">
+        <div class="p-2.5 sm:p-5 border-t border-slate-100 bg-white shadow-inner">
+            <form id="public-chat-form" class="flex items-end gap-1.5 sm:gap-2.5">
                 @csrf
                 <div class="flex-1 relative">
                     <textarea id="public-chat-input"
                               rows="1"
                               maxlength="1000"
-                              placeholder="Ketik pertanyaan Anda atau tekan ikon mikrofon untuk berbicara..."
-                              class="w-full px-4 py-3 pr-14 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-all shadow-sm leading-relaxed"
-                              style="max-height: 120px;"></textarea>
-                    <span id="chat-char-counter" class="absolute bottom-3 right-3 text-[10px] text-slate-400 font-mono">0/1000</span>
+                              placeholder="Ketik pertanyaan data statistik..."
+                              class="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-12 rounded-xl sm:rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-all shadow-xs leading-relaxed"
+                              style="max-height: 100px;"></textarea>
+                    <span id="chat-char-counter" class="absolute bottom-2.5 right-2.5 text-[9px] sm:text-[10px] text-slate-400 font-mono">0/1000</span>
                 </div>
 
                 {{-- Microphone Voice Input Button --}}
                 <button type="button" id="voice-input-btn" onclick="toggleVoiceRecording()" title="Bicara dengan Suara (Voice-to-Text)"
-                        class="h-12 w-12 rounded-2xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 border border-slate-300 flex items-center justify-center transition-all shrink-0 cursor-pointer relative group">
-                    <span id="voice-mic-icon" class="iconify text-xl group-hover:scale-110 transition-transform" data-icon="lucide:mic"></span>
-                    <span id="voice-pulse-ring" class="hidden absolute inset-0 rounded-2xl border-2 border-rose-500 animate-ping"></span>
+                        class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 border border-slate-300 flex items-center justify-center transition-all shrink-0 cursor-pointer relative group">
+                    <span id="voice-mic-icon" class="iconify text-lg sm:text-xl group-hover:scale-110 transition-transform" data-icon="lucide:mic"></span>
+                    <span id="voice-pulse-ring" class="hidden absolute inset-0 rounded-xl sm:rounded-2xl border-2 border-rose-500 animate-ping"></span>
                 </button>
 
                 <button type="submit" id="public-send-btn"
-                        class="h-12 w-12 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white flex items-center justify-center transition-all shrink-0 shadow-lg shadow-blue-600/30 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white flex items-center justify-center transition-all shrink-0 shadow-md shadow-blue-600/30 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         disabled>
-                    <span class="iconify text-xl" data-icon="lucide:send"></span>
+                    <span class="iconify text-lg sm:text-xl" data-icon="lucide:send"></span>
                 </button>
             </form>
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-3 pt-2.5 text-[11px] text-slate-400 border-t border-slate-100">
-                <span class="flex items-center gap-1.5">
-                    <span class="iconify text-emerald-600 text-sm shrink-0" data-icon="lucide:shield-check"></span>
-                    <span>Jawaban bersumber dari data dan publikasi resmi BPS Kabupaten Karanganyar.</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mt-2 pt-2 text-[10px] sm:text-[11px] text-slate-400 border-t border-slate-100">
+                <span class="flex items-center gap-1">
+                    <span class="iconify text-emerald-600 text-xs sm:text-sm shrink-0" data-icon="lucide:shield-check"></span>
+                    <span class="truncate">Jawaban dari data resmi BPS Karanganyar.</span>
                 </span>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                     <a href="{{ route('aduan.create') }}" class="text-blue-600 font-bold hover:underline flex items-center gap-1">
-                        <span class="iconify" data-icon="lucide:ticket"></span> Buat Aduan Layanan
+                        <span class="iconify" data-icon="lucide:ticket"></span> Buat Aduan
                     </a>
                     <span>•</span>
                     <a href="{{ route('kebijakan-privasi') }}" class="text-slate-400 hover:text-slate-600 hover:underline">
@@ -271,28 +271,28 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
 
     if (isVisitor) {
         wrapper.innerHTML = `
-            <div class="max-w-lg">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl rounded-tr-sm px-4 sm:px-5 py-3 sm:py-3.5 shadow-md">
-                    <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium">${escapeHtml(content)}</p>
+            <div class="max-w-[88%] sm:max-w-lg">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl sm:rounded-3xl rounded-tr-sm px-3.5 sm:px-5 py-2.5 sm:py-3.5 shadow-md">
+                    <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium break-words">${escapeHtml(content)}</p>
                 </div>
-                <span class="text-[10px] text-slate-400 font-semibold mt-1 block text-right mr-2">Anda • ${formattedTime}</span>
+                <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 block text-right mr-1.5">Anda • ${formattedTime}</span>
             </div>
         `;
     } else if (isOfficer) {
         wrapper.innerHTML = `
-            <div class="flex gap-3 max-w-xl">
-                <div class="w-8 h-8 rounded-2xl bg-blue-700 text-white flex items-center justify-center shrink-0 font-black text-xs shadow-md">
+            <div class="flex gap-2 sm:gap-3 max-w-[92%] sm:max-w-xl">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl sm:rounded-2xl bg-blue-700 text-white flex items-center justify-center shrink-0 font-black text-xs shadow-md">
                     ${escapeHtml((senderName || 'P').substring(0, 1))}
                 </div>
-                <div>
-                    <div class="bg-white border-2 border-blue-400 rounded-3xl rounded-tl-sm p-4 sm:p-5 shadow-md">
+                <div class="min-w-0 flex-1">
+                    <div class="bg-white border-2 border-blue-400 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-md">
                         <div class="flex items-center gap-1.5 text-xs font-black text-blue-700 mb-2">
                             <span class="iconify text-base" data-icon="lucide:user-check"></span>
-                            <span>${escapeHtml(senderName || 'Petugas BPS Karanganyar')}</span>
+                            <span class="truncate">${escapeHtml(senderName || 'Petugas BPS Karanganyar')}</span>
                         </div>
-                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed">${formatBotContent(content)}</div>
+                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed break-words">${formatBotContent(content)}</div>
                     </div>
-                    <span class="text-[10px] text-slate-400 font-semibold mt-1 block ml-2">Petugas Resmi • ${formattedTime}</span>
+                    <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 block ml-1.5">Petugas Resmi • ${formattedTime}</span>
                 </div>
             </div>
         `;
@@ -338,25 +338,25 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         const rawContentSafe = escapeHtml(content).replace(/'/g, "\\'");
 
         wrapper.innerHTML = `
-            <div class="flex gap-3 max-w-2xl">
-                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm p-1 mt-0.5">
+            <div class="flex gap-2 sm:gap-3 max-w-2xl">
+                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
                     <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                 </div>
-                <div class="min-w-0">
-                    <div class="bg-white border border-slate-200/90 rounded-3xl rounded-tl-sm p-4 sm:p-5 shadow-sm">
-                        <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
-                            <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider">Asisten Statistik Terpadu</span>
-                            <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
-                                <span class="iconify text-sm" data-icon="lucide:volume-2"></span>
+                <div class="min-w-0 flex-1">
+                    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs">
+                        <div class="flex items-center justify-between gap-1.5 mb-2 pb-2 border-b border-slate-100">
+                            <span class="text-[9px] sm:text-[10px] font-bold text-blue-700 uppercase tracking-wider truncate">Asisten Statistik</span>
+                            <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="shrink-0 btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
+                                <span class="iconify text-xs sm:text-sm" data-icon="lucide:volume-2"></span>
                                 <span>Dengarkan</span>
                             </button>
                         </div>
-                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed">${formatBotContent(content)}</div>
+                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed break-words">${formatBotContent(content)}</div>
                         ${sourcesHtml}
                         ${quickChipsHtml}
                         ${feedbackHtml}
                     </div>
-                    <span class="text-[10px] text-slate-400 font-semibold mt-1 block ml-2">Bot Asisten • ${formattedTime}</span>
+                    <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 block ml-1.5">Bot Asisten • ${formattedTime}</span>
                 </div>
             </div>
         `;
