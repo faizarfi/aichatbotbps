@@ -78,22 +78,29 @@
         {{-- Ringkasan Aktivitas Layanan --}}
         <div class="pt-6">
             <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-3">Riwayat Penggunaan Layanan</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="p-3 rounded-2xl bg-blue-50/70 border border-blue-100 text-center">
-                    <p class="text-2xl font-black text-blue-700">{{ $stats['reservations'] }}</p>
-                    <p class="text-[11px] font-bold text-blue-600/80 mt-0.5">Reservasi</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-100 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-rose-600/80">Laporan Aduan</p>
+                        <p class="text-2xl font-black text-rose-700 mt-0.5">{{ $stats['complaints'] }}</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Tiket diajukan</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                        <span class="iconify text-xl" data-icon="lucide:ticket"></span>
+                    </div>
                 </div>
-                <div class="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-center">
-                    <p class="text-2xl font-black text-emerald-700">{{ $stats['data_requests'] }}</p>
-                    <p class="text-[11px] font-bold text-emerald-600/80 mt-0.5">Data Mikro</p>
-                </div>
-                <div class="p-3 rounded-2xl bg-amber-50/70 border border-amber-100 text-center">
-                    <p class="text-2xl font-black text-amber-700">{{ $stats['surveys'] }}</p>
-                    <p class="text-[11px] font-bold text-amber-600/80 mt-0.5">Survei SKM</p>
-                </div>
-                <div class="p-3 rounded-2xl bg-rose-50/70 border border-rose-100 text-center">
-                    <p class="text-2xl font-black text-rose-700">{{ $stats['complaints'] }}</p>
-                    <p class="text-[11px] font-bold text-rose-600/80 mt-0.5">Aduan</p>
+                <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-blue-600/80">Status Akun</p>
+                        <p class="text-sm font-black text-blue-700 mt-1 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            Aktif & Terdaftar
+                        </p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Pengguna Layanan BPS</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                        <span class="iconify text-xl" data-icon="lucide:shield-check"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,7 +171,7 @@
                 <span class="iconify text-xl text-rose-600 shrink-0 mt-0.5" data-icon="lucide:shield-alert"></span>
                 <div>
                     <p class="text-xs font-bold text-rose-900">Peringatan! Tindakan ini tidak dapat dibatalkan.</p>
-                    <p class="text-[11px] text-rose-700 mt-0.5">Seluruh data akun, riwayat reservasi, permohonan data, aduan, dan survei yang terkait dengan akun Anda akan dihapus secara permanen.</p>
+                    <p class="text-[11px] text-rose-700 mt-0.5">Seluruh data akun dan riwayat tiket aduan yang terkait dengan akun Anda akan dihapus secara permanen.</p>
                 </div>
             </div>
 

@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\BotFeedback;
 use App\Models\Complaint;
 use App\Models\Conversation;
-use App\Models\DataRequest;
 use App\Models\KnowledgeArticle;
 use App\Models\Message;
-use App\Models\Reservation;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
@@ -22,40 +20,41 @@ class DashboardController extends Controller
         $stats = $this->collectStats();
 
         // 7 Hari Terakhir untuk Grafik Tren
-        $days = collect(range(6, 0))->map(function ($daysAgo) {
-            return now()->subDays($daysAgo);
-        });
-
+        $days = collect(range(6, 0))->map(fn($daysAgo) => now()->subDays($daysAgo));
         $chartLabels = $days->map(fn($d) => $d->isoFormat('D MMM'))->toArray();
+        $startDate = $days->first()->startOfDay();
 
-        $chartConversations = $days->map(function ($d) {
-            return Conversation::whereDate('created_at', $d->toDateString())->count();
-        })->toArray();
+        $convCounts = Conversation::where('created_at', '>=', $startDate)
+            ->selectRaw('DATE(created_at) as dt, COUNT(*) as aggregate')
+            ->groupBy('dt')
+            ->pluck('aggregate', 'dt');
 
-        $chartComplaints = $days->map(function ($d) {
-            return Complaint::whereDate('created_at', $d->toDateString())->count();
-        })->toArray();
+        $compCounts = Complaint::where('created_at', '>=', $startDate)
+            ->selectRaw('DATE(created_at) as dt, COUNT(*) as aggregate')
+            ->groupBy('dt')
+            ->pluck('aggregate', 'dt');
+
+        $chartConversations = $days->map(fn($d) => $convCounts->get($d->toDateString(), 0))->toArray();
+        $chartComplaints = $days->map(fn($d) => $compCounts->get($d->toDateString(), 0))->toArray();
 
         // Distribusi Status Aduan
+        $statusCounts = Complaint::selectRaw('status, COUNT(*) as aggregate')
+            ->groupBy('status')
+            ->pluck('aggregate', 'status');
+
         $complaintDistribution = [
-            'new' => Complaint::where('status', 'new')->count(),
-            'processing' => Complaint::where('status', 'processing')->count(),
-            'resolved' => Complaint::where('status', 'resolved')->count(),
+            'new' => $statusCounts->get('new', 0),
+            'processing' => $statusCounts->get('processing', 0),
+            'resolved' => $statusCounts->get('resolved', 0),
         ];
 
-        // 6 Percakapan terkini
-        $recentConversations = Conversation::with(['assignedOfficer', 'messages' => function ($q) {
-            $q->latest()->limit(1);
-        }])
-        ->orderByDesc('last_message_at')
-        ->limit(6)
-        ->get();
-
-        // 6 Aduan terkini
-        $recentComplaints = Complaint::with('assignedOfficer')
-            ->orderByDesc('created_at')
+        // 6 Percakapan & Aduan terkini
+        $recentConversations = Conversation::with(['assignedOfficer', 'messages' => fn($q) => $q->latest()->limit(1)])
+            ->orderByDesc('last_message_at')
             ->limit(6)
             ->get();
+
+        $recentComplaints = Complaint::with('assignedOfficer')->latest()->limit(6)->get();
 
         // Feedback kepuasan
         $feedbackHelpful = BotFeedback::where('rating', 'helpful')->count();
@@ -96,8 +95,6 @@ class DashboardController extends Controller
             'complaints_new' => Complaint::where('status', 'new')->count(),
             'complaints_processing' => Complaint::where('status', 'processing')->count(),
             'complaints_resolved' => Complaint::where('status', 'resolved')->count(),
-            'reservations_pending' => Reservation::where('status', 'pending')->count(),
-            'data_requests_new' => DataRequest::where('status', 'submitted')->count(),
             'total_articles' => KnowledgeArticle::where('is_active', true)->count(),
             'total_messages' => Message::count(),
         ];

@@ -7,6 +7,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property string $public_id
+ * @property string $channel
+ * @property string|null $visitor_session
+ * @property string|null $visitor_name
+ * @property string|null $visitor_contact
+ * @property string $status
+ * @property int|null $assigned_to
+ * @property \Illuminate\Support\Carbon|null $last_message_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \App\Models\User|null $assignedOfficer
+ * @property-read \Illuminate\Database\Eloquent\Collection<\App\Models\Message> $messages
+ * @property-read \Illuminate\Database\Eloquent\Collection<\App\Models\Complaint> $complaints
+ * @property-read int|null $messages_count
+ */
 class Conversation extends Model
 {
     protected $fillable = [

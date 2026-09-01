@@ -7,6 +7,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int $id
+ * @property int $conversation_id
+ * @property string $sender_type
+ * @property int|null $sender_user_id
+ * @property string $content
+ * @property array|null $knowledge_sources
+ * @property string|null $ai_model
+ * @property float|null $confidence
+ * @property bool $is_fallback
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \App\Models\Conversation $conversation
+ * @property-read \App\Models\User|null $sender
+ * @property-read \App\Models\BotFeedback|null $feedback
+ */
 class Message extends Model
 {
     protected $fillable = [

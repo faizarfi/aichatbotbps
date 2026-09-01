@@ -51,15 +51,6 @@
                     <a href="{{ route('calculators.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('calculators.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
                         Kalkulator
                     </a>
-                    <a href="{{ route('reservasi.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('reservasi.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
-                        Reservasi
-                    </a>
-                    <a href="{{ route('layanan-data.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('layanan-data.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
-                        Data Mikro
-                    </a>
-                    <a href="{{ route('survei.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('survei.*') ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
-                        Survei SKM
-                    </a>
                     <a href="{{ route('aduan.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('aduan.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
                         Aduan
                     </a>
@@ -138,15 +129,6 @@
             </a>
             <a href="{{ route('calculators.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('calculators.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
                 Kalkulator Statistik Interaktif
-            </a>
-            <a href="{{ route('reservasi.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('reservasi.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
-                Reservasi Tatap Muka PST
-            </a>
-            <a href="{{ route('layanan-data.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('layanan-data.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
-                Permintaan Data & ROMANTIK
-            </a>
-            <a href="{{ route('survei.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('survei.*') ? 'bg-amber-50 text-amber-700' : 'text-slate-700 hover:bg-slate-50' }}">
-                Survei Kepuasan Masyarakat (SKM)
             </a>
             <a href="{{ route('aduan.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('aduan.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
                 Pengaduan Layanan

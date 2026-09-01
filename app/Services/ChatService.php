@@ -112,8 +112,8 @@ class ChatService
     {
         $lower = Str::lower($message);
 
-        // A. Permintaan Hubungi Petugas Manusia
-        if (preg_match('/(hubungi|bicara|ngobrol|chat|telepon|sambungkan)?\s*(dengan\s*)?(petugas|operator|admin|orang|manusia|cs)\b/i', $lower)) {
+        // A. Permintaan Hubungi Petugas Manusia (Hanya jika benar-benar eksplisit meminta sambung ke staf)
+        if (preg_match('/\b(hubungi|bicara\s+dengan|ngobrol\s+dengan|sambungkan\s+ke|chat\s+dengan|minta\s+bantuan)\s+(petugas|operator|admin|cs|manusia)\b/i', $lower) || in_array($lower, ['hubungi petugas', 'petugas', 'operator', 'cs', 'admin', 'bantuan manusia'], true)) {
             return [
                 'reply' => "Baik, percakapan Anda dialihkan ke antrean petugas BPS Kabupaten Karanganyar. Petugas kami akan segera membalas di ruangan chat ini saat jam kerja operasional (Senin–Jumat, 08.00–15.30 WIB).",
                 'sources' => [
@@ -129,36 +129,22 @@ class ChatService
             ];
         }
 
-        // B. Niat Pengaduan / Keluhan Spesifik
-        if (preg_match('/(mau|ingin|cara)?\s*(buat|kirim|lapor|adukan|ajukan)\s*(aduan|keluhan|komplain|laporan)/i', $lower) && !str_contains($lower, 'status')) {
-            return [
-                'reply' => "Untuk menyampaikan aduan atau aspirasi resmi terkait pelayanan BPS Kabupaten Karanganyar, silakan mengisi Formulir Aduan melalui menu: <a href='/aduan' class='text-blue-600 font-bold underline'>Buat Aduan Layanan</a>.\n\nSetiap laporan akan mendapatkan Nomor Tiket Resmi untuk pemantauan tindak lanjut berkala.",
-                'sources' => [
-                    ['title' => 'Formulir Pengaduan Masyarakat', 'url' => '/aduan']
-                ],
-                'confidence' => 1.0,
-                'is_fallback' => false,
-                'quick_options' => [
-                    'Cek Status Aduan',
-                    'Jadwal layanan PST',
-                ],
-            ];
-        }
-
         // C. Cari data relevan di Basis Pengetahuan (Knowledge Search)
         $searchResult = $this->searchService->search($message);
-        $articles = [];
-        $sources = [];
-
-        if ($searchResult['bestMatch']) {
-            $articles[] = $searchResult['bestMatch'];
-            if ($searchResult['bestMatch']->source_title) {
-                $sources[] = [
-                    'title' => $searchResult['bestMatch']->source_title,
-                    'url' => $searchResult['bestMatch']->source_url ?: 'https://karanganyarkab.bps.go.id',
-                ];
-            }
+        $articles = $searchResult['candidates']->all();
+        if (empty($articles) && $searchResult['bestMatch']) {
+            $articles = [$searchResult['bestMatch']];
         }
+
+        $sources = collect($articles)
+            ->filter(fn($a) => !empty($a->source_title))
+            ->map(fn($a) => [
+                'title' => $a->source_title,
+                'url' => $a->source_url ?: 'https://karanganyarkab.bps.go.id',
+            ])
+            ->unique('title')
+            ->values()
+            ->all();
 
         // D. Coba panggil AI LLM Gateway (9router / OpenRouter) dengan RAG
         if ($this->aiService->isConfigured()) {
@@ -168,28 +154,18 @@ class ChatService
                 ->get()
                 ->reverse()
                 ->map(fn($m) => ['sender_type' => $m->sender_type, 'content' => $m->content])
-                ->toArray();
+                ->values()
+                ->all();
 
             $aiAnswer = $this->aiService->generateAnswer($message, $articles, $history);
 
             if (!empty($aiAnswer)) {
-                if (empty($sources)) {
-                    $sources[] = [
-                        'title' => 'Basis Data Resmi BPS Kabupaten Karanganyar',
-                        'url' => 'https://karanganyarkab.bps.go.id',
-                    ];
-                }
-
                 return [
                     'reply' => $aiAnswer,
-                    'sources' => $sources,
+                    'sources' => $sources ?: [['title' => 'Publikasi BPS Karanganyar Dalam Angka 2026', 'url' => 'https://karanganyarkab.bps.go.id']],
                     'confidence' => 0.95,
                     'is_fallback' => false,
-                    'quick_options' => [
-                        'Cara memperoleh data',
-                        'Jadwal layanan PST',
-                        'Hubungi Petugas',
-                    ],
+                    'quick_options' => ['Cara memperoleh data', 'Jadwal layanan PST', 'Hubungi Petugas'],
                 ];
             }
         }
@@ -198,32 +174,20 @@ class ChatService
         if ($searchResult['bestMatch']) {
             return [
                 'reply' => $searchResult['bestMatch']->answer,
-                'sources' => $sources,
+                'sources' => $sources ?: [['title' => 'BPS Kabupaten Karanganyar Dalam Angka 2026', 'url' => 'https://karanganyarkab.bps.go.id']],
                 'confidence' => $searchResult['confidence'],
                 'is_fallback' => false,
-                'quick_options' => [
-                    'Cara memperoleh data',
-                    'Hubungi Petugas',
-                    'Layanan lainnya',
-                ],
+                'quick_options' => ['Cara memperoleh data', 'Hubungi Petugas', 'Layanan lainnya'],
             ];
         }
 
-        // F. Fallback 2: Pesan ramah jika tidak ditemukan
-        $fallbackReply = "Mohon maaf, saya belum menemukan informasi spesifik mengenai pertanyaan Anda dalam basis data BPS Karanganyar.\n\nSilakan mencoba kata kunci lain (misalnya: *jumlah penduduk*, *kemiskinan*, *PDRB*, atau *jadwal PST*), atau klik tombol **Hubungi Petugas** untuk terhubung langsung dengan petugas Pelayanan Statistik Terpadu.";
-
+        // F. Fallback 2: Pesan cerdas jika tidak ditemukan artikel spesifik
         return [
-            'reply' => $fallbackReply,
-            'sources' => [
-                ['title' => 'Portal BPS Karanganyar', 'url' => 'https://karanganyarkab.bps.go.id']
-            ],
+            'reply' => "Mohon maaf, saya belum menemukan jawaban yang tepat untuk pertanyaan tersebut dalam rujukan saat ini.\n\n💡 **Saran:** Anda dapat menanyakan data resmi seperti:\n- *Jumlah penduduk Karanganyar 2026*\n- *Angka kemiskinan atau IPM Karanganyar*\n- *Data 17 Kecamatan (misal: Tawangmangu, Colomadu)*\n- *Jadwal buka dan jam layanan kantor PST BPS*\n\nAtau klik tombol **Hubungi Petugas** di atas untuk berkomunikasi langsung dengan petugas kami.",
+            'sources' => [['title' => 'Portal Resmi BPS Karanganyar 2026', 'url' => 'https://karanganyarkab.bps.go.id']],
             'confidence' => 0.0,
             'is_fallback' => true,
-            'quick_options' => [
-                'Hubungi Petugas',
-                'Cara memperoleh data',
-                'Buat Aduan',
-            ],
+            'quick_options' => ['Hubungi Petugas', 'Cara memperoleh data', 'Buat Aduan'],
         ];
     }
 

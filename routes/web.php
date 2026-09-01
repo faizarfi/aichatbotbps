@@ -3,23 +3,17 @@
 use App\Http\Controllers\Admin\ComplaintController as AdminComplaintController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\DataRequestController as AdminDataRequestController;
 use App\Http\Controllers\Admin\KnowledgeArticleController;
 use App\Http\Controllers\Admin\KnowledgeCategoryController;
 use App\Http\Controllers\Admin\ReportController;
-use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
-use App\Http\Controllers\Admin\SatisfactionSurveyController as AdminSatisfactionSurveyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CalculatorController;
 use App\Http\Controllers\ComplaintController;
-use App\Http\Controllers\DataRequestController;
 use App\Http\Controllers\DistrictStatisticController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicChatController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\SatisfactionSurveyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,29 +54,6 @@ Route::get('/peta-statistik', [DistrictStatisticController::class, 'index'])->na
 // Kalkulator Statistik Interaktif
 Route::get('/kalkulator-statistik', [CalculatorController::class, 'index'])->name('calculators.index');
 
-// Reservasi Konsultasi Tatap Muka PST (Wajib Login untuk Mengajukan)
-Route::middleware('auth')->group(function () {
-    Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi.create');
-    Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
-});
-Route::get('/reservasi/tiket/{code}', [ReservationController::class, 'ticket'])->name('reservasi.ticket');
-Route::get('/lacak-reservasi', [ReservationController::class, 'track'])->name('reservasi.track');
-
-// Permohonan Data Mikro & Rekomendasi Statistik (Wajib Login untuk Mengajukan)
-Route::middleware('auth')->group(function () {
-    Route::get('/layanan-data', [DataRequestController::class, 'create'])->name('layanan-data.create');
-    Route::post('/layanan-data', [DataRequestController::class, 'store'])->name('layanan-data.store');
-});
-Route::get('/lacak-layanan-data', [DataRequestController::class, 'track'])->name('layanan-data.track');
-Route::get('/layanan-data/download/{dataRequest}', [DataRequestController::class, 'downloadResult'])->name('layanan-data.download');
-
-// Survei Kepuasan Masyarakat (Wajib Login untuk Mengisi)
-Route::middleware('auth')->group(function () {
-    Route::get('/survei-kepuasan', [SatisfactionSurveyController::class, 'create'])->name('survei.create');
-    Route::post('/survei-kepuasan', [SatisfactionSurveyController::class, 'store'])->name('survei.store');
-});
-Route::get('/survei-kepuasan/sukses/{survey}', [SatisfactionSurveyController::class, 'success'])->name('survei.success');
-
 // Profil Pengguna Masyarakat (Wajib Login)
 Route::middleware('auth')->group(function () {
     Route::get('/profil-saya', [MyProfileController::class, 'show'])->name('my-profile.show');
@@ -101,7 +72,7 @@ Route::get('/kebijakan-privasi', function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // Redirect alias /admin/login ke /login
 Route::get('/admin/login', function () {
@@ -144,20 +115,6 @@ Route::middleware(['auth', 'role:admin,petugas'])->prefix('admin')->group(functi
     Route::get('/aduan/{complaint}', [AdminComplaintController::class, 'show'])->name('admin.complaints.show');
     Route::post('/aduan/{complaint}/status', [AdminComplaintController::class, 'updateStatus'])->name('admin.complaints.status');
     Route::get('/aduan/lampiran/{attachment}', [AdminComplaintController::class, 'downloadAttachment'])->name('admin.complaints.download');
-
-    // Manajemen Reservasi Tatap Muka
-    Route::get('/reservasi', [AdminReservationController::class, 'index'])->name('admin.reservations.index');
-    Route::get('/reservasi/{reservation}', [AdminReservationController::class, 'show'])->name('admin.reservations.show');
-    Route::post('/reservasi/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('admin.reservations.status');
-
-    // Pengelolaan Permohonan Data Mikro & ROMANTIK
-    Route::get('/permintaan-data', [AdminDataRequestController::class, 'index'])->name('admin.data-requests.index');
-    Route::get('/permintaan-data/{dataRequest}', [AdminDataRequestController::class, 'show'])->name('admin.data-requests.show');
-    Route::post('/permintaan-data/{dataRequest}/status', [AdminDataRequestController::class, 'updateStatus'])->name('admin.data-requests.status');
-    Route::get('/permintaan-data/lampiran/{dataRequest}', [AdminDataRequestController::class, 'downloadAttachment'])->name('admin.data-requests.download');
-
-    // Laporan Survei Kepuasan Masyarakat (IKM / SKM)
-    Route::get('/survei', [AdminSatisfactionSurveyController::class, 'index'])->name('admin.surveys.index');
 
     // Laporan & Rekapitulasi PDF
     Route::get('/laporan', [ReportController::class, 'index'])->name('admin.reports.index');

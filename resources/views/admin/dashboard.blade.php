@@ -33,7 +33,7 @@
     </div>
 
     {{-- Live Statistics Grid --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {{-- Percakapan Hari Ini --}}
         <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md transition-all">
             <div class="flex items-center justify-between mb-2.5">
@@ -70,32 +70,6 @@
             </div>
             <p id="stat-complaints-new" class="text-2xl font-black text-rose-600">{{ $stats['complaints_new'] }}</p>
             <p class="text-[11px] text-slate-500 mt-1">Aduan Baru</p>
-        </a>
-
-        {{-- Reservasi Pending --}}
-        <a href="{{ route('admin.reservations.index', ['status' => 'pending']) }}"
-           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group">
-            <div class="flex items-center justify-between mb-2.5">
-                <span class="text-xs font-semibold text-blue-600">Reservasi</span>
-                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="iconify text-base" data-icon="lucide:calendar-clock"></span>
-                </div>
-            </div>
-            <p class="text-2xl font-black text-blue-700">{{ $stats['reservations_pending'] ?? 0 }}</p>
-            <p class="text-[11px] text-slate-500 mt-1">Jadwal PST Baru</p>
-        </a>
-
-        {{-- Permintaan Data --}}
-        <a href="{{ route('admin.data-requests.index', ['status' => 'submitted']) }}"
-           class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all group">
-            <div class="flex items-center justify-between mb-2.5">
-                <span class="text-xs font-semibold text-emerald-600">Data Mikro</span>
-                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <span class="iconify text-base" data-icon="lucide:database"></span>
-                </div>
-            </div>
-            <p class="text-2xl font-black text-emerald-700">{{ $stats['data_requests_new'] ?? 0 }}</p>
-            <p class="text-[11px] text-slate-500 mt-1">Permohonan Masuk</p>
         </a>
 
         {{-- Basis Pengetahuan --}}
@@ -312,153 +286,174 @@
 {{-- Chart.js CDN --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
+{{-- Dashboard Data in JSON Script tag to avoid linter parse errors --}}
+<script id="dashboard-chart-data" type="application/json">
+{
+    "chartLabels": @json($chartLabels),
+    "chartConversations": @json($chartConversations),
+    "chartComplaints": @json($chartComplaints),
+    "complaintDistribution": @json($complaintDistribution),
+    "statsUrl": @json(route('admin.dashboard.stats'))
+}
+</script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const rawData = document.getElementById('dashboard-chart-data');
+    const dashboardData = rawData ? JSON.parse(rawData.textContent) : {};
+
     // 1. Line Chart: Tren Aktivitas 7 Hari Terakhir
-    const trendCtx = document.getElementById('trendActivityChart').getContext('2d');
-    
-    // Gradient fills
-    const blueGradient = trendCtx.createLinearGradient(0, 0, 0, 300);
-    blueGradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
-    blueGradient.addColorStop(1, 'rgba(37, 99, 235, 0.0)');
+    const trendCanvas = document.getElementById('trendActivityChart');
+    if (trendCanvas) {
+        const trendCtx = trendCanvas.getContext('2d');
+        
+        // Gradient fills
+        const blueGradient = trendCtx.createLinearGradient(0, 0, 0, 300);
+        blueGradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
+        blueGradient.addColorStop(1, 'rgba(37, 99, 235, 0.0)');
 
-    const amberGradient = trendCtx.createLinearGradient(0, 0, 0, 300);
-    amberGradient.addColorStop(0, 'rgba(245, 158, 11, 0.25)');
-    amberGradient.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
+        const amberGradient = trendCtx.createLinearGradient(0, 0, 0, 300);
+        amberGradient.addColorStop(0, 'rgba(245, 158, 11, 0.25)');
+        amberGradient.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
 
-    new Chart(trendCtx, {
-        type: 'line',
-        data: {
-            labels: @json($chartLabels),
-            datasets: [
-                {
-                    label: 'Percakapan Chat',
-                    data: @json($chartConversations),
-                    borderColor: '#2563eb',
-                    backgroundColor: blueGradient,
-                    fill: true,
-                    tension: 0.35,
-                    borderWidth: 2.5,
-                    pointBackgroundColor: '#2563eb',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                },
-                {
-                    label: 'Tiket Aduan',
-                    data: @json($chartComplaints),
-                    borderColor: '#f59e0b',
-                    backgroundColor: amberGradient,
-                    fill: true,
-                    tension: 0.35,
-                    borderWidth: 2.5,
-                    pointBackgroundColor: '#f59e0b',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#0f172a',
-                    titleFont: { size: 12, family: 'Outfit, sans-serif' },
-                    bodyFont: { size: 12, family: 'Plus Jakarta Sans, sans-serif' },
-                    padding: 10,
-                    cornerRadius: 10
-                }
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: dashboardData.chartLabels || [],
+                datasets: [
+                    {
+                        label: 'Percakapan Chat',
+                        data: dashboardData.chartConversations || [],
+                        borderColor: '#2563eb',
+                        backgroundColor: blueGradient,
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Tiket Aduan',
+                        data: dashboardData.chartComplaints || [],
+                        borderColor: '#f59e0b',
+                        backgroundColor: amberGradient,
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }
+                ]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        font: { size: 10, family: 'Plus Jakarta Sans' },
-                        color: '#94a3b8'
-                    },
-                    grid: {
-                        color: '#f1f5f9'
-                    },
-                    border: { dash: [4, 4] }
-                },
-                x: {
-                    ticks: {
-                        font: { size: 10, family: 'Plus Jakarta Sans' },
-                        color: '#94a3b8'
-                    },
-                    grid: { display: false }
-                }
-            }
-        }
-    });
-
-    // 2. Doughnut Chart: Distribusi Status Aduan
-    const statusCtx = document.getElementById('complaintStatusChart').getContext('2d');
-    const newCount = {{ $complaintDistribution['new'] }};
-    const procCount = {{ $complaintDistribution['processing'] }};
-    const resCount = {{ $complaintDistribution['resolved'] }};
-    const totalAduan = newCount + procCount + resCount;
-
-    new Chart(statusCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Baru', 'Diproses', 'Selesai'],
-            datasets: [{
-                data: totalAduan > 0 ? [newCount, procCount, resCount] : [1, 0, 0],
-                backgroundColor: totalAduan > 0 ? ['#ef4444', '#f59e0b', '#10b981'] : ['#e2e8f0', '#e2e8f0', '#e2e8f0'],
-                borderWidth: 3,
-                borderColor: '#ffffff',
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '72%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: { size: 11, family: 'Plus Jakarta Sans' },
-                        boxWidth: 10,
-                        usePointStyle: true
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleFont: { size: 12, family: 'Outfit, sans-serif' },
+                        bodyFont: { size: 12, family: 'Plus Jakarta Sans, sans-serif' },
+                        padding: 10,
+                        cornerRadius: 10
                     }
                 },
-                tooltip: {
-                    enabled: totalAduan > 0,
-                    backgroundColor: '#0f172a',
-                    padding: 8,
-                    cornerRadius: 8
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: { size: 10, family: 'Plus Jakarta Sans' },
+                            color: '#94a3b8'
+                        },
+                        grid: {
+                            color: '#f1f5f9'
+                        },
+                        border: { dash: [4, 4] }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 10, family: 'Plus Jakarta Sans' },
+                            color: '#94a3b8'
+                        },
+                        grid: { display: false }
+                    }
                 }
             }
+        });
+    }
+
+    // 2. Doughnut Chart: Distribusi Status Aduan
+    const statusCanvas = document.getElementById('complaintStatusChart');
+    if (statusCanvas) {
+        const statusCtx = statusCanvas.getContext('2d');
+        const dist = dashboardData.complaintDistribution || { new: 0, processing: 0, resolved: 0 };
+        const newCount = Number(dist.new) || 0;
+        const procCount = Number(dist.processing) || 0;
+        const resCount = Number(dist.resolved) || 0;
+        const totalAduan = newCount + procCount + resCount;
+
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Baru', 'Diproses', 'Selesai'],
+                datasets: [{
+                    data: totalAduan > 0 ? [newCount, procCount, resCount] : [1, 0, 0],
+                    backgroundColor: totalAduan > 0 ? ['#ef4444', '#f59e0b', '#10b981'] : ['#e2e8f0', '#e2e8f0', '#e2e8f0'],
+                    borderWidth: 3,
+                    borderColor: '#ffffff',
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '72%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11, family: 'Plus Jakarta Sans' },
+                            boxWidth: 10,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        enabled: totalAduan > 0,
+                        backgroundColor: '#0f172a',
+                        padding: 8,
+                        cornerRadius: 8
+                    }
+                }
+            }
+        });
+    }
+
+    // Real-time counter updater on dashboard
+    if (dashboardData.statsUrl) {
+        function updateDashboardStats() {
+            fetch(dashboardData.statsUrl)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    const todayEl = document.getElementById('stat-conversations-today');
+                    const waitEl = document.getElementById('stat-conversations-waiting');
+                    const newCompEl = document.getElementById('stat-complaints-new');
+
+                    if (todayEl && data.conversations_today !== undefined) todayEl.textContent = data.conversations_today;
+                    if (waitEl && data.conversations_waiting !== undefined) waitEl.textContent = data.conversations_waiting;
+                    if (newCompEl && data.complaints_new !== undefined) newCompEl.textContent = data.complaints_new;
+                })
+                .catch(function () {});
         }
-    });
+
+        setInterval(updateDashboardStats, 5000);
+    }
 });
-
-// Real-time counter updater on dashboard
-function updateDashboardStats() {
-    fetch('{{ route("admin.dashboard.stats") }}')
-        .then(r => r.json())
-        .then(data => {
-            const todayEl = document.getElementById('stat-conversations-today');
-            const waitEl = document.getElementById('stat-conversations-waiting');
-            const newCompEl = document.getElementById('stat-complaints-new');
-            const procCompEl = document.getElementById('stat-complaints-processing');
-
-            if (todayEl) todayEl.textContent = data.conversations_today;
-            if (waitEl) waitEl.textContent = data.conversations_waiting;
-            if (newCompEl) newCompEl.textContent = data.complaints_new;
-            if (procCompEl) procCompEl.textContent = data.complaints_processing;
-        })
-        .catch(() => {});
-}
-
-setInterval(updateDashboardStats, 5000);
 </script>
 @endpush

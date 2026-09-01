@@ -65,6 +65,8 @@
                         <option value="2022">2022 (IHK: 112.45)</option>
                         <option value="2023">2023 (IHK: 115.80)</option>
                         <option value="2024">2024 (IHK: 118.95)</option>
+                        <option value="2025">2025 (IHK: 122.40)</option>
+                        <option value="2026">2026 (IHK: 125.85)</option>
                     </select>
                 </div>
 
@@ -77,7 +79,9 @@
                         <option value="2021">2021 (IHK: 106.50)</option>
                         <option value="2022">2022 (IHK: 112.45)</option>
                         <option value="2023">2023 (IHK: 115.80)</option>
-                        <option value="2024" selected>2024 (IHK: 118.95)</option>
+                        <option value="2024">2024 (IHK: 118.95)</option>
+                        <option value="2025">2025 (IHK: 122.40)</option>
+                        <option value="2026" selected>2026 (IHK: 125.85)</option>
                     </select>
                 </div>
             </div>
@@ -93,20 +97,20 @@
 
                     <div class="text-center p-3 rounded-xl bg-white/80 border border-blue-200/80 shadow-xs">
                         <span class="text-[10px] font-bold text-slate-400 uppercase">Inflasi Kumulatif Periode</span>
-                        <p id="res-cumulative-rate" class="text-xl font-black text-blue-700">+18,95%</p>
+                        <p id="res-cumulative-rate" class="text-xl font-black text-blue-700">+25,85%</p>
                         <span class="text-[11px] text-slate-500">Kenaikan IHK</span>
                     </div>
 
                     <div class="space-y-1 md:text-right">
                         <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Nilai Setara / Daya Beli:</span>
-                        <p id="res-equivalent-value" class="text-2xl font-black text-emerald-600">Rp 1.189.500</p>
-                        <span id="res-year-end" class="text-xs text-emerald-800 font-bold">Pada Tahun 2024</span>
+                        <p id="res-equivalent-value" class="text-2xl font-black text-emerald-600">Rp 1.258.500</p>
+                        <span id="res-year-end" class="text-xs text-emerald-800 font-bold">Pada Tahun 2026</span>
                     </div>
                 </div>
 
                 <div class="mt-5 pt-4 border-t border-blue-200/80 text-xs text-slate-600 leading-relaxed">
                     <p id="res-explanation">
-                        💡 <strong>Interpretasi:</strong> Barang atau jasa yang berharga <strong>Rp 1.000.000</strong> pada tahun <strong>2018</strong> memerlukan dana sebesar sekitar <strong>Rp 1.189.500</strong> pada tahun <strong>2024</strong> untuk mendapatkan kuantitas dan kualitas yang sama.
+                        💡 <strong>Interpretasi:</strong> Barang atau jasa yang berharga <strong>Rp 1.000.000</strong> pada tahun <strong>2018</strong> memerlukan dana sebesar sekitar <strong>Rp 1.258.500</strong> pada tahun <strong>2026</strong> untuk mendapatkan kuantitas dan kualitas yang sama.
                     </p>
                 </div>
             </div>
@@ -188,7 +192,9 @@ const ihkMap = {
     '2021': 106.50,
     '2022': 112.45,
     '2023': 115.80,
-    '2024': 118.95
+    '2024': 118.95,
+    '2025': 122.40,
+    '2026': 125.85
 };
 
 function switchCalcTab(tab) {

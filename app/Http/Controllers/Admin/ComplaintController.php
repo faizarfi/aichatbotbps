@@ -38,13 +38,14 @@ class ComplaintController extends Controller
 
         $complaints = $query->orderByDesc('created_at')->paginate(12)->withQueryString();
 
+        $statusCounts = Complaint::selectRaw('status, COUNT(*) as aggregate')->groupBy('status')->pluck('aggregate', 'status');
         $counts = [
-            'all' => Complaint::count(),
-            'new' => Complaint::where('status', 'new')->count(),
-            'verified' => Complaint::where('status', 'verified')->count(),
-            'processing' => Complaint::where('status', 'processing')->count(),
-            'resolved' => Complaint::where('status', 'resolved')->count(),
-            'rejected' => Complaint::where('status', 'rejected')->count(),
+            'all' => $statusCounts->sum(),
+            'new' => $statusCounts->get('new', 0),
+            'verified' => $statusCounts->get('verified', 0),
+            'processing' => $statusCounts->get('processing', 0),
+            'resolved' => $statusCounts->get('resolved', 0),
+            'rejected' => $statusCounts->get('rejected', 0),
         ];
 
         return view('admin.complaints.index', compact('complaints', 'counts'));

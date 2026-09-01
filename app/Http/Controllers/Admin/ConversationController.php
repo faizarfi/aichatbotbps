@@ -38,12 +38,13 @@ class ConversationController extends Controller
 
         $conversations = $query->orderByDesc('last_message_at')->paginate(15)->withQueryString();
 
+        $statusCounts = Conversation::selectRaw('status, COUNT(*) as aggregate')->groupBy('status')->pluck('aggregate', 'status');
         $counts = [
-            'all' => Conversation::count(),
-            'waiting' => Conversation::where('status', 'waiting')->count(),
-            'handled' => Conversation::where('status', 'handled')->count(),
-            'bot' => Conversation::where('status', 'bot')->count(),
-            'closed' => Conversation::where('status', 'closed')->count(),
+            'all' => $statusCounts->sum(),
+            'waiting' => $statusCounts->get('waiting', 0),
+            'handled' => $statusCounts->get('handled', 0),
+            'bot' => $statusCounts->get('bot', 0),
+            'closed' => $statusCounts->get('closed', 0),
         ];
 
         return view('admin.conversations.index', compact('conversations', 'counts'));
@@ -63,7 +64,7 @@ class ConversationController extends Controller
      */
     public function getMessages(Conversation $conversation): JsonResponse
     {
-        $messages = $conversation->messages()->with('sender')->get()->map(function ($msg) {
+        $messages = $conversation->messages()->with('sender')->get()->map(function (Message $msg) {
             return [
                 'id' => $msg->id,
                 'sender_type' => $msg->sender_type,
@@ -93,9 +94,12 @@ class ConversationController extends Controller
             'content' => ['required', 'string', 'max:2000'],
         ]);
 
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
         $message = $this->chatService->sendOfficerReply(
             $conversation,
-            auth()->id(),
+            $user->id,
             $request->input('content')
         );
 
@@ -104,7 +108,7 @@ class ConversationController extends Controller
             'message' => [
                 'id' => $message->id,
                 'sender_type' => 'officer',
-                'sender_name' => auth()->user()->name,
+                'sender_name' => $user->name,
                 'content' => $message->content,
                 'created_at' => $message->created_at->format('H:i:s'),
             ],
@@ -117,9 +121,12 @@ class ConversationController extends Controller
      */
     public function takeOver(Conversation $conversation)
     {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
         $conversation->update([
             'status' => 'handled',
-            'assigned_to' => auth()->id(),
+            'assigned_to' => $user->id,
             'last_message_at' => now(),
         ]);
 
@@ -127,8 +134,8 @@ class ConversationController extends Controller
         Message::create([
             'conversation_id' => $conversation->id,
             'sender_type' => 'officer',
-            'sender_user_id' => auth()->id(),
-            'content' => 'Halo, saya ' . auth()->user()->name . ' (Petugas BPS Karanganyar). Ada yang bisa saya bantu secara langsung?',
+            'sender_user_id' => $user->id,
+            'content' => 'Halo, saya ' . $user->name . ' (Petugas BPS Karanganyar). Ada yang bisa saya bantu secara langsung?',
         ]);
 
         return back()->with('success', 'Percakapan berhasil diambil alih.');

@@ -122,8 +122,11 @@ class ReportController extends Controller
         $satisfactionRate = $feedbackTotal > 0 ? round(($feedbackHelpful / $feedbackTotal) * 100) : 100;
 
         // 4. Informasi Umum
-        $totalArticles = KnowledgeArticle::where('is_active', true)->count();
+        $totalArticles = KnowledgeArticle::count();
         $totalMessages = Message::whereBetween('created_at', [$start, $end])->count();
+
+        /** @var \App\Models\User|null $currentUser */
+        $currentUser = auth()->user();
 
         return [
             'startDate' => $startDate,
@@ -139,7 +142,7 @@ class ReportController extends Controller
             'totalArticles' => $totalArticles,
             'totalMessages' => $totalMessages,
             'generatedAt' => now()->translatedFormat('d F Y, H:i') . ' WIB',
-            'generatedBy' => auth()->user()->name ?? 'Administrator BPS',
+            'generatedBy' => $currentUser?->name ?? 'Administrator BPS',
         ];
     }
 }

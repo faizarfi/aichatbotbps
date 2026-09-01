@@ -20,10 +20,7 @@ class MyProfileController extends Controller
 
         // Hitung riwayat layanan yang pernah diajukan
         $stats = [
-            'reservations' => $user->reservations()->count(),
-            'data_requests' => $user->dataRequests()->count(),
             'complaints' => $user->complaints()->count(),
-            'surveys' => $user->surveys()->count(),
         ];
 
         return view('my-profile.show', compact('user', 'stats'));

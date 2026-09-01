@@ -42,7 +42,7 @@ class PublicChatController extends Controller
             return response()->json(['messages' => [], 'status' => 'bot']);
         }
 
-        $messages = $conversation->messages->map(function ($msg) {
+        $messages = $conversation->messages->map(function (Message $msg) {
             return [
                 'id' => $msg->id,
                 'sender_type' => $msg->sender_type,
@@ -74,7 +74,9 @@ class PublicChatController extends Controller
             'visitor_name' => ['nullable', 'string', 'max:100'],
         ]);
 
-        $visitorName = $validated['visitor_name'] ?? (auth()->check() ? auth()->user()->name : null);
+        /** @var \App\Models\User|null $user */
+        $user = auth()->user();
+        $visitorName = $validated['visitor_name'] ?? $user?->name;
 
         $conversation = $this->chatService->getOrCreateConversation(
             $validated['session'] ?? null,

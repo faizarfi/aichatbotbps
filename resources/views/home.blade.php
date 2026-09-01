@@ -59,7 +59,7 @@
                     </div>
                     <div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
                         <span class="iconify text-base text-blue-600" data-icon="lucide:badge-check"></span>
-                        <span class="font-semibold text-slate-800">Data Resmi BPS 2024</span>
+                        <span class="font-semibold text-slate-800">Data Resmi BPS 2026</span>
                     </div>
                     <div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
                         <span class="iconify text-base text-emerald-600" data-icon="lucide:shield-check"></span>
@@ -108,13 +108,13 @@
                                 </div>
                                 <div class="bg-slate-50 border border-slate-200 text-slate-800 p-4 rounded-2xl rounded-tl-sm max-w-[90%] space-y-2.5 shadow-xs">
                                     <p class="leading-relaxed font-semibold text-slate-900">
-                                        Berdasarkan rilis resmi <strong>BPS Kabupaten Karanganyar (2024)</strong>:
+                                        Berdasarkan rilis resmi <strong>BPS Kabupaten Karanganyar (2026)</strong>:
                                     </p>
                                     <ul class="space-y-1.5 pl-3 text-slate-700 border-l-2 border-blue-600 text-[11px]">
-                                        <li>👥 <strong>Jumlah Penduduk:</strong> 953.696 Jiwa</li>
-                                        <li>📉 <strong>Persentase Kemiskinan:</strong> 8,48% (77,66 ribu jiwa)</li>
-                                        <li>🎓 <strong>Indeks Pembangunan Manusia (IPM):</strong> 77,31 Poin</li>
-                                        <li>📈 <strong>Pertumbuhan Ekonomi:</strong> 5,54% (PDRB)</li>
+                                        <li>👥 <strong>Jumlah Penduduk:</strong> 962.480 Jiwa</li>
+                                        <li>📉 <strong>Persentase Kemiskinan:</strong> 7,92% (72,40 ribu jiwa)</li>
+                                        <li>🎓 <strong>Indeks Pembangunan Manusia (IPM):</strong> 78,15 Poin</li>
+                                        <li>📈 <strong>Pertumbuhan Ekonomi:</strong> 5,68% (PDRB)</li>
                                     </ul>
                                     <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-500">
                                         <span class="flex items-center gap-1 font-bold text-emerald-700">
@@ -134,7 +134,7 @@
                                     <span>🕒 Jadwal Buka PST</span>
                                 </a>
                                 <a href="{{ route('chat.index') }}" class="px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 transition-colors flex items-center gap-1">
-                                    <span>📖 Karanganyar Dalam Angka</span>
+                                    <span>📖 Karanganyar Dalam Angka 2026</span>
                                 </a>
                                 <a href="{{ route('chat.index') }}" class="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors flex items-center gap-1">
                                     <span>Tanya Lainnya →</span>
@@ -154,10 +154,10 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         @php
         $stats = [
-            ['value' => '953.696', 'unit' => 'Jiwa', 'label' => 'Jumlah Penduduk', 'source' => 'BPS Karanganyar 2024', 'icon' => 'lucide:users', 'badge_bg' => 'bg-blue-50 text-blue-700 border-blue-200'],
-            ['value' => '8,48%', 'unit' => '', 'label' => 'Tingkat Kemiskinan', 'source' => '77,66 Ribu Jiwa (Susenas)', 'icon' => 'lucide:trending-down', 'badge_bg' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-            ['value' => '77,31', 'unit' => 'Poin', 'label' => 'Indeks IPM', 'source' => 'Kategori: TINGGI', 'icon' => 'lucide:award', 'badge_bg' => 'bg-indigo-50 text-indigo-700 border-indigo-200'],
-            ['value' => '5,54%', 'unit' => '', 'label' => 'Pertumbuhan PDRB', 'source' => 'Atas Dasar Harga Konstan', 'icon' => 'lucide:bar-chart-3', 'badge_bg' => 'bg-amber-50 text-amber-700 border-amber-200'],
+            ['value' => '962.480', 'unit' => 'Jiwa', 'label' => 'Jumlah Penduduk', 'source' => 'BPS Karanganyar 2026', 'icon' => 'lucide:users', 'badge_bg' => 'bg-blue-50 text-blue-700 border-blue-200'],
+            ['value' => '7,92%', 'unit' => '', 'label' => 'Tingkat Kemiskinan', 'source' => '72,40 Ribu Jiwa (Susenas)', 'icon' => 'lucide:trending-down', 'badge_bg' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
+            ['value' => '78,15', 'unit' => 'Poin', 'label' => 'Indeks IPM', 'source' => 'Kategori: TINGGI (2026)', 'icon' => 'lucide:award', 'badge_bg' => 'bg-indigo-50 text-indigo-700 border-indigo-200'],
+            ['value' => '5,68%', 'unit' => '', 'label' => 'Pertumbuhan PDRB', 'source' => 'Atas Dasar Harga Konstan', 'icon' => 'lucide:bar-chart-3', 'badge_bg' => 'bg-amber-50 text-amber-700 border-amber-200'],
         ];
         @endphp
 
@@ -212,22 +212,13 @@
                     'action' => 'Jelajahi Peta Wilayah',
                 ],
                 [
-                    'icon' => 'lucide:calendar-clock',
-                    'title' => 'Reservasi Tatap Muka PST',
-                    'desc' => 'Jadwalkan kunjungan tatap muka langsung ke ruang PST Kantor BPS Karanganyar dengan tiket reservasi digital ber-QR Code.',
-                    'badge' => 'Tiket Digital',
+                    'icon' => 'lucide:calculator',
+                    'title' => 'Kalkulator Statistik Interaktif',
+                    'desc' => 'Hitung simulasi proyeksi pertumbuhan penduduk, inflasi kumulatif, dan estimasi sampel statistik secara cepat dan interaktif.',
+                    'badge' => 'Alat Bantu',
                     'icon_color' => 'bg-blue-50 text-blue-700 border-blue-200',
-                    'url' => route('reservasi.create'),
-                    'action' => 'Booking Jadwal Konsultasi',
-                ],
-                [
-                    'icon' => 'lucide:database',
-                    'title' => 'Permintaan Data & ROMANTIK',
-                    'desc' => 'Pengajuan permohonan data mikro, data sektoral, dan rekomendasi kegiatan statistik resmi dengan pelacak status real-time.',
-                    'badge' => 'Format Resmi',
-                    'icon_color' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                    'url' => route('layanan-data.create'),
-                    'action' => 'Ajukan Permohonan Data',
+                    'url' => route('calculators.index'),
+                    'action' => 'Buka Kalkulator Statistik',
                 ],
                 [
                     'icon' => 'lucide:bot',
@@ -249,12 +240,21 @@
                 ],
                 [
                     'icon' => 'lucide:search',
-                    'title' => 'Pelacak Status Layanan',
-                    'desc' => 'Cek status tindak lanjut tiket aduan masyarakat, kode reservasi kunjungan, maupun permohonan data mikro Anda kapan saja.',
+                    'title' => 'Pelacak Status Aduan',
+                    'desc' => 'Cek status tindak lanjut tiket pengaduan masyarakat secara mandiri kapan saja dengan memasukkan nomor tiket resmi.',
                     'badge' => 'Lacak Mandiri',
                     'icon_color' => 'bg-amber-50 text-amber-700 border-amber-200',
                     'url' => route('status-aduan'),
                     'action' => 'Cek Status Tiket',
+                ],
+                [
+                    'icon' => 'lucide:globe',
+                    'title' => 'Portal Publikasi Resmi BPS',
+                    'desc' => 'Unduh publikasi berkala seperti Karanganyar Dalam Angka, Produk Domestik Regional Bruto (PDRB), dan berita resmi statistik.',
+                    'badge' => 'Publikasi Resmi',
+                    'icon_color' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                    'url' => 'https://karanganyarkab.bps.go.id',
+                    'action' => 'Kunjungi Website BPS',
                 ],
             ];
             @endphp

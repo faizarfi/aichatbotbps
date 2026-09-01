@@ -9,13 +9,32 @@ use Illuminate\Support\Str;
 class KnowledgeSearchService
 {
     /**
+     * Peta Sinonim Kata Kunci Bahasa Indonesia untuk domain BPS
+     */
+    protected array $synonymMap = [
+        'penduduk' => ['populasi', 'warga', 'jiwa', 'orang', 'masyarakat', 'demografi', 'sensus', 'kelahiran'],
+        'kemiskinan' => ['miskin', 'poverty', 'garis kemiskinan', 'bansos', 'dtks', 'desil', 'p0', 'kurang mampu', 'bantuan'],
+        'ipm' => ['indeks pembangunan manusia', 'hdi', 'harapan hidup', 'lama sekolah', 'rls', 'hls', 'kualitas sdm', 'pendidikan'],
+        'pdrb' => ['ekonomi', 'pertumbuhan ekonomi', 'gdp', 'pendapatan daerah', 'adhk', 'adhb', 'lapangan usaha'],
+        'ketenagakerjaan' => ['pengangguran', 'tpt', 'angkatan kerja', 'bekerja', 'tenaga kerja', 'sakernas', 'loker'],
+        'inflasi' => ['ihk', 'indeks harga konsumen', 'kenaikan harga', 'daya beli', 'deflasi', 'harga barang'],
+        'pertanian' => ['panen', 'luas panen', 'padi', 'beras', 'palawija', 'kebun', 'teh', 'durian', 'sayuran', 'peternakan'],
+        'jadwal' => ['jam buka', 'jam kerja', 'waktu layanan', 'operasional', 'hari kerja', 'buka jam berapa', 'tutup'],
+        'lokasi' => ['alamat', 'kantor', 'tempat', 'posisi', 'nomor telepon', 'email', 'kontak', 'maps', 'hubungi'],
+        'biaya' => ['tarif', 'harga', 'gratis', 'bayar', 'pnbp', 'retribusi'],
+        'romantik' => ['rekomendasi statistik', 'survei opd', 'metodologi', 'kegiatan statistik sektoral'],
+        'aduan' => ['keluhan', 'lapor', 'komplain', 'kritik', 'aspirasi', 'tiket aduan'],
+        'kda' => ['karanganyar dalam angka', 'buku statistik', 'publikasi', 'tahunan', 'pdf'],
+    ];
+
+    /**
      * Cari artikel paling relevan berdasarkan teks pertanyaan.
      *
      * @param string $query
      * @param int $limit
      * @return array{bestMatch: ?KnowledgeArticle, candidates: Collection, confidence: float}
      */
-    public function search(string $query, int $limit = 3): array
+    public function search(string $query, int $limit = 5): array
     {
         $cleanQuery = trim($query);
         if (empty($cleanQuery)) {
@@ -43,45 +62,32 @@ class KnowledgeSearchService
         }
 
         $queryWords = $this->tokenize($cleanQuery);
-        $scored = [];
+        $expandedWords = $this->expandSynonyms($queryWords);
 
-        foreach ($articles as $article) {
-            $score = $this->calculateScore($article, $cleanQuery, $queryWords);
-            if ($score > 0) {
-                $scored[] = [
-                    'article' => $article,
-                    'score' => $score,
-                ];
-            }
+        $scored = $articles->map(fn($article) => [
+            'article' => $article,
+            'score' => $this->calculateScore($article, $cleanQuery, $queryWords, $expandedWords),
+        ])->filter(fn($item) => $item['score'] > 0)
+          ->sortByDesc('score')
+          ->values();
+
+        if ($scored->isEmpty()) {
+            return ['bestMatch' => null, 'candidates' => new Collection(), 'confidence' => 0.0];
         }
 
-        // Urutkan berdasarkan skor tertinggi
-        usort($scored, fn ($a, $b) => $b['score'] <=> $a['score']);
-
-        if (empty($scored)) {
-            return [
-                'bestMatch' => null,
-                'candidates' => new Collection(),
-                'confidence' => 0.0,
-            ];
-        }
-
-        $topCandidates = collect(array_slice($scored, 0, $limit))->pluck('article');
-        $topScore = $scored[0]['score'];
-        $bestMatch = $topScore >= 20 ? $scored[0]['article'] : null;
-        $confidence = min(1.0, round($topScore / 100, 4));
+        $topScore = $scored->first()['score'];
 
         return [
-            'bestMatch' => $bestMatch,
-            'candidates' => $topCandidates,
-            'confidence' => $confidence,
+            'bestMatch' => $topScore >= 15 ? $scored->first()['article'] : null,
+            'candidates' => $scored->take($limit)->pluck('article'),
+            'confidence' => min(1.0, round($topScore / 100, 4)),
         ];
     }
 
     /**
      * Hitung skor relevansi artikel terhadap query.
      */
-    private function calculateScore(KnowledgeArticle $article, string $fullQuery, array $queryWords): float
+    private function calculateScore(KnowledgeArticle $article, string $fullQuery, array $queryWords, array $expandedWords): float
     {
         $score = 0.0;
         $lowerQuery = Str::lower($fullQuery);
@@ -92,45 +98,76 @@ class KnowledgeSearchService
 
         // 1. Exact match di title atau question
         if (str_contains($lowerTitle, $lowerQuery)) {
-            $score += 60;
+            $score += 70;
         }
         if (str_contains($lowerQuestion, $lowerQuery)) {
-            $score += 50;
+            $score += 60;
         }
 
         // 2. Keyword match
         foreach ($keywords as $kw) {
             if (!empty($kw)) {
                 if ($kw === $lowerQuery) {
-                    $score += 70;
+                    $score += 80;
                 } elseif (str_contains($lowerQuery, $kw) || str_contains($kw, $lowerQuery)) {
-                    $score += 35;
+                    $score += 40;
                 }
             }
         }
 
-        // 3. Kata per kata matching
+        // 3. Direct Word Matching
         foreach ($queryWords as $word) {
             if (strlen($word) < 3) continue;
 
             if (str_contains($lowerTitle, $word)) {
-                $score += 15;
+                $score += 20;
             }
             if (str_contains($lowerQuestion, $word)) {
-                $score += 12;
+                $score += 15;
             }
             if (str_contains($lowerAnswer, $word)) {
-                $score += 5;
+                $score += 8;
             }
 
             foreach ($keywords as $kw) {
                 if (str_contains($kw, $word)) {
+                    $score += 15;
+                }
+            }
+        }
+
+        // 4. Synonym Expansion Matching
+        foreach ($expandedWords as $syn) {
+            if (strlen($syn) < 3) continue;
+            if (str_contains($lowerTitle, $syn) || str_contains($lowerQuestion, $syn)) {
+                $score += 12;
+            }
+            foreach ($keywords as $kw) {
+                if (str_contains($kw, $syn)) {
                     $score += 10;
                 }
             }
         }
 
         return $score;
+    }
+
+    /**
+     * Ekspansi kata dengan sinonim domain BPS
+     */
+    private function expandSynonyms(array $words): array
+    {
+        $expanded = [];
+        foreach ($words as $word) {
+            $expanded[] = $word;
+            foreach ($this->synonymMap as $key => $synonyms) {
+                if ($word === $key || in_array($word, $synonyms, true) || str_contains($key, $word) || str_contains($word, $key)) {
+                    $expanded[] = $key;
+                    $expanded = array_merge($expanded, $synonyms);
+                }
+            }
+        }
+        return array_unique($expanded);
     }
 
     /**
@@ -142,7 +179,8 @@ class KnowledgeSearchService
         $words = preg_split('/\s+/', $clean, -1, PREG_SPLIT_NO_EMPTY);
 
         // Abaikan stopwords umum bahasa Indonesia
-        $stopwords = ['yang', 'untuk', 'pada', 'ke', 'dari', 'di', 'dan', 'ini', 'itu', 'adalah', 'apakah', 'bagaimana', 'bisa', 'tolong', 'mohon', 'ada', 'apa', 'saya', 'kami', 'anda', 'dengan', 'atau'];
+        $stopwords = ['yang', 'untuk', 'pada', 'ke', 'dari', 'di', 'dan', 'ini', 'itu', 'adalah', 'apakah', 'bagaimana', 'bisa', 'tolong', 'mohon', 'ada', 'apa', 'saya', 'kami', 'anda', 'dengan', 'atau', 'saja', 'pun', 'dong', 'sih'];
         return array_values(array_diff($words, $stopwords));
     }
 }
+

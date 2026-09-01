@@ -104,7 +104,7 @@ chatbot-bps-karanganyar/
 │   │   │   ├── Auth/           # Controller Autentikasi & Google SSO
 │   │   │   └── ...             # Controller Layanan Publik
 │   │   └── Middleware/         # Proteksi Role & Security Headers
-│   ├── Models/                 # Model Eloquent (User, Reservation, DataRequest, dll)
+│   ├── Models/                 # Model Eloquent (User, Complaint, Conversation, dll)
 │   └── Services/               # Logika Bisnis (AI Client, Ticket Service)
 ├── database/
 │   ├── migrations/             # Struktur skema tabel database
