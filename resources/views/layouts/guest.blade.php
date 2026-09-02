@@ -63,6 +63,15 @@
         &copy; 2026 Badan Pusat Statistik Kabupaten Karanganyar • Hak Cipta Dilindungi
     </footer>
 
+    {{-- Session Flash Data for Toast --}}
+    <script id="guest-flash-messages" type="application/json">
+    {
+        "success": @json(session('success')),
+        "status": @json(session('status')),
+        "error": @json(session('error'))
+    }
+    </script>
+
     {{-- Global Auth UX Scripts --}}
     <script>
         // Toggle Password Visibility
@@ -115,41 +124,45 @@
             });
 
             // SweetAlert Toast for Flash Messages
-            @if(session('success'))
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'success',
-                    title: "{{ session('success') }}",
-                    showConfirmButton: false,
-                    timer: 4000,
-                    timerProgressBar: true
-                });
-            @endif
-
-            @if(session('status'))
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'info',
-                    title: "{{ session('status') }}",
-                    showConfirmButton: false,
-                    timer: 5000,
-                    timerProgressBar: true
-                });
-            @endif
-
-            @if(session('error'))
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'error',
-                    title: "{{ session('error') }}",
-                    showConfirmButton: false,
-                    timer: 4000,
-                    timerProgressBar: true
-                });
-            @endif
+            const flashEl = document.getElementById('guest-flash-messages');
+            if (flashEl) {
+                try {
+                    const flash = JSON.parse(flashEl.textContent);
+                    if (flash.success) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: flash.success,
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true
+                        });
+                    }
+                    if (flash.status) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'info',
+                            title: flash.status,
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true
+                        });
+                    }
+                    if (flash.error) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'error',
+                            title: flash.error,
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true
+                        });
+                    }
+                } catch (e) {}
+            }
         });
     </script>
 
