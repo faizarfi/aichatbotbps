@@ -26,7 +26,7 @@
             @if($conversation->status !== 'handled' && $conversation->status !== 'closed')
             <form action="{{ route('admin.conversations.takeover', $conversation) }}" method="POST">
                 @csrf
-                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-blue-600/20 transition-all flex items-center gap-1.5">
+                <button type="submit" class="px-4 py-2 bg-[#f7941d] hover:bg-[#e07e0c] text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5">
                     <span class="iconify text-base" data-icon="lucide:user-plus"></span>
                     <span>Ambil Alih Percakapan</span>
                 </button>
@@ -50,13 +50,13 @@
         {{-- Live Room Bar --}}
         <div class="px-6 py-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#00a651] animate-pulse"></span>
                 <span class="text-xs font-bold text-slate-700">Live Polling Aktif</span>
                 <span class="text-xs text-slate-400">| Sesi Dimulai: {{ $conversation->created_at->format('d M Y, H:i') }}</span>
             </div>
             @if($conversation->assignedOfficer)
             <div class="text-xs text-slate-600 font-medium">
-                Ditangani oleh: <span class="font-bold text-blue-600">{{ $conversation->assignedOfficer->name }}</span>
+                Ditangani oleh: <span class="font-bold text-[#005b9f]">{{ $conversation->assignedOfficer->name }}</span>
             </div>
             @endif
         </div>
@@ -81,41 +81,49 @@
                 @elseif($msg->sender_type === 'officer')
                 <div class="flex items-start gap-2.5 max-w-xl">
                     <div class="text-right">
-                        <div class="bg-blue-600 text-white rounded-2xl rounded-tr-sm p-4 shadow-sm">
+                        <div class="bg-[#005b9f] text-white rounded-2xl rounded-tr-sm p-4 shadow-sm">
                             <p class="text-xs font-semibold text-blue-100 mb-1">{{ $msg->sender?->name ?? 'Petugas BPS' }}</p>
                             <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->content }}</p>
                         </div>
                         <span class="text-[10px] text-slate-400 mt-1 block mr-1">{{ $msg->created_at->format('H:i') }}</span>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-blue-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                    <div class="w-8 h-8 rounded-full bg-[#04325e] text-white flex items-center justify-center shrink-0 font-bold text-xs">
                         {{ substr($msg->sender?->name ?? 'P', 0, 1) }}
                     </div>
                 </div>
                 @else
-                {{-- Bot Message --}}
+                {{-- Automated System Response Message --}}
                 <div class="flex items-start gap-2.5 max-w-xl">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                        <span class="iconify text-base" data-icon="lucide:bot"></span>
+                    <div class="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-[#005b9f] shrink-0">
+                        <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
                     </div>
                     <div>
-                        <div class="bg-blue-50/60 border border-blue-100 rounded-2xl rounded-tl-sm p-4 shadow-sm">
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-sm p-4 shadow-sm">
                             <div class="flex items-center justify-between mb-1">
-                                <p class="text-xs font-semibold text-blue-900">Bot Asisten</p>
+                                <p class="text-xs font-bold text-[#005b9f] flex items-center gap-1">
+                                    <span class="iconify text-xs text-[#005b9f]" data-icon="lucide:check-circle-2"></span> Respons Otomatis BPS
+                                </p>
                                 @if($msg->is_fallback)
-                                <span class="px-2 py-0.5 rounded text-[10px] bg-rose-100 text-rose-700 font-semibold">Fallback</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 font-bold border border-amber-200">Belum Terjawab (Fallback)</span>
                                 @endif
                             </div>
-                            <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{{ $msg->content }}</p>
+                            <div class="chat-content-body text-xs sm:text-sm text-slate-700 leading-relaxed">
+                                {!! Str::markdown($msg->content) !!}
+                            </div>
                             @if(!empty($msg->knowledge_sources))
-                            <div class="mt-2 pt-2 border-t border-blue-100 text-[11px] text-blue-700">
-                                <strong>Sumber:</strong>
+                            <div class="mt-2 pt-2 border-t border-slate-200 text-[11px] text-[#005b9f]">
+                                <strong>Rujukan:</strong>
                                 @foreach($msg->knowledge_sources as $src)
                                 <span class="inline-block mr-2">• {{ $src['title'] ?? '' }}</span>
                                 @endforeach
                             </div>
                             @endif
                         </div>
-                        <span class="text-[10px] text-slate-400 mt-1 block ml-1">{{ $msg->created_at->format('H:i') }}</span>
+                        <div class="flex items-center gap-1 text-[10px] text-slate-400 mt-1 ml-1">
+                            <span class="text-slate-600 font-semibold">Sistem BPS</span>
+                            <span>•</span>
+                            <span>{{ $msg->created_at->format('H:i') }}</span>
+                        </div>
                     </div>
                 </div>
                 @endif
@@ -135,10 +143,10 @@
                 <div class="flex-1">
                     <textarea id="officer-message-input" rows="2" required maxlength="2000"
                               placeholder="Ketik balasan langsung kepada pengunjung..."
-                              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-all"></textarea>
+                              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#005b9f] focus:border-[#005b9f] outline-none resize-none transition-all"></textarea>
                 </div>
                 <button type="submit" id="officer-send-btn"
-                        class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-blue-600/20 transition-all flex items-center justify-center gap-2 shrink-0 self-end disabled:opacity-50">
+                        class="px-5 py-2.5 bg-[#005b9f] hover:bg-[#04325e] text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0 self-end disabled:opacity-50">
                     <span class="iconify text-lg" data-icon="lucide:send"></span>
                     <span>Kirim</span>
                 </button>
@@ -209,13 +217,13 @@ function renderMessages(messages) {
             wrapper.innerHTML = `
                 <div class="flex items-start gap-2.5 max-w-xl">
                     <div class="text-right">
-                        <div class="bg-blue-600 text-white rounded-2xl rounded-tr-sm p-4 shadow-sm">
+                        <div class="bg-[#005b9f] text-white rounded-2xl rounded-tr-sm p-4 shadow-sm">
                             <p class="text-xs font-semibold text-blue-100 mb-1">${escapeHtml(msg.sender_name)}</p>
                             <p class="text-sm leading-relaxed whitespace-pre-line">${escapeHtml(msg.content)}</p>
                         </div>
                         <span class="text-[10px] text-slate-400 mt-1 block mr-1">${msg.created_at}</span>
                     </div>
-                    <div class="w-8 h-8 rounded-full bg-blue-700 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                    <div class="w-8 h-8 rounded-full bg-[#04325e] text-white flex items-center justify-center shrink-0 font-bold text-xs">
                         ${escapeHtml(msg.sender_name.substring(0, 1))}
                     </div>
                 </div>
@@ -223,18 +231,24 @@ function renderMessages(messages) {
         } else {
             wrapper.innerHTML = `
                 <div class="flex items-start gap-2.5 max-w-xl">
-                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                        <span class="iconify text-base" data-icon="lucide:bot"></span>
+                    <div class="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-[#005b9f] shrink-0">
+                        <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
                     </div>
                     <div>
-                        <div class="bg-blue-50/60 border border-blue-100 rounded-2xl rounded-tl-sm p-4 shadow-sm">
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-sm p-4 shadow-sm">
                             <div class="flex items-center justify-between mb-1">
-                                <p class="text-xs font-semibold text-blue-900">Bot Asisten</p>
-                                ${msg.is_fallback ? '<span class="px-2 py-0.5 rounded text-[10px] bg-rose-100 text-rose-700 font-semibold">Fallback</span>' : ''}
+                                <p class="text-xs font-bold text-[#005b9f] flex items-center gap-1">
+                                    <span class="iconify text-xs text-[#005b9f]" data-icon="lucide:check-circle-2"></span> Respons Otomatis BPS
+                                </p>
+                                ${msg.is_fallback ? '<span class="px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 font-bold border border-amber-200">Fallback</span>' : ''}
                             </div>
-                            <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHtml(msg.content)}</p>
+                            <div class="chat-content-body text-xs sm:text-sm text-slate-700 leading-relaxed">${formatAdminContent(msg.content)}</div>
                         </div>
-                        <span class="text-[10px] text-slate-400 mt-1 block ml-1">${msg.created_at}</span>
+                        <div class="flex items-center gap-1 text-[10px] text-slate-400 mt-1 ml-1">
+                            <span class="text-slate-600 font-semibold">Sistem BPS</span>
+                            <span>•</span>
+                            <span>${msg.created_at}</span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -242,6 +256,18 @@ function renderMessages(messages) {
         messagesContainer.appendChild(wrapper);
     });
     scrollToBottom();
+}
+
+function formatAdminContent(text) {
+    if (!text) return '';
+    if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        try {
+            return marked.parse(text, { breaks: true, gfm: true });
+        } catch (e) {
+            console.warn(e);
+        }
+    }
+    return escapeHtml(text).replace(/\n/g, '<br>');
 }
 
 function escapeHtml(text) {

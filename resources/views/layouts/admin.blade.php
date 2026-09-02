@@ -11,77 +11,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 <body class="bg-slate-50/80 font-sans antialiased text-slate-800 flex flex-col min-h-screen">
+    {{-- Modern Preloader Screen --}}
+    <x-preloader />
+
     <div class="min-h-screen flex flex-1">
-        {{-- Modern Light Executive Sidebar --}}
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white text-slate-700 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-200 ease-in-out flex flex-col justify-between border-r border-slate-200/90 shadow-sm">
+        {{-- Official BPS Executive Sidebar --}}
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-white text-slate-700 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-200 ease-in-out flex flex-col justify-between border-r border-slate-200 shadow-sm">
             <div>
-                {{-- Logo BPS --}}
-                <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100">
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 p-1.5 flex items-center justify-center border border-blue-100 shadow-xs">
+                {{-- Logo BPS Header --}}
+                <div class="flex items-center gap-3 px-5 py-4 bg-[#04325e] text-white border-b-2 border-[#f7941d]">
+                    <div class="w-10 h-10 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-sm shrink-0">
                         <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
-                    <div>
-                        <h1 class="text-sm font-black text-slate-900 leading-tight">Panel Petugas BPS</h1>
-                        <p class="text-[11px] text-blue-700 font-bold uppercase tracking-wider">Kabupaten Karanganyar</p>
+                    <div class="min-w-0">
+                        <h1 class="text-xs font-black text-white tracking-tight leading-tight uppercase">BPS Karanganyar</h1>
+                        <p class="text-[10px] text-[#f7941d] font-extrabold tracking-wider uppercase mt-0.5">Panel Petugas PST</p>
                     </div>
                 </div>
 
                 {{-- Navigation --}}
-                <nav class="mt-4 px-3 space-y-1.5">
+                <nav class="mt-4 px-3 space-y-1">
                     {{-- Dashboard --}}
                     <a href="{{ route('admin.dashboard') }}"
-                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.dashboard*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all {{ request()->routeIs('admin.dashboard*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
                         <div class="flex items-center gap-3">
-                            <span class="iconify text-lg {{ request()->routeIs('admin.dashboard*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:layout-dashboard"></span>
+                            <span class="iconify text-lg {{ request()->routeIs('admin.dashboard*') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:layout-dashboard"></span>
                             <span>Dashboard Utama</span>
                         </div>
                     </a>
 
                     {{-- Percakapan / Live Chat --}}
                     <a href="{{ route('admin.conversations.index') }}"
-                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.conversations*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all {{ request()->routeIs('admin.conversations.index') || request()->routeIs('admin.conversations.show') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
                         <div class="flex items-center gap-3">
-                            <span class="iconify text-lg {{ request()->routeIs('admin.conversations*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:messages-square"></span>
+                            <span class="iconify text-lg {{ request()->routeIs('admin.conversations.index') || request()->routeIs('admin.conversations.show') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:messages-square"></span>
                             <span>Percakapan Live</span>
                         </div>
-                        <span id="badge-waiting" class="hidden px-2 py-0.5 text-[10px] font-black rounded-full bg-amber-100 text-amber-800 border border-amber-300">0</span>
+                        <span id="badge-waiting" class="hidden px-2 py-0.5 text-[10px] font-black rounded-full bg-[#f7941d] text-white">0</span>
+                    </a>
+
+                    {{-- Evaluasi Pertanyaan Belum Terjawab --}}
+                    <a href="{{ route('admin.conversations.unanswered') }}"
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all {{ request()->routeIs('admin.conversations.unanswered') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
+                        <div class="flex items-center gap-3">
+                            <span class="iconify text-lg {{ request()->routeIs('admin.conversations.unanswered') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:help-circle"></span>
+                            <span>Evaluasi Pertanyaan</span>
+                        </div>
+                        <span class="px-2 py-0.5 text-[9.5px] font-bold rounded-md bg-amber-100 text-amber-800">Tinjau</span>
                     </a>
 
                     {{-- Aduan Tiket --}}
                     <a href="{{ route('admin.complaints.index') }}"
-                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.complaints*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all {{ request()->routeIs('admin.complaints*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
                         <div class="flex items-center gap-3">
-                            <span class="iconify text-lg {{ request()->routeIs('admin.complaints*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:ticket"></span>
+                            <span class="iconify text-lg {{ request()->routeIs('admin.complaints*') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:ticket"></span>
                             <span>Aduan Masuk</span>
                         </div>
-                        <span id="badge-complaints" class="hidden px-2 py-0.5 text-[10px] font-black rounded-full bg-rose-100 text-rose-800 border border-rose-300">0</span>
+                        <span id="badge-complaints" class="hidden px-2 py-0.5 text-[10px] font-black rounded-full bg-rose-500 text-white">0</span>
                     </a>
 
                     {{-- Laporan Rekapitulasi PDF --}}
                     <a href="{{ route('admin.reports.index') }}"
-                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.reports*') ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-xs' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all {{ request()->routeIs('admin.reports*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
                         <div class="flex items-center gap-3">
-                            <span class="iconify text-lg {{ request()->routeIs('admin.reports*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:printer"></span>
+                            <span class="iconify text-lg {{ request()->routeIs('admin.reports*') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:printer"></span>
                             <span>Laporan PDF</span>
                         </div>
-                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-blue-100 text-blue-800">Cetak</span>
+                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-blue-100 text-[#005b9f]">Cetak</span>
                     </a>
 
                     {{-- Basis Pengetahuan Submenu --}}
                     <div class="pt-3">
-                        <p class="px-3.5 mb-1.5 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Basis Pengetahuan</p>
+                        <p class="px-3.5 mb-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Basis Pengetahuan</p>
                         <a href="{{ route('admin.articles.index') }}"
-                           class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ request()->routeIs('admin.articles*') ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200/80' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                            <span class="iconify text-base {{ request()->routeIs('admin.articles*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:file-text"></span>
+                           class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.articles*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
+                            <span class="iconify text-base {{ request()->routeIs('admin.articles*') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:file-text"></span>
                             <span>Artikel & FAQ</span>
                         </a>
                         <a href="{{ route('admin.categories.index') }}"
-                           class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ request()->routeIs('admin.categories*') ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200/80' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                            <span class="iconify text-base {{ request()->routeIs('admin.categories*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:folder-tree"></span>
+                           class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.categories*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
+                            <span class="iconify text-base {{ request()->routeIs('admin.categories*') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:folder-tree"></span>
                             <span>Kategori Layanan</span>
                         </a>
                     </div>
@@ -89,10 +103,10 @@
                     {{-- Admin Only --}}
                     @if(auth()->user()->isAdmin())
                     <div class="pt-3">
-                        <p class="px-3.5 mb-1.5 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">Administrasi Sistem</p>
+                        <p class="px-3.5 mb-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Administrasi Sistem</p>
                         <a href="{{ route('admin.users.index') }}"
-                           class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ request()->routeIs('admin.users*') ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200/80' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                            <span class="iconify text-base {{ request()->routeIs('admin.users*') ? 'text-blue-600' : 'text-slate-400' }}" data-icon="lucide:users"></span>
+                           class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all {{ request()->routeIs('admin.users*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100 hover:text-[#005b9f]' }}">
+                            <span class="iconify text-base {{ request()->routeIs('admin.users*') ? 'text-[#f7941d]' : 'text-slate-400' }}" data-icon="lucide:users"></span>
                             <span>Kelola Pengguna</span>
                         </a>
                     </div>
@@ -101,15 +115,15 @@
             </div>
 
             {{-- User bottom widget --}}
-            <div class="p-4 border-t border-slate-100 bg-slate-50/70">
+            <div class="p-4 border-t border-slate-200 bg-slate-50">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
+                        <div class="w-9 h-9 rounded-xl bg-[#005b9f] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
                             {{ substr(auth()->user()->name, 0, 1) }}
                         </div>
                         <div class="truncate">
                             <p class="text-xs font-bold text-slate-900 truncate">{{ auth()->user()->name }}</p>
-                            <p class="text-[10px] text-blue-700 font-bold uppercase">{{ auth()->user()->role }}</p>
+                            <p class="text-[10px] text-[#005b9f] font-extrabold uppercase">{{ auth()->user()->role }}</p>
                         </div>
                     </div>
                     <form method="POST" action="{{ route('logout') }}" id="form-logout">
@@ -125,7 +139,7 @@
         {{-- Main content area --}}
         <div class="flex-1 flex flex-col min-w-0">
             {{-- Top Navbar --}}
-            <header class="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+            <header class="sticky top-0 z-20 bg-white border-b-2 border-[#005b9f] px-4 lg:px-8 py-3.5 flex items-center justify-between shadow-xs">
                 <div class="flex items-center gap-3">
                     <button id="sidebar-toggle" class="lg:hidden p-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition-colors">
                         <span class="iconify text-xl text-slate-600" data-icon="lucide:menu"></span>
@@ -139,20 +153,20 @@
                 <div class="flex items-center gap-3">
                     {{-- Clock / WIB indicator --}}
                     <div id="live-clock-badge" class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-mono text-slate-700">
-                        <span class="iconify text-sm text-blue-600" data-icon="lucide:clock"></span>
+                        <span class="iconify text-sm text-[#005b9f]" data-icon="lucide:clock"></span>
                         <span id="live-clock-text">{{ now()->format('H:i:s') }} WIB</span>
                     </div>
 
                     {{-- Status Indicator --}}
                     <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-xs font-bold text-emerald-800">Sistem Online</span>
+                        <span class="w-2 h-2 rounded-full bg-[#00a651] animate-pulse"></span>
+                        <span class="text-xs font-bold text-[#00a651]">Sistem Online</span>
                     </div>
 
                     {{-- Public Portal Link --}}
-                    <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-slate-200 transition-colors shadow-xs">
-                        <span class="iconify text-sm text-blue-600" data-icon="lucide:external-link"></span>
-                        <span class="hidden sm:inline">Lihat Web Publik</span>
+                    <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-[#04325e] hover:bg-[#004b87] rounded-xl transition-colors shadow-xs">
+                        <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:external-link"></span>
+                        <span class="hidden sm:inline">Portal Publik</span>
                     </a>
                 </div>
             </header>

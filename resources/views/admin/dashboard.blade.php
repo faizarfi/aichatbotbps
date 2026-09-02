@@ -4,28 +4,28 @@
 
 @section('content')
 <div class="space-y-8">
-    {{-- Welcome Banner (Clean Light Executive Style) --}}
-    <div class="bg-gradient-to-r from-blue-50 via-sky-50 to-indigo-50 rounded-3xl p-6 sm:p-8 text-slate-900 border border-blue-200/90 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+    {{-- Welcome Banner (Official BPS Corporate Navy & Orange) --}}
+    <div class="bg-gradient-to-r from-[#04325e] via-[#004b87] to-[#013a63] rounded-3xl p-6 sm:p-8 text-white border-b-4 border-[#f7941d] shadow-md flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-xs font-bold text-blue-800 border border-blue-200 shadow-xs mb-3">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>BPS Kabupaten Karanganyar</span>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-slate-100 border border-white/20 mb-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>BPS Kabupaten Karanganyar • Portal PST</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Selamat Datang, {{ auth()->user()->name }}!</h1>
-            <p class="mt-2 text-xs sm:text-sm text-slate-600 max-w-xl leading-relaxed">
+            <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Selamat Datang, {{ auth()->user()->name }}!</h1>
+            <p class="mt-2 text-xs sm:text-sm text-blue-100 max-w-xl leading-relaxed">
                 Pantau antrean percakapan masyarakat, tindak lanjuti tiket aduan masuk, dan kelola basis data statistik secara langsung.
             </p>
         </div>
         <div class="flex flex-wrap gap-2.5 shrink-0">
-            <a href="{{ route('admin.reports.index') }}" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition-all shadow-xs border border-slate-300 flex items-center gap-2">
-                <span class="iconify text-base text-blue-600" data-icon="lucide:printer"></span>
+            <a href="{{ route('admin.reports.index') }}" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all shadow-xs border border-white/20 flex items-center gap-2">
+                <span class="iconify text-base text-[#f7941d]" data-icon="lucide:printer"></span>
                 <span>Cetak Laporan PDF</span>
             </a>
-            <a href="{{ route('admin.conversations.index', ['status' => 'waiting']) }}" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+            <a href="{{ route('admin.conversations.index', ['status' => 'waiting']) }}" class="px-4 py-2.5 rounded-xl bg-[#f7941d] hover:bg-[#e07e0c] text-white text-xs font-black transition-all shadow-sm flex items-center gap-2">
                 <span class="iconify text-base" data-icon="lucide:messages-square"></span>
                 <span>Cek Antrean Chat</span>
             </a>
-            <a href="{{ route('admin.complaints.index', ['status' => 'new']) }}" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+            <a href="{{ route('admin.complaints.index', ['status' => 'new']) }}" class="px-4 py-2.5 rounded-xl bg-[#00a651] hover:bg-[#008d36] text-white text-xs font-black transition-all shadow-sm flex items-center gap-2">
                 <span class="iconify text-base" data-icon="lucide:ticket"></span>
                 <span>Aduan Baru</span>
             </a>
@@ -186,7 +186,7 @@
                             <div class="flex items-center gap-2 mb-1">
                                 <h4 class="font-bold text-xs text-slate-900 truncate">{{ $rc->visitor_name }}</h4>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border {{ $badge[$rc->status] ?? '' }}">
-                                    {{ $rc->status === 'waiting' ? 'Menunggu' : ($rc->status === 'handled' ? 'Petugas' : ($rc->status === 'closed' ? 'Selesai' : 'Bot')) }}
+                                    {{ $rc->status === 'waiting' ? 'Menunggu' : ($rc->status === 'handled' ? 'Petugas' : ($rc->status === 'closed' ? 'Selesai' : 'Otomatis')) }}
                                 </span>
                             </div>
                             <p class="text-xs text-slate-500 truncate">
@@ -206,10 +206,10 @@
             <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
                 <span class="flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Chatbot Siap Melayani 24 Jam</span>
+                    <span>Layanan Konsultasi Aktif 24 Jam</span>
                 </span>
                 <a href="{{ route('chat.index') }}" target="_blank" class="text-blue-600 font-semibold hover:underline">
-                    Uji Chatbot Publik
+                    Buka Halaman Chat
                 </a>
             </div>
         </div>
@@ -271,7 +271,7 @@
             <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
                 <span class="flex items-center gap-1.5">
                     <span class="iconify text-emerald-600 text-sm" data-icon="lucide:shield-check"></span>
-                    <span>Tingkat Kepuasan Bot: <strong>{{ $satisfactionRate }}%</strong> ({{ $feedbackHelpful }}/{{ $feedbackTotal }} ulasan)</span>
+                    <span>Tingkat Kepuasan Layanan: <strong>{{ $satisfactionRate }}%</strong> ({{ $feedbackHelpful }}/{{ $feedbackTotal }} ulasan)</span>
                 </span>
                 <a href="{{ route('aduan.create') }}" target="_blank" class="text-blue-600 font-semibold hover:underline">
                     Form Aduan Publik

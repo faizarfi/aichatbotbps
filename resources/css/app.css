@@ -75,3 +75,176 @@
 .animate-glow {
     animation: pulseGlow 6s ease-in-out infinite;
 }
+
+/* ===================================================
+   Clean & Elegant Chat Markdown Formatting 
+   =================================================== */
+.chat-content-body {
+    line-height: 1.68;
+    color: #334155; /* slate-700 */
+}
+
+.chat-content-body p {
+    margin-bottom: 0.65rem;
+}
+.chat-content-body p:last-child {
+    margin-bottom: 0;
+}
+
+.chat-content-body h1,
+.chat-content-body h2,
+.chat-content-body h3,
+.chat-content-body h4,
+.chat-content-body h5,
+.chat-content-body h6 {
+    color: #0f172a; /* slate-900 */
+    font-weight: 800;
+    line-height: 1.4;
+    margin-top: 1rem;
+    margin-bottom: 0.45rem;
+}
+.chat-content-body h1:first-child,
+.chat-content-body h2:first-child,
+.chat-content-body h3:first-child,
+.chat-content-body h4:first-child,
+.chat-content-body h5:first-child,
+.chat-content-body h6:first-child {
+    margin-top: 0;
+}
+
+.chat-content-body h1 {
+    font-size: 1.05rem;
+    color: #1e3a8a;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.25rem;
+}
+.chat-content-body h2 {
+    font-size: 0.975rem;
+    color: #1e3a8a; /* blue-900 */
+}
+.chat-content-body h3 {
+    font-size: 0.9rem;
+    color: #1d4ed8; /* blue-700 */
+}
+.chat-content-body h4,
+.chat-content-body h5,
+.chat-content-body h6 {
+    font-size: 0.85rem;
+    color: #1e293b; /* slate-800 */
+    font-weight: 700;
+}
+
+.chat-content-body strong {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.chat-content-body em {
+    font-style: italic;
+    color: #475569;
+}
+
+.chat-content-body ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.35rem;
+    margin-bottom: 0.65rem;
+}
+.chat-content-body ul > li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.35rem;
+    line-height: 1.6;
+}
+.chat-content-body ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0.25rem;
+    top: 0.6rem;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 9999px;
+    background-color: #2563eb; /* blue-600 */
+}
+
+.chat-content-body ol {
+    list-style-type: decimal;
+    padding-left: 1.35rem;
+    margin-top: 0.35rem;
+    margin-bottom: 0.65rem;
+}
+.chat-content-body ol > li {
+    margin-bottom: 0.35rem;
+    padding-left: 0.2rem;
+    line-height: 1.6;
+}
+
+.chat-content-body blockquote {
+    border-left: 3px solid #3b82f6;
+    background-color: #f8fafc;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    margin: 0.6rem 0;
+    color: #475569;
+    font-size: 0.8125rem;
+}
+
+.chat-content-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.775rem;
+}
+.chat-content-body th {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    font-weight: 700;
+    text-align: left;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid #cbd5e1;
+}
+.chat-content-body td {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+}
+.chat-content-body tr:nth-child(even) td {
+    background-color: #f8fafc;
+}
+
+.chat-content-body code {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    border: 1px solid #e2e8f0;
+}
+
+.chat-content-body pre {
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+}
+.chat-content-body pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border: none;
+    font-size: 0.75rem;
+}
+
+.chat-content-body a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.chat-content-body a:hover {
+    color: #1d4ed8;
+}
+

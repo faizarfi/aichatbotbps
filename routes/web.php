@@ -36,6 +36,9 @@ Route::post('/chat/request-officer', [PublicChatController::class, 'requestOffic
 Route::post('/chat/feedback', [PublicChatController::class, 'feedback'])
     ->middleware('throttle:30,1')
     ->name('chat.feedback');
+Route::get('/chat/unduh-pdf', [PublicChatController::class, 'downloadPdf'])
+    ->middleware('throttle:20,1')
+    ->name('chat.download-pdf');
 
 // Layanan Aduan (Wajib Login untuk Mengajukan)
 Route::middleware('auth')->group(function () {
@@ -104,6 +107,7 @@ Route::middleware(['auth', 'role:admin,petugas'])->prefix('admin')->group(functi
 
     // Percakapan Live & Antrean
     Route::get('/percakapan', [ConversationController::class, 'index'])->name('admin.conversations.index');
+    Route::get('/percakapan/unanswered', [ConversationController::class, 'unanswered'])->name('admin.conversations.unanswered');
     Route::get('/percakapan/{conversation}', [ConversationController::class, 'show'])->name('admin.conversations.show');
     Route::get('/percakapan/{conversation}/messages', [ConversationController::class, 'getMessages'])->name('admin.conversations.messages');
     Route::post('/percakapan/{conversation}/reply', [ConversationController::class, 'reply'])->name('admin.conversations.reply');

@@ -7,12 +7,12 @@
     {{-- Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-            <h2 class="text-xl font-bold text-slate-800">Ruang Percakapan & Antrean Live</h2>
-            <p class="text-sm text-slate-500 mt-1">Pantau interaksi masyarakat dengan chatbot dan tanggapi permintaan bantuan langsung.</p>
+            <h2 class="text-xl font-black text-slate-800 tracking-tight">Ruang Konsultasi & Antrean PST</h2>
+            <p class="text-sm text-slate-500 mt-1">Pantau permohonan data dan konsultasi statistik masyarakat melalui sistem Pelayanan Statistik Terpadu (PST).</p>
         </div>
         <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto-Refresh Aktif
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-700">
+                <span class="w-2 h-2 rounded-full bg-[#00a651] animate-pulse"></span> Auto-Refresh Aktif
             </span>
         </div>
     </div>
@@ -23,16 +23,16 @@
         $currentStatus = request('status', 'all');
         $tabs = [
             'all' => ['label' => 'Semua', 'count' => $counts['all'], 'icon' => 'lucide:layers'],
-            'waiting' => ['label' => 'Menunggu Petugas', 'count' => $counts['waiting'], 'icon' => 'lucide:clock', 'color' => 'bg-amber-500 text-slate-900'],
-            'handled' => ['label' => 'Sedang Ditangani', 'count' => $counts['handled'], 'icon' => 'lucide:user-check', 'color' => 'bg-blue-500 text-white'],
-            'bot' => ['label' => 'Otomatis Bot', 'count' => $counts['bot'], 'icon' => 'lucide:bot', 'color' => 'bg-slate-200 text-slate-700'],
-            'closed' => ['label' => 'Selesai', 'count' => $counts['closed'], 'icon' => 'lucide:check-circle', 'color' => 'bg-emerald-200 text-emerald-800'],
+            'waiting' => ['label' => 'Menunggu Petugas', 'count' => $counts['waiting'], 'icon' => 'lucide:clock', 'color' => 'bg-[#f7941d] text-white'],
+            'handled' => ['label' => 'Sedang Ditangani', 'count' => $counts['handled'], 'icon' => 'lucide:user-check', 'color' => 'bg-[#005b9f] text-white'],
+            'bot' => ['label' => 'Otomatis Sistem', 'count' => $counts['bot'], 'icon' => 'lucide:message-square-text', 'color' => 'bg-slate-200 text-slate-700'],
+            'closed' => ['label' => 'Selesai', 'count' => $counts['closed'], 'icon' => 'lucide:check-circle', 'color' => 'bg-emerald-100 text-emerald-800'],
         ];
         @endphp
 
         @foreach($tabs as $key => $tab)
         <a href="{{ route('admin.conversations.index', ['status' => $key]) }}"
-           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all {{ $currentStatus === $key ? 'bg-slate-900 text-white shadow-sm' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200' }}">
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all {{ $currentStatus === $key ? 'bg-[#005b9f] text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200' }}">
             <span class="iconify text-base" data-icon="{{ $tab['icon'] }}"></span>
             <span>{{ $tab['label'] }}</span>
             <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $tab['color'] ?? 'bg-slate-700 text-white' }}">
@@ -48,10 +48,10 @@
             <input type="hidden" name="status" value="{{ $currentStatus }}">
             <div class="flex-1">
                 <input type="text" name="search" value="{{ request('search') }}"
-                       class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#005b9f] focus:border-[#005b9f] outline-none"
                        placeholder="Cari ID percakapan atau nama pengunjung...">
             </div>
-            <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
+            <button type="submit" class="px-5 py-2.5 bg-[#005b9f] hover:bg-[#04325e] text-white text-sm font-bold rounded-xl transition-colors flex items-center gap-2">
                 <span class="iconify" data-icon="lucide:search"></span> Cari
             </button>
             @if(request('search'))
@@ -69,7 +69,7 @@
         $statusInfo = [
             'waiting' => ['label' => 'Menunggu Petugas', 'class' => 'bg-amber-100 text-amber-800 border-amber-300', 'badge' => 'animate-pulse'],
             'handled' => ['label' => 'Ditangani Petugas', 'class' => 'bg-blue-100 text-blue-800 border-blue-300', 'badge' => ''],
-            'bot' => ['label' => 'Ditangani Bot', 'class' => 'bg-slate-100 text-slate-700 border-slate-300', 'badge' => ''],
+            'bot' => ['label' => 'Otomatis Sistem', 'class' => 'bg-slate-100 text-slate-700 border-slate-300', 'badge' => ''],
             'closed' => ['label' => 'Ditutup', 'class' => 'bg-emerald-100 text-emerald-800 border-emerald-300', 'badge' => ''],
         ];
         $st = $statusInfo[$conv->status] ?? $statusInfo['bot'];
@@ -98,7 +98,7 @@
                 <div class="bg-slate-50 rounded-xl p-3 mb-4">
                     <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
                         @if($lastMsg)
-                            <span class="font-semibold text-slate-800">{{ $lastMsg->sender_type === 'visitor' ? 'Pengunjung:' : ($lastMsg->sender_type === 'officer' ? 'Petugas:' : 'Bot:') }}</span>
+                            <span class="font-semibold text-slate-800">{{ $lastMsg->sender_type === 'visitor' ? 'Pengunjung:' : ($lastMsg->sender_type === 'officer' ? 'Petugas:' : 'Sistem:') }}</span>
                             {{ $lastMsg->content }}
                         @else
                             <span class="italic text-slate-400">Belum ada pesan</span>

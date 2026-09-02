@@ -33,7 +33,7 @@
 
                 <div>
                     <label for="title" class="block text-sm font-semibold text-slate-700 mb-2">Judul Artikel <span class="text-rose-500">*</span></label>
-                    <input type="text" id="title" name="title" value="{{ old('title') }}" required
+                    <input type="text" id="title" name="title" value="{{ old('title', request('title')) }}" required
                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                            placeholder="Contoh: Cara Permintaan Data Statistik">
                     @error('title') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
@@ -44,7 +44,7 @@
                 <label for="question" class="block text-sm font-semibold text-slate-700 mb-2">Pertanyaan / Pertanyaan Terkait <span class="text-rose-500">*</span></label>
                 <textarea id="question" name="question" rows="2" required
                           class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
-                          placeholder="Pertanyaan umum yang biasa diajukan masyarakat...">{{ old('question') }}</textarea>
+                          placeholder="Pertanyaan umum yang biasa diajukan masyarakat...">{{ old('question', request('question')) }}</textarea>
                 @error('question') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
 

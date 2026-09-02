@@ -275,7 +275,7 @@
                 <td style="text-align: center;">{{ $idx + 1 }}</td>
                 <td style="font-weight: bold;">{{ $conv->visitor_name ?? 'Masyarakat Umum' }}</td>
                 <td>{{ $conv->created_at->translatedFormat('d M Y, H:i') }} WIB</td>
-                <td>{{ $conv->assignedOfficer ? $conv->assignedOfficer->name : 'Otomatis oleh AI Bot' }}</td>
+                <td>{{ $conv->assignedOfficer ? $conv->assignedOfficer->name : 'Otomatis oleh Sistem PST' }}</td>
                 <td style="text-align: center;">
                     @if($conv->status === 'closed')
                         <span class="badge badge-done">Selesai</span>

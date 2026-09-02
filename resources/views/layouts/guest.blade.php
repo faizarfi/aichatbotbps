@@ -20,6 +20,9 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-sky-50/50 to-indigo-50/30 text-slate-800 flex flex-col justify-between selection:bg-blue-600 selection:text-white relative overflow-x-hidden font-sans">
     
+    {{-- Modern Preloader Screen --}}
+    <x-preloader />
+
     {{-- Decorative Background Elements (Soft, Bright & Clean) --}}
     <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-blue-100/60 via-sky-50/30 to-transparent blur-3xl pointer-events-none -z-10"></div>
     <div class="fixed -bottom-20 -left-20 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none -z-10"></div>

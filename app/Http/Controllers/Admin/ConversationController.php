@@ -51,6 +51,48 @@ class ConversationController extends Controller
     }
 
     /**
+     * Tampilkan daftar pertanyaan pengunjung yang memicu fallback (evaluasi basis pengetahuan).
+     */
+    public function unanswered(Request $request)
+    {
+        $query = Message::with('conversation')
+            ->where('sender_type', 'bot')
+            ->where('is_fallback', true);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('content', 'like', "%{$search}%");
+        }
+
+        $fallbackMessages = $query->latest()->paginate(15)->withQueryString();
+
+        $items = $fallbackMessages->getCollection()->map(function ($fallbackMsg) {
+            $visitorMsg = Message::where('conversation_id', $fallbackMsg->conversation_id)
+                ->where('sender_type', 'visitor')
+                ->where('created_at', '<=', $fallbackMsg->created_at)
+                ->latest()
+                ->first();
+
+            return (object) [
+                'id' => $fallbackMsg->id,
+                'conversation_id' => $fallbackMsg->conversation_id,
+                'conversation' => $fallbackMsg->conversation,
+                'question' => $visitorMsg ? $visitorMsg->content : 'Pertanyaan Pengunjung',
+                'bot_response' => $fallbackMsg->content,
+                'created_at' => $fallbackMsg->created_at,
+            ];
+        });
+
+        $fallbackMessages->setCollection($items);
+
+        $totalFallback = Message::where('sender_type', 'bot')->where('is_fallback', true)->count();
+        $totalBot = Message::where('sender_type', 'bot')->count();
+        $accuracyRate = $totalBot > 0 ? round((($totalBot - $totalFallback) / $totalBot) * 100, 1) : 100;
+
+        return view('admin.conversations.unanswered', compact('fallbackMessages', 'totalFallback', 'accuracyRate'));
+    }
+
+    /**
      * Tampilkan ruang obrolan / detail percakapan.
      */
     public function show(Conversation $conversation)

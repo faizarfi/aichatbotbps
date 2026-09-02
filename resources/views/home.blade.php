@@ -1,286 +1,263 @@
 @extends('layouts.public')
 
-@section('title', 'Portal Resmi Layanan Statistik Terpadu')
-@section('meta_description', 'Portal resmi layanan informasi statistik, konsultasi data, publikasi, dan pengaduan masyarakat BPS Kabupaten Karanganyar.')
+@section('title', 'Portal Resmi Pelayanan Statistik Terpadu')
+@section('meta_description', 'Portal resmi layanan informasi data statistik, publikasi berkala, konsultasi PST, dan pengaduan masyarakat BPS Kabupaten Karanganyar.')
 
 @section('content')
-{{-- HERO SECTION (Cerah, Elegan, dan Berwibawa) --}}
-<section class="relative overflow-hidden bg-gradient-to-b from-slate-50 via-sky-50/40 to-slate-100/60 pt-10 pb-16 lg:pt-16 lg:pb-28 border-b border-slate-200/60">
-    {{-- Subtle institutional background accents --}}
-    <div class="absolute inset-0 pointer-events-none overflow-hidden">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-sky-100/40 rounded-full blur-3xl"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:28px_28px] opacity-25"></div>
-    </div>
-
+{{-- HERO SECTION: Official Prestigious BPS Gateway --}}
+<section class="relative bg-gradient-to-br from-[#04325e] via-[#004b87] to-[#013a63] text-white pt-10 pb-16 lg:pt-14 lg:pb-24 overflow-hidden border-b-4 border-[#f7941d]">
+    {{-- Institutional watermark pattern --}}
+    <div class="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <div class="text-center max-w-3xl mx-auto space-y-5">
+            {{-- Official Agency Badge --}}
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-slate-100 text-xs font-extrabold shadow-sm">
+                <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-4 h-4 object-contain">
+                <span>BADAN PUSAT STATISTIK KABUPATEN KARANGANYAR</span>
+            </div>
 
-            {{-- Left Content --}}
-            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                {{-- Official Badge --}}
-                <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/90 border border-blue-200 text-blue-900 shadow-xs">
-                    <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-4 h-4 object-contain">
-                    <span class="text-xs font-extrabold tracking-wide uppercase">Pelayanan Statistik Terpadu BPS</span>
-                </div>
+            {{-- Main Title --}}
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                Portal Pelayanan Statistik Terpadu
+            </h1>
 
-                {{-- Hero Heading --}}
-                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.14]">
-                    Akses Data & Layanan
-                    <span class="text-blue-700 block mt-1">
-                        Statistik Karanganyar
-                    </span>
-                </h1>
+            <p class="text-sm sm:text-base text-blue-100 leading-relaxed font-normal max-w-2xl mx-auto">
+                Penyedia data statistik berkualitas, publikasi berkala resmi, konsultasi statistik daring, dan kanal penanganan aspirasi masyarakat Kabupaten Karanganyar.
+            </p>
 
-                <p class="text-sm sm:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal">
-                    Pusat publikasi resmi, konsultasi data, dan layanan pengaduan masyarakat Kabupaten Karanganyar dengan dukungan <strong class="text-slate-800 font-bold">Asisten Statistik Terpadu 24 Jam</strong>.
-                </p>
+            {{-- Official Prominent Search Bar --}}
+            <div class="pt-3 max-w-2xl mx-auto">
+                <form action="{{ route('chat.index') }}" method="GET" class="relative flex items-center bg-white rounded-2xl p-1.5 sm:p-2 shadow-2xl border border-slate-200">
+                    <div class="pl-3.5 pr-2 text-slate-400">
+                        <span class="iconify text-xl text-[#005b9f]" data-icon="lucide:search"></span>
+                    </div>
+                    <input type="text"
+                           name="q"
+                           placeholder="Cari data penduduk, angka kemiskinan, PDRB, publikasi KDA..."
+                           class="w-full py-2.5 px-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium">
+                    <button type="submit"
+                            class="px-5 sm:px-7 py-2.5 sm:py-3 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl transition-all shadow-md shadow-orange-500/20 shrink-0 flex items-center gap-1.5 cursor-pointer">
+                        <span>Cari Data</span>
+                        <span class="iconify text-base" data-icon="lucide:arrow-right"></span>
+                    </button>
+                </form>
 
-                {{-- Action Buttons --}}
-                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
-                    <a href="{{ route('chat.index') }}"
-                       class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-extrabold rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 group">
-                        <span class="iconify text-lg" data-icon="lucide:message-square-text"></span>
-                        <span>Mulai Tanya Data</span>
-                        <span class="iconify text-base opacity-75 group-hover:translate-x-1 transition-transform" data-icon="lucide:arrow-right"></span>
+                {{-- Search Shortcuts --}}
+                <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-3 text-[11px] text-blue-100 font-medium">
+                    <span class="text-blue-200 text-[10px] uppercase font-bold tracking-wider mr-1">Rujukan Cepat:</span>
+                    <a href="{{ route('chat.index', ['q' => 'Jumlah penduduk Kabupaten Karanganyar 2026']) }}" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-colors">
+                        Penduduk 2026
                     </a>
-                    <a href="{{ route('aduan.create') }}"
-                       class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-800 text-sm font-bold rounded-xl transition-all border border-slate-200/90 shadow-xs">
-                        <span class="iconify text-lg text-blue-600" data-icon="lucide:ticket"></span>
-                        <span>Buat Pengaduan</span>
+                    <a href="{{ route('chat.index', ['q' => 'Data tingkat kemiskinan Karanganyar']) }}" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-colors">
+                        Angka Kemiskinan
                     </a>
-                </div>
-
-                {{-- Trust Badges --}}
-                <div class="pt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs text-slate-600 border-t border-slate-200/80">
-                    <div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="font-bold text-slate-800">Layanan Aktif 24 Jam</span>
-                    </div>
-                    <div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
-                        <span class="iconify text-base text-blue-600" data-icon="lucide:badge-check"></span>
-                        <span class="font-semibold text-slate-800">Data Resmi BPS 2026</span>
-                    </div>
-                    <div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-xs">
-                        <span class="iconify text-base text-emerald-600" data-icon="lucide:shield-check"></span>
-                        <span class="font-semibold text-slate-800">Privasi Terlindungi</span>
-                    </div>
+                    <a href="{{ route('chat.index', ['q' => 'Publikasi Karanganyar Dalam Angka (KDA)']) }}" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-colors">
+                        Publikasi KDA
+                    </a>
+                    <a href="{{ route('chat.index', ['q' => 'Jadwal dan jam operasional PST']) }}" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-colors">
+                        Jadwal PST
+                    </a>
+                    <a href="{{ route('districts.index') }}" class="px-2.5 py-1 rounded-lg bg-[#00a651]/30 hover:bg-[#00a651]/50 text-white border border-[#00a651]/40 transition-colors">
+                        17 Kecamatan
+                    </a>
                 </div>
             </div>
 
-            {{-- Right Interactive Simulator Card --}}
-            <div class="lg:col-span-5">
-                <div class="relative mx-auto max-w-md">
-                    {{-- Soft subtle card container --}}
-                    <div class="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-xl shadow-slate-200/60 space-y-4">
-                        {{-- Mockup Topbar --}}
-                        <div class="flex items-center justify-between pb-3.5 border-b border-slate-100">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-2xl bg-blue-50 p-1.5 flex items-center justify-center border border-blue-100">
-                                    <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-extrabold text-slate-900 leading-tight">Asisten Statistik BPS</h3>
-                                    <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1.5 mt-0.5">
-                                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                        Siap Melayani Pertanyaan Anda
-                                    </span>
-                                </div>
-                            </div>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                                PST Online
-                            </span>
-                        </div>
-
-                        {{-- Simulated Chat Messages --}}
-                        <div class="space-y-3 text-xs">
-                            {{-- User Bubble --}}
-                            <div class="flex justify-end">
-                                <div class="bg-blue-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm max-w-[85%] shadow-sm">
-                                    <p class="leading-relaxed font-medium">Berapa jumlah penduduk dan tingkat kemiskinan di Kabupaten Karanganyar?</p>
-                                </div>
-                            </div>
-
-                            {{-- Bot Response Bubble --}}
-                            <div class="flex gap-2.5 items-start">
-                                <div class="w-7 h-7 rounded-full bg-blue-50 p-1 flex items-center justify-center shrink-0 border border-blue-100 mt-0.5">
-                                    <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
-                                </div>
-                                <div class="bg-slate-50 border border-slate-200 text-slate-800 p-4 rounded-2xl rounded-tl-sm max-w-[90%] space-y-2.5 shadow-xs">
-                                    <p class="leading-relaxed font-semibold text-slate-900">
-                                        Berdasarkan rilis resmi <strong>BPS Kabupaten Karanganyar (2026)</strong>:
-                                    </p>
-                                    <ul class="space-y-1.5 pl-3 text-slate-700 border-l-2 border-blue-600 text-[11px]">
-                                        <li>👥 <strong>Jumlah Penduduk:</strong> 962.480 Jiwa</li>
-                                        <li>📉 <strong>Persentase Kemiskinan:</strong> 7,92% (72,40 ribu jiwa)</li>
-                                        <li>🎓 <strong>Indeks Pembangunan Manusia (IPM):</strong> 78,15 Poin</li>
-                                        <li>📈 <strong>Pertumbuhan Ekonomi:</strong> 5,68% (PDRB)</li>
-                                    </ul>
-                                    <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-500">
-                                        <span class="flex items-center gap-1 font-bold text-emerald-700">
-                                            <span class="iconify" data-icon="lucide:check-circle-2"></span> Terverifikasi Resmi
-                                        </span>
-                                        <a href="{{ route('chat.index') }}" class="text-blue-600 hover:text-blue-800 font-extrabold">Tanya Lengkap →</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Quick Interactive Pills --}}
-                        <div class="pt-2 border-t border-slate-100">
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400 mb-2">Contoh Topik Data Populer:</p>
-                            <div class="flex flex-wrap gap-1.5">
-                                <a href="{{ route('chat.index') }}" class="px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 transition-colors flex items-center gap-1">
-                                    <span>🕒 Jadwal Buka PST</span>
-                                </a>
-                                <a href="{{ route('chat.index') }}" class="px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 transition-colors flex items-center gap-1">
-                                    <span>📖 Karanganyar Dalam Angka 2026</span>
-                                </a>
-                                <a href="{{ route('chat.index') }}" class="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition-colors flex items-center gap-1">
-                                    <span>Tanya Lainnya →</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {{-- Fast Navigation Actions --}}
+            <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
+                <a href="{{ route('chat.index') }}" class="px-5 py-2.5 rounded-xl bg-white text-[#005b9f] hover:bg-blue-50 text-xs font-black shadow-md transition-all flex items-center gap-2">
+                    <span class="iconify text-base text-[#f7941d]" data-icon="lucide:message-square-text"></span>
+                    <span>Konsultasi Data Online</span>
+                </a>
+                <a href="{{ route('districts.index') }}" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-2">
+                    <span class="iconify text-base text-emerald-400" data-icon="lucide:map"></span>
+                    <span>Statistik 17 Kecamatan</span>
+                </a>
+                <a href="{{ route('aduan.create') }}" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-2">
+                    <span class="iconify text-base text-amber-300" data-icon="lucide:ticket"></span>
+                    <span>Saluran Pengaduan</span>
+                </a>
             </div>
-
         </div>
     </div>
 </section>
 
-{{-- STATISTIK KARANGANYAR SEKILAS (HIGHLIGHT DATA CARDS) --}}
-<section class="relative -mt-6 z-20 max-w-6xl mx-auto px-4 sm:px-6">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+{{-- INDIKATOR MAKRO STRATEGIS KARANGANYAR 2026 --}}
+<section class="relative -mt-8 z-20 max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         @php
-        $stats = [
-            ['value' => '962.480', 'unit' => 'Jiwa', 'label' => 'Jumlah Penduduk', 'source' => 'BPS Karanganyar 2026', 'icon' => 'lucide:users', 'badge_bg' => 'bg-blue-50 text-blue-700 border-blue-200'],
-            ['value' => '7,92%', 'unit' => '', 'label' => 'Tingkat Kemiskinan', 'source' => '72,40 Ribu Jiwa (Susenas)', 'icon' => 'lucide:trending-down', 'badge_bg' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-            ['value' => '78,15', 'unit' => 'Poin', 'label' => 'Indeks IPM', 'source' => 'Kategori: TINGGI (2026)', 'icon' => 'lucide:award', 'badge_bg' => 'bg-indigo-50 text-indigo-700 border-indigo-200'],
-            ['value' => '5,68%', 'unit' => '', 'label' => 'Pertumbuhan PDRB', 'source' => 'Atas Dasar Harga Konstan', 'icon' => 'lucide:bar-chart-3', 'badge_bg' => 'bg-amber-50 text-amber-700 border-amber-200'],
+        $macroStats = [
+            [
+                'label' => 'Jumlah Penduduk',
+                'value' => '962.480',
+                'unit' => 'Jiwa',
+                'sub' => 'L: 483,2k | P: 479,2k',
+                'source' => 'BPS Karanganyar 2026',
+                'icon' => 'lucide:users',
+                'color' => 'text-[#005b9f]',
+                'badge' => 'bg-blue-50 border-blue-200 text-[#005b9f]',
+            ],
+            [
+                'label' => 'Tingkat Kemiskinan',
+                'value' => '7,92%',
+                'unit' => '',
+                'sub' => '72,40 Ribu Jiwa (Susenas)',
+                'source' => 'GK: Rp 521.800/bln',
+                'icon' => 'lucide:trending-down',
+                'color' => 'text-[#ea580c]',
+                'badge' => 'bg-orange-50 border-orange-200 text-[#ea580c]',
+            ],
+            [
+                'label' => 'Indeks IPM',
+                'value' => '78,15',
+                'unit' => 'Poin',
+                'sub' => 'Kategori: TINGGI',
+                'source' => 'AHH: 78,12 Thn | HLS: 14,02',
+                'icon' => 'lucide:award',
+                'color' => 'text-indigo-700',
+                'badge' => 'bg-indigo-50 border-indigo-200 text-indigo-700',
+            ],
+            [
+                'label' => 'Pertumbuhan PDRB',
+                'value' => '5,68%',
+                'unit' => '',
+                'sub' => 'Atas Dasar Harga Konstan',
+                'source' => 'ADHB: Rp 44,8 Triliun',
+                'icon' => 'lucide:trending-up',
+                'color' => 'text-[#00a651]',
+                'badge' => 'bg-emerald-50 border-emerald-200 text-[#00a651]',
+            ],
         ];
         @endphp
 
-        @foreach($stats as $s)
-        <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-xs font-bold text-slate-500 leading-tight uppercase tracking-wider">{{ $s['label'] }}</span>
-                <div class="w-9 h-9 rounded-xl {{ $s['badge_bg'] }} border flex items-center justify-center shadow-xs">
-                    <span class="iconify text-lg" data-icon="{{ $s['icon'] }}"></span>
-                </div>
-            </div>
+        @foreach($macroStats as $ms)
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-md hover:shadow-lg transition-all flex flex-col justify-between">
             <div>
-                <div class="flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{{ $s['value'] }}</span>
-                    @if($s['unit'])<span class="text-xs font-bold text-slate-500">{{ $s['unit'] }}</span>@endif
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider">{{ $ms['label'] }}</span>
+                    <div class="w-8 h-8 rounded-xl {{ $ms['badge'] }} border flex items-center justify-center">
+                        <span class="iconify text-base" data-icon="{{ $ms['icon'] }}"></span>
+                    </div>
                 </div>
-                <p class="text-[11px] text-slate-500 font-medium mt-1 flex items-center gap-1">
-                    <span class="iconify text-blue-600" data-icon="lucide:check"></span>
-                    <span>{{ $s['source'] }}</span>
-                </p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{{ $ms['value'] }}</span>
+                    @if($ms['unit'])<span class="text-xs font-bold text-slate-500">{{ $ms['unit'] }}</span>@endif
+                </div>
+                <p class="text-xs text-slate-600 font-semibold mt-1">{{ $ms['sub'] }}</p>
+            </div>
+            <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-medium">
+                <span>{{ $ms['source'] }}</span>
+                <span class="iconify text-emerald-600" data-icon="lucide:check-circle-2"></span>
             </div>
         </div>
         @endforeach
     </div>
 </section>
 
-{{-- 6 LAYANAN UTAMA PST BPS KARANGANYAR --}}
-<section class="py-16 lg:py-24 bg-slate-50/60">
+{{-- 6 LAYANAN UTAMA PELAYANAN STATISTIK TERPADU (PST) --}}
+<section class="py-16 lg:py-24 bg-slate-50">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="text-xs font-extrabold text-blue-700 uppercase tracking-widest bg-blue-100/70 px-3.5 py-1.5 rounded-full border border-blue-200">
-                Pusat Pelayanan Terpadu
+            <span class="text-xs font-black text-[#005b9f] uppercase tracking-widest bg-blue-50 px-3.5 py-1.5 rounded-full border border-blue-200">
+                Layanan Publik Resmi
             </span>
-            <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-4 tracking-tight">
-                Layanan Statistik Resmi BPS
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 mt-3 tracking-tight">
+                Layanan Pelayanan Statistik Terpadu (PST)
             </h2>
-            <p class="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
-                Kemudahan akses permohonan data, konsultasi statistik, publikasi berkala, hingga saluran pengaduan resmi.
+            <p class="mt-2 text-slate-600 text-sm sm:text-base">
+                Akses resmi diseminasi data, konsultasi statistik, publikasi berkala, dan penanganan aspirasi BPS Karanganyar.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @php
-            $services = [
+            $portalServices = [
+                [
+                    'icon' => 'lucide:message-square-text',
+                    'title' => 'Konsultasi Statistik Online',
+                    'desc' => 'Layanan tanya jawab dan permohonan data statistik resmi secara daring tanpa perlu datang langsung ke kantor BPS.',
+                    'badge' => 'Online 24/7',
+                    'badge_class' => 'bg-blue-50 text-[#005b9f] border-blue-200',
+                    'icon_class' => 'bg-blue-50 text-[#005b9f] border-blue-200',
+                    'url' => route('chat.index'),
+                    'action' => 'Buka Konsultasi Data',
+                ],
                 [
                     'icon' => 'lucide:map-pin',
-                    'title' => 'Peta 17 Kecamatan Karanganyar',
-                    'desc' => 'Eksplorasi data statistik kependudukan, luas wilayah, kepadatan, dan sektor unggulan di setiap kecamatan se-Kabupaten Karanganyar.',
-                    'badge' => 'Peta Tematik',
-                    'icon_color' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
+                    'title' => 'Statistik 17 Kecamatan',
+                    'desc' => 'Eksplorasi data kependudukan, luas wilayah, kepadatan penduduk, dan komoditas unggulan 17 kecamatan di Karanganyar.',
+                    'badge' => 'Profil Wilayah',
+                    'badge_class' => 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                    'icon_class' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
                     'url' => route('districts.index'),
-                    'action' => 'Jelajahi Peta Wilayah',
+                    'action' => 'Lihat Data Kecamatan',
                 ],
                 [
                     'icon' => 'lucide:calculator',
                     'title' => 'Kalkulator Statistik Interaktif',
-                    'desc' => 'Hitung simulasi proyeksi pertumbuhan penduduk, inflasi kumulatif, dan estimasi sampel statistik secara cepat dan interaktif.',
+                    'desc' => 'Hitung simulasi proyeksi pertumbuhan penduduk, inflasi kumulatif, dan estimasi sampel statistik dengan rumus baku.',
                     'badge' => 'Alat Bantu',
-                    'icon_color' => 'bg-blue-50 text-blue-700 border-blue-200',
+                    'badge_class' => 'bg-indigo-50 text-indigo-800 border-indigo-200',
+                    'icon_class' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
                     'url' => route('calculators.index'),
-                    'action' => 'Buka Kalkulator Statistik',
+                    'action' => 'Buka Kalkulator',
                 ],
                 [
-                    'icon' => 'lucide:bot',
-                    'title' => 'Asisten Chatbot AI 24 Jam',
-                    'desc' => 'Tanyakan berbagai informasi statistik kapan saja tanpa antre. Dilengkapi fitur pengalihan langsung ke petugas bila butuh respon mendalam.',
-                    'badge' => 'Online 24/7',
-                    'icon_color' => 'bg-cyan-50 text-cyan-700 border-cyan-200',
-                    'url' => route('chat.index'),
-                    'action' => 'Mulai Konsultasi Bot',
+                    'icon' => 'lucide:book-open',
+                    'title' => 'Publikasi Karanganyar Dalam Angka',
+                    'desc' => 'Unduh publikasi berkala Karanganyar Dalam Angka, Produk Domestik Regional Bruto (PDRB), dan berita resmi statistik.',
+                    'badge' => 'Publikasi Resmi',
+                    'badge_class' => 'bg-amber-50 text-amber-800 border-amber-200',
+                    'icon_class' => 'bg-amber-50 text-[#f7941d] border-amber-200',
+                    'url' => 'https://karanganyarkab.bps.go.id',
+                    'action' => 'Katalog Publikasi',
                 ],
                 [
                     'icon' => 'lucide:ticket',
-                    'title' => 'Pengaduan Layanan Resmi',
-                    'desc' => 'Saluran aspirasi dan pengaduan pelayanan publik transparan dengan nomor tiket unik serta pemantauan status tindak lanjut berkala.',
+                    'title' => 'Saluran Pengaduan Resmi',
+                    'desc' => 'Sampaikan pengaduan atau aspirasi pelayanan statistik secara transparan dengan nomor tiket unik pemantauan.',
                     'badge' => 'Resmi & Berkode',
-                    'icon_color' => 'bg-rose-50 text-rose-700 border-rose-200',
+                    'badge_class' => 'bg-rose-50 text-rose-800 border-rose-200',
+                    'icon_class' => 'bg-rose-50 text-rose-700 border-rose-200',
                     'url' => route('aduan.create'),
-                    'action' => 'Buat Laporan Aduan',
+                    'action' => 'Kirim Pengaduan',
                 ],
                 [
                     'icon' => 'lucide:search',
-                    'title' => 'Pelacak Status Aduan',
-                    'desc' => 'Cek status tindak lanjut tiket pengaduan masyarakat secara mandiri kapan saja dengan memasukkan nomor tiket resmi.',
+                    'title' => 'Lacak Status Tiket Pengaduan',
+                    'desc' => 'Pantau status tindak lanjut tiket pengaduan masyarakat secara mandiri dengan memasukkan nomor tiket resmi.',
                     'badge' => 'Lacak Mandiri',
-                    'icon_color' => 'bg-amber-50 text-amber-700 border-amber-200',
+                    'badge_class' => 'bg-slate-100 text-slate-800 border-slate-300',
+                    'icon_class' => 'bg-slate-100 text-slate-700 border-slate-300',
                     'url' => route('status-aduan'),
                     'action' => 'Cek Status Tiket',
-                ],
-                [
-                    'icon' => 'lucide:globe',
-                    'title' => 'Portal Publikasi Resmi BPS',
-                    'desc' => 'Unduh publikasi berkala seperti Karanganyar Dalam Angka, Produk Domestik Regional Bruto (PDRB), dan berita resmi statistik.',
-                    'badge' => 'Publikasi Resmi',
-                    'icon_color' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                    'url' => 'https://karanganyarkab.bps.go.id',
-                    'action' => 'Kunjungi Website BPS',
                 ],
             ];
             @endphp
 
-            @foreach($services as $svc)
-            <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300 group flex flex-col justify-between">
+            @foreach($portalServices as $ps)
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-[#005b9f]/50 transition-all flex flex-col justify-between group">
                 <div>
-                    <div class="flex items-center justify-between mb-5">
-                        <div class="w-12 h-12 rounded-2xl {{ $svc['icon_color'] }} border flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform p-2.5">
-                            <span class="iconify text-2xl" data-icon="{{ $svc['icon'] }}"></span>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-11 h-11 rounded-xl {{ $ps['icon_class'] }} border flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <span class="iconify text-xl" data-icon="{{ $ps['icon'] }}"></span>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-[11px] font-extrabold bg-slate-100 text-slate-700 group-hover:bg-blue-50 group-hover:text-blue-700 transition-colors">
-                            {{ $svc['badge'] }}
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $ps['badge_class'] }}">
+                            {{ $ps['badge'] }}
                         </span>
                     </div>
-                    <h3 class="font-extrabold text-slate-900 text-lg mb-2.5 group-hover:text-blue-700 transition-colors tracking-tight">
-                        {{ $svc['title'] }}
+                    <h3 class="font-extrabold text-slate-900 text-base mb-2 group-hover:text-[#005b9f] transition-colors">
+                        {{ $ps['title'] }}
                     </h3>
-                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        {{ $svc['desc'] }}
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        {{ $ps['desc'] }}
                     </p>
                 </div>
-                <div class="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between">
-                    <a href="{{ $svc['url'] }}" class="text-xs font-extrabold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 group-hover:gap-2 transition-all">
-                        <span>{{ $svc['action'] }}</span>
-                        <span class="iconify" data-icon="lucide:arrow-right"></span>
+                <div class="pt-4 mt-4 border-t border-slate-100">
+                    <a href="{{ $ps['url'] }}" class="text-xs font-black text-[#005b9f] hover:text-[#004b87] flex items-center gap-1.5 group-hover:gap-2 transition-all">
+                        <span>{{ $ps['action'] }}</span>
+                        <span class="iconify text-sm" data-icon="lucide:arrow-right"></span>
                     </a>
                 </div>
             </div>
@@ -289,69 +266,80 @@
     </div>
 </section>
 
-{{-- PANDUAN PENGGUNAAN CEPAT --}}
-<section class="py-16 lg:py-24 bg-white border-t border-slate-100">
+{{-- STANDAR WAKTU & JADWAL OPERASIONAL PELAYANAN PST --}}
+<section class="py-14 bg-white border-t border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-center max-w-xl mx-auto mb-14">
-            <span class="text-xs font-extrabold text-blue-700 uppercase tracking-widest bg-blue-100/70 px-3.5 py-1.5 rounded-full border border-blue-200">
-                Alur Praktis
-            </span>
-            <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-4 tracking-tight">
-                3 Langkah Mudah Menemukan Data
-            </h2>
-            <p class="mt-3 text-slate-600 text-sm sm:text-base">
-                Dapatkan informasi statistik resmi Kabupaten Karanganyar dalam hitungan detik.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            @php
-            $steps = [
-                ['step' => '01', 'title' => 'Buka Ruang Obrolan', 'desc' => 'Klik menu Chatbot pada website ini kapan saja melalui smartphone atau komputer tanpa perlu instalasi aplikasi.'],
-                ['step' => '02', 'title' => 'Ketik Topik / Kata Kunci', 'desc' => 'Tanyakan angka kemiskinan, jumlah penduduk, PDRB, jadwal PST, atau cara download publikasi BPS Karanganyar.'],
-                ['step' => '03', 'title' => 'Dapatkan Data Terverifikasi', 'desc' => 'Asisten menyajikan kutipan rilis data akurat, tautan dokumen resmi, atau menghubungkan langsung ke petugas BPS bila dibutuhkan.'],
-            ];
-            @endphp
-
-            @foreach($steps as $st)
-            <div class="bg-slate-50/80 rounded-3xl p-8 border border-slate-200 relative group hover:bg-blue-50/50 hover:border-blue-200 transition-all duration-300">
-                <div class="text-4xl font-black text-blue-200 group-hover:text-blue-400 font-mono mb-4 transition-colors">
-                    {{ $st['step'] }}
-                </div>
-                <h3 class="font-extrabold text-slate-900 text-lg mb-2 tracking-tight">
-                    {{ $st['title'] }}
-                </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-6 space-y-4">
+                <span class="text-xs font-black text-[#f7941d] uppercase tracking-widest bg-orange-50 px-3.5 py-1.5 rounded-full border border-orange-200">
+                    Jadwal & Standar Pelayanan
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
+                    Jam Operasional Pelayanan Statistik Terpadu (PST)
+                </h2>
                 <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {{ $st['desc'] }}
+                    Pelayanan tatap muka dan verifikasi data resmi dilayani langsung oleh petugas PST BPS Kabupaten Karanganyar pada hari kerja. Layanan konsultasi data digital dapat diakses 24 jam.
                 </p>
+                <div class="pt-2 grid grid-cols-2 gap-3 text-xs">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-slate-900 block mb-1">Senin — Kamis:</span>
+                        <span class="text-[#005b9f] font-extrabold text-sm">08.00 — 15.30 WIB</span>
+                        <span class="text-[10px] text-slate-500 block mt-0.5">Istirahat: 12.00 — 13.00 WIB</span>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="font-bold text-slate-900 block mb-1">Jumat:</span>
+                        <span class="text-[#005b9f] font-extrabold text-sm">08.00 — 15.00 WIB</span>
+                        <span class="text-[10px] text-slate-500 block mt-0.5">Istirahat: 11.30 — 13.00 WIB</span>
+                    </div>
+                </div>
             </div>
-            @endforeach
+
+            <div class="lg:col-span-6">
+                <div class="bg-[#04325e] rounded-2xl p-6 sm:p-8 text-white border-l-4 border-[#f7941d] shadow-lg space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#f7941d]">
+                            <span class="iconify text-2xl" data-icon="lucide:shield-check"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-black text-white">Maklumat Pelayanan BPS</h3>
+                            <p class="text-xs text-blue-200">Komitmen Integritas & Keterbukaan Data</p>
+                        </div>
+                    </div>
+                    <p class="text-xs sm:text-sm leading-relaxed text-slate-200">
+                        "Dengan ini kami menyatakan sanggup menyelenggarakan pelayanan publik sesuai standar pelayanan yang telah ditetapkan, dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai ketentuan peraturan perundang-undangan."
+                    </p>
+                    <div class="pt-2 flex items-center justify-between text-xs text-blue-200 border-t border-white/10">
+                        <span>Badan Pusat Statistik Karanganyar</span>
+                        <span class="text-[#f7941d] font-bold">Zona Integritas Bebas Korupsi</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-{{-- CTA PENGADUAN & KONSULTASI RESMI (Cerah, Bersih & Berwibawa) --}}
-<section class="py-14 lg:py-20 bg-slate-50 border-t border-slate-200">
+{{-- CTA PENGADUAN & KONSULTASI RESMI --}}
+<section class="py-14 lg:py-16 bg-slate-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 border border-blue-200/90 rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-sm">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-blue-800 text-xs font-bold border border-blue-200 shadow-xs">
-                <span class="iconify text-base text-blue-600" data-icon="lucide:shield-check"></span>
-                <span>Keterbukaan & Integritas Pelayanan Publik</span>
+        <div class="bg-gradient-to-r from-blue-900 to-[#04325e] text-white rounded-3xl p-8 sm:p-10 text-center space-y-5 shadow-lg border border-blue-900/50">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-slate-200 text-xs font-bold border border-white/20">
+                <span class="iconify text-base text-[#00a651]" data-icon="lucide:check-circle-2"></span>
+                <span>Saluran Aspirasi & Konsultasi Resmi</span>
             </div>
-            <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 max-w-3xl mx-auto leading-tight">
-                Membutuhkan Bantuan Khusus atau Ingin Menyampaikan Aspirasi?
+            <h2 class="text-2xl sm:text-3xl font-black text-white max-w-2xl mx-auto leading-tight">
+                Butuh Konsultasi Statistik Mendalam atau Menyampaikan Masukan?
             </h2>
-            <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Petugas Pelayanan Statistik Terpadu BPS Kabupaten Karanganyar siap membantu konsultasi data dan menindaklanjuti setiap masukan Anda secara transparan.
+            <p class="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto leading-relaxed">
+                Petugas Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar siap membantu permohonan data dan menindaklanjuti pengaduan Anda.
             </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
-                <a href="{{ route('aduan.create') }}" class="w-full sm:w-auto px-7 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
-                    <span class="iconify text-lg" data-icon="lucide:send"></span>
-                    <span>Kirim Aduan / Konsultasi Resmi</span>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <a href="{{ route('chat.index') }}" class="w-full sm:w-auto px-7 py-3 bg-[#f7941d] hover:bg-[#e07e0c] text-white font-black text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                    <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
+                    <span>Konsultasi Data Sekarang</span>
                 </a>
-                <a href="{{ route('status-aduan') }}" class="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 transition-all flex items-center justify-center gap-2 shadow-xs">
-                    <span class="iconify text-lg text-blue-600" data-icon="lucide:search"></span>
-                    <span>Lacak Status Tiket Aduan</span>
+                <a href="{{ route('aduan.create') }}" class="w-full sm:w-auto px-7 py-3 bg-white hover:bg-slate-100 text-[#005b9f] font-extrabold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2">
+                    <span class="iconify text-base text-[#005b9f]" data-icon="lucide:ticket"></span>
+                    <span>Kirim Pengaduan</span>
                 </a>
             </div>
         </div>

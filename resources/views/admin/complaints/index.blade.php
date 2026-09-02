@@ -18,7 +18,7 @@
         $currentStatus = request('status', 'all');
         $tabs = [
             'all' => ['label' => 'Semua', 'count' => $counts['all'], 'icon' => 'lucide:layers'],
-            'new' => ['label' => 'Baru', 'count' => $counts['new'], 'icon' => 'lucide:sparkles', 'color' => 'bg-red-500 text-white'],
+            'new' => ['label' => 'Baru', 'count' => $counts['new'], 'icon' => 'lucide:inbox', 'color' => 'bg-red-500 text-white'],
             'verified' => ['label' => 'Diverifikasi', 'count' => $counts['verified'], 'icon' => 'lucide:check-circle-2', 'color' => 'bg-blue-500 text-white'],
             'processing' => ['label' => 'Diproses', 'count' => $counts['processing'], 'icon' => 'lucide:clock', 'color' => 'bg-amber-500 text-slate-900'],
             'resolved' => ['label' => 'Selesai', 'count' => $counts['resolved'], 'icon' => 'lucide:badge-check', 'color' => 'bg-emerald-500 text-white'],

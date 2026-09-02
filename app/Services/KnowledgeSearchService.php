@@ -12,19 +12,20 @@ class KnowledgeSearchService
      * Peta Sinonim Kata Kunci Bahasa Indonesia untuk domain BPS
      */
     protected array $synonymMap = [
-        'penduduk' => ['populasi', 'warga', 'jiwa', 'orang', 'masyarakat', 'demografi', 'sensus', 'kelahiran'],
-        'kemiskinan' => ['miskin', 'poverty', 'garis kemiskinan', 'bansos', 'dtks', 'desil', 'p0', 'kurang mampu', 'bantuan'],
-        'ipm' => ['indeks pembangunan manusia', 'hdi', 'harapan hidup', 'lama sekolah', 'rls', 'hls', 'kualitas sdm', 'pendidikan'],
-        'pdrb' => ['ekonomi', 'pertumbuhan ekonomi', 'gdp', 'pendapatan daerah', 'adhk', 'adhb', 'lapangan usaha'],
-        'ketenagakerjaan' => ['pengangguran', 'tpt', 'angkatan kerja', 'bekerja', 'tenaga kerja', 'sakernas', 'loker'],
-        'inflasi' => ['ihk', 'indeks harga konsumen', 'kenaikan harga', 'daya beli', 'deflasi', 'harga barang'],
-        'pertanian' => ['panen', 'luas panen', 'padi', 'beras', 'palawija', 'kebun', 'teh', 'durian', 'sayuran', 'peternakan'],
-        'jadwal' => ['jam buka', 'jam kerja', 'waktu layanan', 'operasional', 'hari kerja', 'buka jam berapa', 'tutup'],
-        'lokasi' => ['alamat', 'kantor', 'tempat', 'posisi', 'nomor telepon', 'email', 'kontak', 'maps', 'hubungi'],
-        'biaya' => ['tarif', 'harga', 'gratis', 'bayar', 'pnbp', 'retribusi'],
+        'penduduk' => ['populasi', 'warga', 'jiwa', 'orang', 'masyarakat', 'demografi', 'sensus', 'kelahiran', 'cacahe', 'tiyang', 'wong', 'pendhudhuk'],
+        'kemiskinan' => ['miskin', 'poverty', 'garis kemiskinan', 'bansos', 'dtks', 'desil', 'p0', 'kurang mampu', 'bantuan', 'mlarat', 'kirang mampu', 'boten gadhah'],
+        'ipm' => ['indeks pembangunan manusia', 'hdi', 'harapan hidup', 'lama sekolah', 'rls', 'hls', 'kualitas sdm', 'pendidikan', 'gesang'],
+        'pdrb' => ['ekonomi', 'pertumbuhan ekonomi', 'gdp', 'pendapatan daerah', 'adhk', 'adhb', 'lapangan usaha', 'pangupajiwa'],
+        'ketenagakerjaan' => ['pengangguran', 'tpt', 'angkatan kerja', 'bekerja', 'tenaga kerja', 'sakernas', 'loker', 'nyambut damel', 'pedamelan'],
+        'inflasi' => ['ihk', 'indeks harga konsumen', 'kenaikan harga', 'daya beli', 'deflasi', 'harga barang', 'rega'],
+        'pertanian' => ['panen', 'luas panen', 'padi', 'beras', 'palawija', 'kebun', 'teh', 'durian', 'sayuran', 'peternakan', 'sabin', 'tetanen'],
+        'jadwal' => ['jam buka', 'jam kerja', 'waktu layanan', 'operasional', 'hari kerja', 'buka jam berapa', 'tutup', 'dina', 'jam pira', 'kapan bukak'],
+        'lokasi' => ['alamat', 'kantor', 'tempat', 'posisi', 'nomor telepon', 'email', 'kontak', 'maps', 'hubungi', 'pundi', 'kantore'],
+        'biaya' => ['tarif', 'harga', 'gratis', 'bayar', 'pnbp', 'retribusi', 'bayare', 'piro', 'pinten', 'ragad'],
         'romantik' => ['rekomendasi statistik', 'survei opd', 'metodologi', 'kegiatan statistik sektoral'],
-        'aduan' => ['keluhan', 'lapor', 'komplain', 'kritik', 'aspirasi', 'tiket aduan'],
+        'aduan' => ['keluhan', 'lapor', 'komplain', 'kritik', 'aspirasi', 'tiket aduan', 'wadul'],
         'kda' => ['karanganyar dalam angka', 'buku statistik', 'publikasi', 'tahunan', 'pdf'],
+        'grafik' => ['chart', 'diagram', 'tren', 'perkembangan', 'grafik', 'visualisasi', 'kurva', 'tabel', 'statistik'],
     ];
 
     /**

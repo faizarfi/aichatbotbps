@@ -12,46 +12,84 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
-</head>
-<body class="bg-slate-50/70 font-sans antialiased text-slate-800 selection:bg-blue-600 selection:text-white flex flex-col min-h-screen">
+</head><body class="bg-slate-50 font-sans antialiased text-slate-800 selection:bg-[#005b9f] selection:text-white flex flex-col min-h-screen">
 
-    {{-- Clean Professional Navbar (Single Unified Header) --}}
-    <nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs transition-all">
+    {{-- Modern Preloader Screen --}}
+    <x-preloader />
+
+    {{-- Official BPS Top Bar --}}
+    <div class="bg-[#04325e] text-slate-200 text-[11px] py-1.5 border-b border-blue-900/60 hidden md:block">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="flex items-center gap-1 font-semibold text-slate-300">
+                    <span class="iconify text-xs text-[#f7941d]" data-icon="lucide:calendar"></span>
+                    <span>{{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM Y') }}</span>
+                </span>
+                <span class="text-slate-500">•</span>
+                <span class="font-medium text-slate-300">Badan Pusat Statistik Republik Indonesia</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://karanganyarkab.bps.go.id" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1 font-semibold">
+                    <span class="iconify text-xs text-[#f7941d]" data-icon="lucide:globe"></span>
+                    <span>Website BPS Karanganyar</span>
+                </a>
+                <span class="text-slate-500">•</span>
+                <a href="https://pst.bps.go.id" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1 font-semibold">
+                    <span class="iconify text-xs text-[#00a651]" data-icon="lucide:external-link"></span>
+                    <span>PST BPS RI</span>
+                </a>
+                <span class="text-slate-500">•</span>
+                <span class="flex items-center gap-1 text-slate-300">
+                    <span class="iconify text-xs text-sky-400" data-icon="lucide:phone"></span>
+                    <span>(0271) 495035</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Main Navbar (BPS Official Style) --}}
+    <nav class="sticky top-0 z-40 bg-white border-b-2 border-[#005b9f] shadow-sm transition-all">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between h-16 sm:h-20">
                 {{-- Brand Identity --}}
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3 group min-w-0 flex-1 sm:flex-initial mr-2 sm:mr-0">
+                <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3.5 group min-w-0 flex-1 sm:flex-initial mr-2 sm:mr-0">
                     <div class="relative shrink-0">
-                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS Karanganyar" class="w-8 h-8 sm:w-11 sm:h-11 object-contain group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS Karanganyar" class="w-9 h-9 sm:w-12 sm:h-12 object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="min-w-0">
-                        <span class="text-xs sm:text-base font-black text-slate-900 tracking-tight block leading-tight group-hover:text-blue-700 transition-colors truncate">
-                            BPS Kabupaten Karanganyar
+                        <span class="text-xs sm:text-base font-black text-slate-900 tracking-tight block leading-tight group-hover:text-[#005b9f] transition-colors truncate">
+                            BADAN PUSAT STATISTIK
                         </span>
-                        <span class="text-[9px] sm:text-[11px] font-bold text-blue-700 tracking-wide uppercase block truncate">
-                            Pelayanan Statistik Terpadu
-                        </span>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                            <span class="text-[10px] sm:text-xs font-extrabold text-[#005b9f] tracking-wide uppercase truncate">
+                                KABUPATEN KARANGANYAR
+                            </span>
+                            <span class="hidden sm:inline px-1.5 py-0.2 rounded bg-amber-50 text-[#f7941d] border border-amber-200 text-[9px] font-bold">
+                                PST
+                            </span>
+                        </div>
                     </div>
                 </a>
 
                 {{-- Desktop Nav Menu --}}
-                <div class="hidden md:flex items-center gap-0.5 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80">
-                    <a href="{{ route('home') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('home') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                <div class="hidden md:flex items-center gap-1">
+                    <a href="{{ route('home') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('home') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
                         Beranda
                     </a>
-                    <a href="{{ route('chat.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('chat.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all flex items-center gap-1">
-                        <span class="iconify text-sm text-blue-600" data-icon="lucide:message-square-text"></span>
-                        <span>Chatbot</span>
+                    <a href="{{ route('chat.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('chat.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all flex items-center gap-1.5">
+                        <span class="iconify text-sm" data-icon="lucide:message-square-text"></span>
+                        <span>Konsultasi PST</span>
                     </a>
-                    <a href="{{ route('districts.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('districts.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
-                        Peta
+                    <a href="{{ route('districts.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('districts.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
+                        17 Kecamatan
                     </a>
-                    <a href="{{ route('calculators.index') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('calculators.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                    <a href="{{ route('calculators.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('calculators.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
                         Kalkulator
                     </a>
-                    <a href="{{ route('aduan.create') }}" class="px-2.5 py-1.5 text-xs font-bold rounded-xl {{ request()->routeIs('aduan.*') ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }} transition-all">
+                    <a href="{{ route('aduan.create') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('aduan.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
                         Aduan
                     </a>
                 </div>
@@ -60,16 +98,16 @@
                 <div class="hidden lg:flex items-center gap-2.5">
                     @auth
                         @if(auth()->user()->isStaff())
-                            <a href="{{ route('admin.dashboard') }}" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-xl border border-blue-200 transition-all flex items-center gap-1.5 shadow-xs">
+                            <a href="{{ route('admin.dashboard') }}" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-[#005b9f] text-xs font-bold rounded-xl border border-blue-200 transition-all flex items-center gap-1.5 shadow-xs">
                                 <span class="iconify text-base" data-icon="lucide:shield-check"></span>
-                                <span>Dashboard Admin</span>
+                                <span>Dashboard Petugas</span>
                             </a>
                         @else
                             <a href="{{ route('my-profile.show') }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 flex items-center gap-2 transition-all">
                                 @if(auth()->user()->avatar)
                                     <img src="{{ auth()->user()->avatar }}" alt="" class="w-6 h-6 rounded-full object-cover" referrerpolicy="no-referrer">
                                 @else
-                                    <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                                    <div class="w-6 h-6 rounded-full bg-[#005b9f] text-white flex items-center justify-center text-xs font-bold">
                                         {{ substr(auth()->user()->name, 0, 1) }}
                                     </div>
                                 @endif
@@ -85,30 +123,30 @@
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="px-3.5 py-2 text-slate-700 hover:text-blue-700 font-bold text-xs rounded-xl border border-slate-200/90 hover:border-blue-300 hover:bg-slate-50 transition-all flex items-center gap-1.5 shadow-xs">
+                        <a href="{{ route('login') }}" class="px-3.5 py-2 text-slate-700 hover:text-[#005b9f] font-bold text-xs rounded-xl border border-slate-300 hover:border-[#005b9f] hover:bg-slate-50 transition-all flex items-center gap-1.5 shadow-xs">
                             <span class="iconify text-base text-slate-500" data-icon="lucide:log-in"></span>
                             <span>Masuk</span>
                         </a>
-                        <a href="{{ route('register') }}" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl border border-blue-200 transition-all flex items-center gap-1.5 shadow-xs">
-                            <span class="iconify text-base" data-icon="lucide:user-plus"></span>
+                        <a href="{{ route('register') }}" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-all flex items-center gap-1.5 shadow-xs">
+                            <span class="iconify text-base text-slate-600" data-icon="lucide:user-plus"></span>
                             <span>Daftar</span>
                         </a>
                     @endauth
 
-                    <a href="{{ route('chat.index') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-xl transition-all shadow-md shadow-blue-500/20 flex items-center gap-1.5 ml-1">
-                        <span class="iconify text-base" data-icon="lucide:bot"></span>
-                        <span>Tanya Asisten</span>
+                    <a href="{{ route('chat.index') }}" class="px-4 py-2.5 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs font-extrabold rounded-xl transition-all shadow-md shadow-orange-500/20 flex items-center gap-1.5 ml-1">
+                        <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
+                        <span>Konsultasi Data</span>
                     </a>
                 </div>
 
                 {{-- Mobile Menu Button --}}
                 <div class="flex items-center md:hidden gap-1.5 shrink-0">
                     @if(!request()->routeIs('chat.*'))
-                    <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Buka Chatbot">
-                        <span class="iconify text-lg" data-icon="lucide:bot"></span>
+                    <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-[#f7941d] text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Buka Konsultasi Data">
+                        <span class="iconify text-lg" data-icon="lucide:message-square-text"></span>
                     </a>
                     @endif
-                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer" aria-label="Menu">
+                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer" aria-label="Menu">
                         <span class="iconify text-2xl" data-icon="lucide:menu"></span>
                     </button>
                 </div>
@@ -116,63 +154,57 @@
         </div>
 
         {{-- Mobile Dropdown Menu --}}
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-5 space-y-2 shadow-lg">
-            <a href="{{ route('home') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('home') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b-2 border-[#005b9f] px-4 pt-3 pb-5 space-y-2 shadow-lg">
+            <a href="{{ route('home') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('home') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Beranda Utama
             </a>
-            <a href="{{ route('chat.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('chat.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }} flex items-center gap-2">
-                <span class="iconify text-base text-blue-600" data-icon="lucide:bot"></span>
-                <span>Chatbot Statistik 24 Jam</span>
+            <a href="{{ route('chat.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('chat.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }} flex items-center gap-2">
+                <span class="iconify text-base text-[#f7941d]" data-icon="lucide:message-square-text"></span>
+                <span>Konsultasi Data PST</span>
             </a>
-            <a href="{{ route('districts.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('districts.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('districts.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('districts.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Peta 17 Kecamatan
             </a>
-            <a href="{{ route('calculators.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('calculators.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('calculators.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('calculators.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Kalkulator Statistik Interaktif
             </a>
-            <a href="{{ route('aduan.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('aduan.*') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('aduan.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('aduan.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Pengaduan Layanan
             </a>
-            <a href="{{ route('status-aduan') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('status-aduan') ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('status-aduan') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('status-aduan') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Lacak Status Tiket Aduan
             </a>
 
             <div class="pt-3 border-t border-slate-100 space-y-2">
                 @auth
                     @if(auth()->user()->isStaff())
-                        <a href="{{ route('admin.dashboard') }}" class="w-full py-2.5 px-4 bg-blue-50 text-blue-700 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-blue-200">
+                        <a href="{{ route('admin.dashboard') }}" class="w-full py-2.5 px-4 bg-blue-50 text-[#005b9f] text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-blue-200">
                             <span class="iconify text-base" data-icon="lucide:shield-check"></span>
-                            <span>Panel Admin ({{ auth()->user()->name }})</span>
+                            <span>Panel Petugas ({{ auth()->user()->name }})</span>
                         </a>
                     @else
-                        <a href="{{ route('my-profile.show') }}" class="p-2.5 bg-slate-100 rounded-xl text-center text-xs font-bold text-slate-800 flex items-center justify-center gap-2 hover:bg-blue-50 hover:text-blue-700 transition-all">
-                            <span class="iconify text-base" data-icon="lucide:user-circle"></span>
-                            👤 {{ auth()->user()->name }} — Profil Saya
+                        <a href="{{ route('my-profile.show') }}" class="w-full py-2.5 px-4 bg-slate-100 text-slate-800 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-slate-200">
+                            <span class="iconify text-base text-slate-600" data-icon="lucide:user"></span>
+                            <span>Profil Saya</span>
                         </a>
                     @endif
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" class="block">
                         @csrf
                         <button type="submit" class="w-full py-2.5 px-4 bg-rose-50 text-rose-600 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-rose-200">
                             <span class="iconify text-base" data-icon="lucide:log-out"></span>
-                            <span>Keluar dari Akun</span>
+                            <span>Keluar</span>
                         </button>
                     </form>
                 @else
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="{{ route('login') }}" class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors border border-slate-200">
-                            <span class="iconify text-base text-slate-500" data-icon="lucide:log-in"></span>
-                            <span>Masuk</span>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <a href="{{ route('login') }}" class="py-2.5 px-4 text-center rounded-xl border border-slate-300 font-bold text-xs text-slate-700 hover:bg-slate-50">
+                            Masuk
                         </a>
-                        <a href="{{ route('register') }}" class="py-2.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors border border-blue-200">
-                            <span class="iconify text-base text-blue-600" data-icon="lucide:user-plus"></span>
-                            <span>Daftar</span>
+                        <a href="{{ route('register') }}" class="py-2.5 px-4 text-center rounded-xl bg-[#005b9f] text-white font-bold text-xs hover:bg-[#004b87]">
+                            Daftar
                         </a>
                     </div>
                 @endauth
-                <a href="{{ route('chat.index') }}" class="w-full py-3 bg-blue-600 text-white text-center text-xs font-extrabold rounded-xl shadow-md flex items-center justify-center gap-2">
-                    <span class="iconify text-base" data-icon="lucide:message-circle"></span>
-                    <span>Buka Chatbot Sekarang</span>
-                </a>
             </div>
         </div>
     </nav>
@@ -182,31 +214,31 @@
         @yield('content')
     </main>
 
-    {{-- Clean Light Institutional Footer --}}
-    <footer class="bg-white text-slate-600 border-t border-slate-200 mt-auto">
+    {{-- Official BPS Footer (Deep Navy Corporate & Orange Accent) --}}
+    <footer class="bg-[#04325e] text-slate-200 border-t-4 border-[#f7941d] mt-auto">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
                 {{-- Col 1: Brand & Bio --}}
                 <div class="md:col-span-5 space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-blue-50 p-1.5 flex items-center justify-center border border-blue-100 shadow-xs">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-2xl bg-white p-2 flex items-center justify-center shadow-md">
                             <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                         </div>
                         <div>
-                            <span class="font-black text-slate-900 block text-base tracking-tight leading-tight">BPS Kabupaten Karanganyar</span>
-                            <span class="text-xs text-blue-700 font-bold tracking-wide">Badan Pusat Statistik Republik Indonesia</span>
+                            <span class="font-black text-white block text-base tracking-tight leading-tight">BADAN PUSAT STATISTIK</span>
+                            <span class="text-xs text-[#f7941d] font-extrabold tracking-wide uppercase">KABUPATEN KARANGANYAR</span>
                         </div>
                     </div>
-                    <p class="text-xs sm:text-sm leading-relaxed text-slate-500 pr-4">
-                        Pusat rujukan data statistik terpercaya, penyedia data kependudukan, sosial, ekonomi, pertanian, serta kanal resmi pengaduan masyarakat Kabupaten Karanganyar.
+                    <p class="text-xs sm:text-sm leading-relaxed text-slate-300 pr-4">
+                        Penyedia data statistik berkualitas untuk Indonesia Maju. Melayani permohonan data statistik, publikasi berkala, konsultasi PST, dan penanganan aspirasi masyarakat Kabupaten Karanganyar.
                     </p>
                     <div class="pt-2 flex flex-wrap items-center gap-2.5">
-                        <a href="https://karanganyarkab.bps.go.id" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold border border-slate-200 transition-colors flex items-center gap-1.5 shadow-xs">
-                            <span class="iconify text-blue-600" data-icon="lucide:globe"></span>
-                            <span>Website Resmi BPS</span>
+                        <a href="https://karanganyarkab.bps.go.id" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-colors flex items-center gap-1.5 shadow-xs">
+                            <span class="iconify text-[#f7941d]" data-icon="lucide:globe"></span>
+                            <span>Website BPS Karanganyar</span>
                         </a>
-                        <a href="https://pst.bps.go.id" target="_blank" class="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-bold border border-slate-200 transition-colors flex items-center gap-1.5 shadow-xs">
-                            <span class="iconify text-blue-600" data-icon="lucide:external-link"></span>
+                        <a href="https://pst.bps.go.id" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-colors flex items-center gap-1.5 shadow-xs">
+                            <span class="iconify text-[#00a651]" data-icon="lucide:external-link"></span>
                             <span>Portal PST Pusat</span>
                         </a>
                     </div>
@@ -214,39 +246,45 @@
 
                 {{-- Col 2: Layanan --}}
                 <div class="md:col-span-3 space-y-3">
-                    <h4 class="text-slate-900 font-black text-xs uppercase tracking-widest">Kanal Layanan</h4>
-                    <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600">
-                        <li><a href="{{ route('home') }}" class="hover:text-blue-700 font-medium transition-colors flex items-center gap-2"><span class="iconify text-blue-600" data-icon="lucide:chevron-right"></span> Beranda Utama</a></li>
-                        <li><a href="{{ route('chat.index') }}" class="hover:text-blue-700 font-medium transition-colors flex items-center gap-2"><span class="iconify text-blue-600" data-icon="lucide:chevron-right"></span> Chatbot Statistik 24 Jam</a></li>
-                        <li><a href="{{ route('aduan.create') }}" class="hover:text-blue-700 font-medium transition-colors flex items-center gap-2"><span class="iconify text-blue-600" data-icon="lucide:chevron-right"></span> Formulir Pengaduan</a></li>
-                        <li><a href="{{ route('status-aduan') }}" class="hover:text-blue-700 font-medium transition-colors flex items-center gap-2"><span class="iconify text-blue-600" data-icon="lucide:chevron-right"></span> Lacak Status Aduan</a></li>
-                        <li><a href="{{ route('kebijakan-privasi') }}" class="hover:text-blue-700 font-medium transition-colors flex items-center gap-2"><span class="iconify text-blue-600" data-icon="lucide:chevron-right"></span> Kebijakan Privasi Data</a></li>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-[#f7941d]"></span>
+                        <span>Layanan PST</span>
+                    </h4>
+                    <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300">
+                        <li><a href="{{ route('home') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Beranda Utama</a></li>
+                        <li><a href="{{ route('chat.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Konsultasi Data Online</a></li>
+                        <li><a href="{{ route('districts.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Statistik 17 Kecamatan</a></li>
+                        <li><a href="{{ route('calculators.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Kalkulator Statistik</a></li>
+                        <li><a href="{{ route('aduan.create') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Saluran Pengaduan Resmi</a></li>
                     </ul>
                 </div>
 
                 {{-- Col 3: Kontak PST --}}
                 <div class="md:col-span-4 space-y-3">
-                    <h4 class="text-slate-900 font-black text-xs uppercase tracking-widest">Kantor & Pelayanan</h4>
-                    <div class="space-y-2.5 text-xs sm:text-sm text-slate-600">
-                        <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                            <span class="iconify mt-0.5 shrink-0 text-blue-600 text-lg" data-icon="lucide:map-pin"></span>
+                    <h4 class="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-[#00a651]"></span>
+                        <span>Kontak Pelayanan</span>
+                    </h4>
+                    <div class="space-y-2.5 text-xs sm:text-sm text-slate-300">
+                        <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+                            <span class="iconify mt-0.5 shrink-0 text-[#f7941d] text-lg" data-icon="lucide:map-pin"></span>
                             <div>
-                                <span class="font-bold text-slate-900 block">Alamat Kantor:</span>
-                                <span class="text-slate-500">Jl. Lawu No. 202B, Badran Asri, Cangakan, Karanganyar 57714</span>
+                                <span class="font-bold text-white block">Kantor BPS Karanganyar:</span>
+                                <span class="text-slate-300 text-xs">Jl. Lawu No. 202B, Cangakan, Karanganyar 57714</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                            <span class="iconify shrink-0 text-blue-600 text-lg" data-icon="lucide:phone"></span>
+                        <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+                            <span class="iconify shrink-0 text-[#00a651] text-lg" data-icon="lucide:phone"></span>
                             <div>
-                                <span class="font-bold text-slate-900 block">Telepon Pelayanan:</span>
-                                <span class="text-slate-500">(0271) 495035</span>
+                                <span class="font-bold text-white block">Telepon Pelayanan:</span>
+                                <span class="text-slate-300 text-xs">(0271) 495035 / (0271) 495045</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                            <span class="iconify shrink-0 text-blue-600 text-lg" data-icon="lucide:mail"></span>
+                        <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+                            <span class="iconify shrink-0 text-sky-400 text-lg" data-icon="lucide:mail"></span>
                             <div>
-                                <span class="font-bold text-slate-900 block">Email Resmi:</span>
-                                <span class="text-slate-500">bps3313@bps.go.id</span>
+                                <span class="font-bold text-white block">Email Resmi:</span>
+                                <span class="text-slate-300 text-xs">bps3313@bps.go.id</span>
                             </div>
                         </div>
                     </div>
@@ -254,32 +292,20 @@
             </div>
 
             {{-- Bottom info --}}
-            <div class="mt-12 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
-                <p class="text-xs text-slate-400">&copy; {{ date('Y') }} Badan Pusat Statistik Kabupaten Karanganyar. Hak Cipta Dilindungi.</p>
-                <div class="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200">
-                    <span class="iconify text-emerald-600" data-icon="lucide:clock"></span>
-                    <span>Waktu Server: <strong>Asia/Jakarta (WIB)</strong></span>
+            <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs text-slate-400">
+                <p>&copy; {{ date('Y') }} Badan Pusat Statistik Kabupaten Karanganyar. Seluruh Hak Cipta Dilindungi.</p>
+                <div class="flex items-center gap-3">
+                    <span class="text-slate-300">Standar Pelayanan Terpadu (PST)</span>
+                    <span>•</span>
+                    <span class="text-[#00a651] font-bold">Zona Integritas WBK/WBBM</span>
                 </div>
             </div>
         </div>
     </footer>
 
-    {{-- Floating Chatbot Button (on all pages except chat) --}}
+    {{-- Interactive Floating Chatbot Widget (di semua halaman publik kecuali /chat) --}}
     @if(!request()->routeIs('chat.*'))
-    <div class="fixed bottom-5 right-5 sm:bottom-7 sm:right-7 z-30">
-        <a href="{{ route('chat.index') }}"
-           class="flex items-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-full shadow-lg shadow-blue-600/30 hover:shadow-blue-600/40 transform hover:-translate-y-1 transition-all duration-300 group border border-blue-500/40">
-            <div class="relative shrink-0">
-                <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-6 h-6 object-contain bg-white rounded-full p-0.5 shadow-sm">
-                <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-blue-700 animate-pulse"></span>
-            </div>
-            <div class="text-left pr-1.5 hidden sm:block">
-                <span class="text-[10px] text-blue-100 block uppercase font-bold tracking-wider leading-none">Asisten PST</span>
-                <span class="text-xs font-bold tracking-tight leading-tight">Tanya Data BPS</span>
-            </div>
-            <span class="sm:hidden text-xs font-bold pr-1">Tanya Data</span>
-        </a>
-    </div>
+        @include('components.floating-chat')
     @endif
 
     {{-- Mobile menu toggle --}}

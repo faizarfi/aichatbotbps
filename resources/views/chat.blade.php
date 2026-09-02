@@ -1,40 +1,45 @@
 @extends('layouts.public')
 
-@section('title', 'Chatbot Layanan Statistik 24 Jam')
-@section('meta_description', 'Konsultasikan data statistik resmi, informasi publikasi, jadwal PST, dan tata cara pengaduan BPS Kabupaten Karanganyar.')
+@section('title', 'Layanan Konsultasi Statistik Online')
+@section('meta_description', 'Layanan resmi konsultasi data statistik, publikasi berkala, jadwal PST, dan pengaduan BPS Kabupaten Karanganyar.')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-1.5 sm:px-6 py-2 sm:py-6">
     {{-- Chat Box Card --}}
-    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl sm:shadow-2xl shadow-slate-200/60 overflow-hidden flex flex-col h-[calc(100dvh-5rem)] sm:h-[calc(100vh-160px)] min-h-[480px]">
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col h-[calc(100dvh-5rem)] sm:h-[calc(100vh-160px)] min-h-[480px]">
 
-        {{-- Chat Header --}}
-        <div class="px-3 sm:px-6 py-2.5 sm:py-4 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 flex items-center justify-between text-white shadow-lg gap-2">
-            <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+        {{-- Chat Header (Official BPS Navy & Orange) --}}
+        <div class="px-3 sm:px-6 py-3 sm:py-4 border-b-2 border-[#f7941d] bg-[#04325e] flex items-center justify-between text-white shadow-md gap-2">
+            <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
                 <div class="relative shrink-0">
-                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white p-1 sm:p-1.5 flex items-center justify-center shadow-md">
+                    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white p-1 sm:p-1.5 flex items-center justify-center shadow-xs">
                         <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
-                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full bg-emerald-400 border-2 border-slate-900"></span>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-400 border-2 border-[#04325e]"></span>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
-                        <h2 class="text-xs sm:text-base font-bold sm:font-black text-white tracking-tight leading-tight">Asisten Statistik</h2>
-                        <span id="chat-status-pill" class="shrink-0 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
-                            Bot Aktif
+                    <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                        <h2 class="text-xs sm:text-base font-black text-white tracking-tight leading-tight">Pelayanan Statistik Terpadu (PST)</h2>
+                        <span id="chat-status-pill" class="shrink-0 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>Layanan Terhubung</span>
                         </span>
                     </div>
-                    <p class="text-[10px] sm:text-xs text-blue-200/90 truncate mt-0.5 font-medium">BPS Karanganyar • 24 Jam</p>
+                    <p class="text-[10px] sm:text-xs text-blue-200 truncate mt-0.5 font-medium">BPS Kabupaten Karanganyar • Konsultasi Data & Rujukan Resmi</p>
                 </div>
             </div>
 
             {{-- Actions --}}
-            <div class="flex items-center gap-1 sm:gap-2 shrink-0">
-                <button id="btn-request-officer" onclick="requestOfficerHandoff()" class="p-2 sm:px-3.5 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer" title="Hubungkan ke Petugas">
-                    <span class="iconify text-base text-cyan-300" data-icon="lucide:headset"></span>
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <button onclick="downloadConsultationPdf()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer shadow-xs" title="Unduh Lembar Rekapitulasi Konsultasi PDF">
+                    <span class="iconify text-base text-[#f7941d]" data-icon="lucide:file-down"></span>
+                    <span class="hidden sm:inline">Unduh PDF</span>
+                </button>
+                <button id="btn-request-officer" onclick="requestOfficerHandoff()" class="p-2 sm:px-3.5 sm:py-2 rounded-xl bg-[#f7941d] hover:bg-[#e07e0c] text-white text-xs font-bold border border-amber-600 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer" title="Hubungkan ke Petugas">
+                    <span class="iconify text-base text-white" data-icon="lucide:headset"></span>
                     <span class="hidden sm:inline">Hubungi Petugas</span>
                 </button>
-                <button onclick="resetConversation()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer" title="Mulai Sesi Baru">
+                <button onclick="resetConversation()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer" title="Mulai Sesi Baru">
                     <span class="iconify text-base" data-icon="lucide:refresh-cw"></span>
                     <span class="hidden md:inline">Mulai Baru</span>
                 </button>
@@ -42,73 +47,103 @@
         </div>
 
         {{-- Messages Scroll Area --}}
-        <div id="chat-messages" class="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3.5 sm:space-y-5 bg-gradient-to-b from-slate-50/80 to-slate-100/40">
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3.5 sm:space-y-5 bg-slate-50/70">
 
-            {{-- Bot Welcome Bubble --}}
+            {{-- Official Welcome Bubble --}}
             <div class="flex gap-2 sm:gap-3 max-w-2xl">
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm p-1 mt-0.5">
+                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
                     <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                 </div>
                 <div class="min-w-0 space-y-1">
-                    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-sm text-slate-800 space-y-2.5 sm:space-y-3">
+                    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs text-slate-800 space-y-2.5 sm:space-y-3">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                            <span class="text-[10px] sm:text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
+                                Layanan PST BPS Karanganyar
+                            </span>
+                            <span class="text-[10px] text-slate-400 font-medium">BPS Karanganyar</span>
+                        </div>
                         <p class="text-xs sm:text-sm leading-relaxed">
-                            Halo! Selamat datang di <strong>Layanan Informasi BPS Kabupaten Karanganyar</strong>.
+                            Selamat datang di <strong>Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar</strong>.
                         </p>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                            Saya dapat membantu Anda mencari informasi publikasi resmi (seperti <em>Karanganyar Dalam Angka</em>), data kependudukan, angka kemiskinan, PDRB, jadwal konsultasi Pelayanan Statistik Terpadu (PST), hingga pengaduan layanan.
+                            Silakan ketik pertanyaan atau data statistik yang Anda cari (seperti <em>publikasi Karanganyar Dalam Angka</em>, jumlah penduduk, angka kemiskinan, PDRB, jadwal layanan, hingga pengaduan masyarakat).
                         </p>
                     </div>
-                    <span class="text-[10px] text-slate-400 font-semibold ml-1.5 block">Asisten AI • BPS Karanganyar</span>
+                    <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 ml-1.5">
+                        <span class="inline-flex items-center gap-1 text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 font-semibold">
+                            <span class="iconify text-xs text-blue-600" data-icon="lucide:shield-check"></span> Layanan Resmi BPS
+                        </span>
+                        <span>•</span>
+                        <span>Kabupaten Karanganyar</span>
+                    </div>
                 </div>
             </div>
 
             {{-- Quick Topic Chips --}}
             <div id="quick-questions-wrapper" class="ml-0 sm:ml-12 pt-1 space-y-2">
-                <p class="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Topik Populer Cepat:</p>
+                <p class="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">PILIHAN TOPIK LAYANAN:</p>
                 <div class="flex flex-wrap gap-1.5 sm:gap-2">
-                    <button onclick="sendQuickMessage('Cara memperoleh data statistik BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
-                        <span>📊 Cara Memperoleh Data</span>
+                    <button onclick="sendQuickMessage('Cara memperoleh data statistik BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-blue-600" data-icon="lucide:file-text"></span>
+                        <span>Cara Memperoleh Data</span>
                     </button>
-                    <button onclick="sendQuickMessage('Jadwal dan jam buka operasional PST')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
-                        <span>🕒 Jadwal Layanan PST</span>
+                    <button onclick="sendQuickMessage('Jadwal dan jam buka operasional PST')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-amber-600" data-icon="lucide:clock"></span>
+                        <span>Jadwal Layanan PST</span>
                     </button>
-                    <button onclick="sendQuickMessage('Publikasi Karanganyar Dalam Angka (KDA)')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
-                        <span>📖 Karanganyar Dalam Angka</span>
+                    <button onclick="sendQuickMessage('Publikasi Karanganyar Dalam Angka (KDA)')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-indigo-600" data-icon="lucide:book-open"></span>
+                        <span>Karanganyar Dalam Angka</span>
                     </button>
-                    <button onclick="sendQuickMessage('Data kemiskinan dan garis kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
-                        <span>📉 Angka Kemiskinan</span>
+                    <button onclick="sendQuickMessage('Data kemiskinan dan garis kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-rose-600" data-icon="lucide:trending-down"></span>
+                        <span>Angka Kemiskinan</span>
                     </button>
-                    <button onclick="sendQuickMessage('Alamat kantor dan kontak BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-blue-700 bg-white hover:bg-blue-50 border border-blue-200 rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-98 cursor-pointer">
-                        <span>📍 Alamat & Kontak Resmi</span>
+                    <button onclick="sendQuickMessage('Alamat kantor dan kontak BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-emerald-600" data-icon="lucide:map-pin"></span>
+                        <span>Alamat & Kontak</span>
+                    </button>
+                    <button onclick="sendQuickMessage('Tampilkan grafik tren kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-amber-600" data-icon="lucide:bar-chart-2"></span>
+                        <span>Grafik Kemiskinan</span>
+                    </button>
+                    <button onclick="sendQuickMessage('Tampilkan grafik IPM Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-sky-600" data-icon="lucide:line-chart"></span>
+                        <span>Grafik IPM</span>
+                    </button>
+                    <button onclick="sendQuickMessage('Grafik perbandingan penduduk kecamatan terbanyak')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-emerald-600" data-icon="lucide:users"></span>
+                        <span>Grafik Kecamatan</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        {{-- Typing Indicator --}}
+        {{-- Processing / Loading Indicator --}}
         <div id="typing-indicator" class="hidden px-3 sm:px-6 py-2 bg-slate-50 border-t border-slate-100">
             <div class="flex items-center gap-2 text-slate-400">
-                <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                    <span class="iconify text-[10px] sm:text-xs" data-icon="lucide:bot"></span>
+                <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-200">
+                    <span class="iconify text-[10px] sm:text-xs" data-icon="lucide:message-square-text"></span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style="animation-delay: 0ms;"></span>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style="animation-delay: 150ms;"></span>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style="animation-delay: 300ms;"></span>
-                    <span class="text-[10px] sm:text-[11px] font-semibold text-slate-600 ml-1">Menyiapkan jawaban data...</span>
+                    <span class="text-[10px] sm:text-[11px] font-semibold text-slate-600 ml-1">Memproses permintaan data...</span>
                 </div>
             </div>
         </div>
 
         {{-- Input Bar --}}
-        <div class="p-2.5 sm:p-5 border-t border-slate-100 bg-white shadow-inner">
+        <div class="p-2.5 sm:p-5 border-t border-slate-200 bg-white shadow-xs">
             <form id="public-chat-form" class="flex items-end gap-1.5 sm:gap-2.5">
                 @csrf
                 <div class="flex-1 relative">
                     <textarea id="public-chat-input"
                               rows="1"
                               maxlength="1000"
-                              placeholder="Ketik pertanyaan data statistik..."
+                              placeholder="Ketik permintaan data atau pertanyaan statistik di sini..."
                               class="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-12 rounded-xl sm:rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-all shadow-xs leading-relaxed"
                               style="max-height: 100px;"></textarea>
                     <span id="chat-char-counter" class="absolute bottom-2.5 right-2.5 text-[9px] sm:text-[10px] text-slate-400 font-mono">0/1000</span>
@@ -122,7 +157,7 @@
                 </button>
 
                 <button type="submit" id="public-send-btn"
-                        class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white flex items-center justify-center transition-all shrink-0 shadow-md shadow-blue-600/30 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        class="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-[#005b9f] hover:bg-[#04325e] active:scale-95 text-white flex items-center justify-center transition-all shrink-0 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         disabled>
                     <span class="iconify text-lg sm:text-xl" data-icon="lucide:send"></span>
                 </button>
@@ -149,6 +184,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const messagesArea = document.getElementById('chat-messages');
 const chatForm = document.getElementById('public-chat-form');
@@ -216,17 +252,17 @@ function pollHistory() {
 function updateStatusBadge(status, officerName) {
     if (!statusPill) return;
     if (status === 'waiting') {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400/20 text-amber-300 border border-amber-400/30 animate-pulse';
-        statusPill.textContent = 'Menunggu Petugas';
+        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center gap-1 animate-pulse';
+        statusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span>Menunggu Petugas</span>';
     } else if (status === 'handled') {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-400/20 text-blue-300 border border-blue-400/30';
-        statusPill.textContent = officerName ? 'Petugas: ' + officerName : 'Terhubung Petugas';
+        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-400/20 text-blue-300 border border-blue-400/30 flex items-center gap-1';
+        statusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span><span>' + escapeHtml(officerName ? 'Petugas: ' + officerName : 'Terhubung Petugas') + '</span>';
     } else if (status === 'closed') {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-400/20 text-slate-300 border border-slate-400/30';
+        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-400/20 text-slate-300 border border-slate-400/30';
         statusPill.textContent = 'Sesi Selesai';
     } else {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30';
-        statusPill.textContent = 'Bot Aktif';
+        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1';
+        statusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Layanan Aktif</span>';
     }
 }
 
@@ -234,7 +270,7 @@ function renderAllMessages(messages) {
     messagesArea.querySelectorAll('.chat-msg-wrapper').forEach(e => e.remove());
 
     messages.forEach(msg => {
-        appendMessageElement(msg.sender_type, msg.content, msg.sources, msg.id, msg.created_at, msg.sender_name, msg.feedback);
+        appendMessageElement(msg.sender_type, msg.content, msg.sources, msg.id, msg.created_at, msg.sender_name, msg.feedback, [], msg.chart);
     });
 
     scrollToBottom();
@@ -242,26 +278,73 @@ function renderAllMessages(messages) {
 
 function formatBotContent(raw) {
     if (!raw) return '';
-    
-    // First escape HTML
-    let text = escapeHtml(raw);
-    
-    // Bold: **text**
+
+    // 1. Prioritaskan Marked.js bila library sudah dimuat
+    if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+        try {
+            marked.setOptions({
+                gfm: true,
+                breaks: true,
+                smartypants: false
+            });
+            let html = marked.parse(raw);
+            html = html.replace(/<a /g, '<a target="_blank" rel="noopener" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1" ');
+            return html;
+        } catch (e) {
+            console.warn('Marked parser warning:', e);
+        }
+    }
+
+    // 2. Parser Markdown Pure JS Super Lengkap (Heading, List, Bold, Italic, Link, Code)
+    let text = raw;
+
+    // Bersihkan karakter kontrol berlebih
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    // Heading Markdown (#, ##, ###, ####, #####, ######)
+    text = text.replace(/^######[ \t]+(.*)$/gim, '<h6 class="text-xs font-bold text-slate-800 mt-2.5 mb-1">$1</h6>');
+    text = text.replace(/^#####[ \t]+(.*)$/gim, '<h5 class="text-xs font-bold text-slate-800 mt-2.5 mb-1">$1</h5>');
+    text = text.replace(/^####[ \t]+(.*)$/gim, '<h4 class="text-xs font-bold text-blue-900 mt-3 mb-1">$1</h4>');
+    text = text.replace(/^###[ \t]+(.*)$/gim, '<h3 class="text-sm font-extrabold text-blue-800 mt-3.5 mb-1.5">$1</h3>');
+    text = text.replace(/^##[ \t]+(.*)$/gim, '<h2 class="text-base font-extrabold text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-100">$1</h2>');
+    text = text.replace(/^#[ \t]+(.*)$/gim, '<h1 class="text-lg font-black text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-200">$1</h1>');
+
+    // Bold (**text** atau __text__)
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>');
-    
-    // Italic: *text*
-    text = text.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
-    
-    // Markdown Links: [title](url)
+    text = text.replace(/__(.*?)__/g, '<strong class="font-bold text-slate-900">$1</strong>');
+
+    // Italic (*text* atau _text_)
+    text = text.replace(/(^|[^\*])\*([^\*\n]+)\*([^\*]|$)/g, '$1<em class="italic text-slate-700">$2</em>$3');
+    text = text.replace(/(^|[^_])_([^_\n]+)_([^_]|$)/g, '$1<em class="italic text-slate-700">$2</em>$3');
+
+    // Unordered Lists (* item, - item, + item)
+    text = text.replace(/^[ \t]*[\*\-\+][ \t]+(.*)$/gim, '<li class="my-1">$1</li>');
+
+    // Numbered Lists (1. item)
+    text = text.replace(/^[ \t]*(\d+)\.[ \t]+(.*)$/gim, '<li class="my-1" value="$1">$2</li>');
+
+    // Wrap consecutive <li> in <ul>
+    text = text.replace(/(<li class="my-1"[^>]*>[\s\S]*?<\/li>\s*)+/gi, function(match) {
+        if (match.includes('value="')) {
+            return '<ol class="list-decimal pl-5 my-2 space-y-1">' + match + '</ol>';
+        }
+        return '<ul class="list-disc pl-5 my-2 space-y-1">' + match + '</ul>';
+    });
+
+    // Links: [title](url)
     text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1">$1 <span class="iconify" data-icon="lucide:external-link"></span></a>');
-    
-    // Preserve newlines
+
+    // Inline Code: `code`
+    text = text.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded text-xs font-mono border border-slate-200">$1</code>');
+
+    // Newlines preservation (hanya jika bukan tag heading/list)
+    text = text.replace(/\n\n/g, '<div class="h-2"></div>');
     text = text.replace(/\n/g, '<br>');
-    
+
     return text;
 }
 
-function appendMessageElement(type, content, sources, messageId = null, time = null, senderName = null, feedback = null, quickOptions = []) {
+function appendMessageElement(type, content, sources, messageId = null, time = null, senderName = null, feedback = null, quickOptions = [], chartDataParam = null) {
     const isVisitor = type === 'visitor';
     const isOfficer = type === 'officer';
     const formattedTime = time || new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
@@ -269,10 +352,13 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
     const wrapper = document.createElement('div');
     wrapper.className = `flex ${isVisitor ? 'justify-end' : 'justify-start'} chat-msg-wrapper`;
 
+    let canvasId = '';
+    let chartData = chartDataParam;
+
     if (isVisitor) {
         wrapper.innerHTML = `
             <div class="max-w-[88%] sm:max-w-lg">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl sm:rounded-3xl rounded-tr-sm px-3.5 sm:px-5 py-2.5 sm:py-3.5 shadow-md">
+                <div class="bg-[#005b9f] text-white rounded-2xl sm:rounded-3xl rounded-tr-sm px-4 sm:px-5 py-3 sm:py-3.5 shadow-sm">
                     <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium break-words">${escapeHtml(content)}</p>
                 </div>
                 <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 block text-right mr-1.5">Anda • ${formattedTime}</span>
@@ -281,29 +367,64 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
     } else if (isOfficer) {
         wrapper.innerHTML = `
             <div class="flex gap-2 sm:gap-3 max-w-[92%] sm:max-w-xl">
-                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl sm:rounded-2xl bg-blue-700 text-white flex items-center justify-center shrink-0 font-black text-xs shadow-md">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl sm:rounded-2xl bg-blue-700 text-white flex items-center justify-center shrink-0 font-black text-xs shadow-sm">
                     ${escapeHtml((senderName || 'P').substring(0, 1))}
                 </div>
                 <div class="min-w-0 flex-1">
-                    <div class="bg-white border-2 border-blue-400 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-md">
-                        <div class="flex items-center gap-1.5 text-xs font-black text-blue-700 mb-2">
+                    <div class="bg-white border-2 border-blue-400 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-sm">
+                        <div class="flex items-center gap-1.5 text-xs font-bold text-blue-700 mb-2">
                             <span class="iconify text-base" data-icon="lucide:user-check"></span>
                             <span class="truncate">${escapeHtml(senderName || 'Petugas BPS Karanganyar')}</span>
                         </div>
-                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed break-words">${formatBotContent(content)}</div>
+                        <div class="chat-content-body text-xs sm:text-sm break-words">${formatBotContent(content)}</div>
                     </div>
                     <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 block ml-1.5">Petugas Resmi • ${formattedTime}</span>
                 </div>
             </div>
         `;
     } else {
-        // Bot Message
+        // Bot / System Message
+        let displayContent = content;
+
+        // Ekstraksi data grafik jika terdapat format ```chart
+        const chartMatch = content.match(/```chart\s*(\{[\s\S]*?\})\s*```/);
+        if (chartMatch) {
+            try {
+                chartData = JSON.parse(chartMatch[1]);
+                displayContent = content.replace(/```chart\s*\{[\s\S]*?\}\s*```/g, '').trim();
+            } catch (err) {
+                console.error("Gagal memproses data grafik:", err);
+            }
+        }
+
+        let chartBoxHtml = '';
+        if (chartData && chartData.labels && chartData.data) {
+            canvasId = 'chart-box-' + Math.random().toString(36).substring(2, 9);
+            chartBoxHtml = `
+                <div class="mt-3 p-3 sm:p-4 bg-slate-50 border border-slate-200/90 rounded-2xl shadow-xs">
+                    <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-200">
+                        <div class="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                            <span class="iconify text-base text-blue-600" data-icon="${chartData.type === 'line' ? 'lucide:trending-up' : 'lucide:bar-chart-2'}"></span>
+                            <span class="truncate">${escapeHtml(chartData.title || 'Visualisasi Data BPS Karanganyar')}</span>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 shrink-0">
+                            Data BPS
+                        </span>
+                    </div>
+                    <div class="relative h-52 sm:h-60 w-full">
+                        <canvas id="${canvasId}"></canvas>
+                    </div>
+                    ${chartData.description ? `<p class="mt-2 text-[10px] text-slate-500 font-medium italic text-right">${escapeHtml(chartData.description)}</p>` : ''}
+                </div>
+            `;
+        }
+
         let sourcesHtml = '';
         if (sources && sources.length > 0) {
             sourcesHtml = `
                 <div class="mt-3 pt-2.5 border-t border-slate-100 text-[11px] text-slate-500">
-                    <span class="font-bold text-slate-700 block mb-1">Rujukan Resmi BPS:</span>
-                    ${sources.map(s => `<a href="${s.url || '#'}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 mt-1 font-medium"><span class="iconify" data-icon="lucide:external-link"></span> ${escapeHtml(s.title)}</a>`).join('')}
+                    <span class="font-bold text-slate-700 block mb-1">Rujukan Dokumen Resmi:</span>
+                    ${sources.map(s => `<a href="${s.url || '#'}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 mt-1 font-medium"><span class="iconify text-xs" data-icon="lucide:file-text"></span> ${escapeHtml(s.title)}</a>`).join('')}
                 </div>
             `;
         }
@@ -324,10 +445,12 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
                     <span class="text-[10px] text-slate-400">Apakah informasi ini membantu?</span>
                     <div class="flex items-center gap-1.5">
                         <button onclick="submitFeedback(${messageId}, 'helpful')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${feedback === 'helpful' ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700'} transition-all flex items-center gap-1 cursor-pointer">
-                            <span>👍 Ya</span>
+                            <span class="iconify text-xs" data-icon="lucide:thumbs-up"></span>
+                            <span>Ya</span>
                         </button>
                         <button onclick="submitFeedback(${messageId}, 'not_helpful')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${feedback === 'not_helpful' ? 'bg-rose-50 text-rose-700 border-rose-300' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-rose-50 hover:text-rose-700'} transition-all flex items-center gap-1 cursor-pointer">
-                            <span>👎 Tidak</span>
+                            <span class="iconify text-xs" data-icon="lucide:thumbs-down"></span>
+                            <span>Tidak</span>
                         </button>
                     </div>
                 </div>
@@ -335,7 +458,7 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         }
 
         // Clean text content for text-to-speech
-        const rawContentSafe = escapeHtml(content).replace(/'/g, "\\'");
+        const rawContentSafe = escapeHtml(displayContent).replace(/'/g, "\\'");
 
         wrapper.innerHTML = `
             <div class="flex gap-2 sm:gap-3 max-w-2xl">
@@ -345,24 +468,37 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
                 <div class="min-w-0 flex-1">
                     <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs">
                         <div class="flex items-center justify-between gap-1.5 mb-2 pb-2 border-b border-slate-100">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-blue-700 uppercase tracking-wider truncate">Asisten Statistik</span>
+                            <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider truncate flex items-center gap-1.5">
+                                <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
+                                Layanan PST BPS Karanganyar
+                            </span>
                             <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="shrink-0 btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
                                 <span class="iconify text-xs sm:text-sm" data-icon="lucide:volume-2"></span>
                                 <span>Dengarkan</span>
                             </button>
                         </div>
-                        <div class="text-xs sm:text-sm text-slate-800 leading-relaxed break-words">${formatBotContent(content)}</div>
+                        <div class="chat-content-body text-xs sm:text-sm break-words">${formatBotContent(displayContent)}</div>
+                        ${chartBoxHtml}
                         ${sourcesHtml}
                         ${quickChipsHtml}
                         ${feedbackHtml}
                     </div>
-                    <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 block ml-1.5">Bot Asisten • ${formattedTime}</span>
+                    <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 ml-1.5">
+                        <span class="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-semibold">
+                            <span class="iconify text-xs text-blue-600" data-icon="lucide:shield-check"></span> Layanan BPS
+                        </span>
+                        <span>•</span>
+                        <span>${formattedTime}</span>
+                    </div>
                 </div>
             </div>
         `;
     }
 
     messagesArea.appendChild(wrapper);
+    if (canvasId && chartData) {
+        renderMessageChart(canvasId, chartData);
+    }
     scrollToBottom();
 }
 
@@ -561,7 +697,7 @@ chatForm.addEventListener('submit', function(e) {
         const replyTime = botMsg?.created_at || null;
 
         if (replyText) {
-            appendMessageElement('bot', replyText, replySources, replyId, replyTime, null, null, data.quick_options || []);
+            appendMessageElement('bot', replyText, replySources, replyId, replyTime, null, null, data.quick_options || [], botMsg?.chart || data.chart || null);
         }
     })
     .catch(() => {
@@ -665,6 +801,87 @@ function resetConversation() {
     });
 }
 
+function renderMessageChart(canvasId, chartData) {
+    setTimeout(() => {
+        const ctx = document.getElementById(canvasId);
+        if (!ctx || typeof Chart === 'undefined') return;
+
+        const isLine = chartData.type === 'line';
+        const colorPalette = ['#0284c7', '#0369a1', '#0ea5e9', '#059669', '#10b981', '#f59e0b', '#6366f1'];
+
+        new Chart(ctx, {
+            type: chartData.type || 'bar',
+            data: {
+                labels: chartData.labels || [],
+                datasets: [{
+                    label: chartData.title || 'Nilai',
+                    data: chartData.data || [],
+                    borderColor: '#0284c7',
+                    backgroundColor: isLine ? 'rgba(2, 132, 199, 0.12)' : (chartData.labels.length > 1 ? chartData.labels.map((_, i) => colorPalette[i % colorPalette.length]) : '#0284c7'),
+                    borderWidth: isLine ? 3 : 1,
+                    fill: isLine,
+                    tension: 0.35,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#0284c7',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    borderRadius: isLine ? 0 : 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        titleFont: { size: 11, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        padding: 8,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return (context.dataset.label || '') + ': ' + context.parsed.y + (chartData.unit ? ' ' + chartData.unit : '');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10, weight: '600' }, color: '#64748b' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                        ticks: {
+                            font: { size: 10 },
+                            color: '#64748b',
+                            callback: function(value) {
+                                return value + (chartData.unit ? ' ' + chartData.unit : '');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }, 80);
+}
+
+function downloadConsultationPdf() {
+    const session = localStorage.getItem('bps_chat_session') || visitorSession;
+    if (!session) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Belum Ada Percakapan',
+            text: 'Silakan mulai bertanya data statistik terlebih dahulu untuk mengunduh bukti konsultasi.',
+            confirmButtonColor: '#0284c7'
+        });
+        return;
+    }
+    window.open('{{ route("chat.download-pdf") }}?session=' + encodeURIComponent(session), '_blank');
+}
+
 function escapeHtml(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -675,5 +892,16 @@ function escapeHtml(text) {
 // Initial history fetch and periodic polling (every 3 seconds)
 pollHistory();
 setInterval(pollHistory, 3000);
+
+// Auto-populate query if passed via URL ?q=...
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery && initialQuery.trim().length > 0) {
+        setTimeout(() => {
+            sendQuickMessage(initialQuery.trim());
+        }, 300);
+    }
+});
 </script>
 @endpush
