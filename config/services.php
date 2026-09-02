@@ -36,10 +36,11 @@ return [
     ],
 
     'ai' => [
-        'base_url' => env('AI_BASE_URL', 'http://localhost:20128/v1'),
-        'api_key' => env('AI_API_KEY', 'sk-4b5999ce98b14713-3yhdv5-b4b12348'),
-        'model' => env('AI_MODEL', 'ag/gemini-3-flash'),
-        'timeout' => (int) env('AI_TIMEOUT', 15),
+        'provider' => env('AI_PROVIDER', 'gemini'),
+        'base_url' => env('AI_BASE_URL', 'https://generativelanguage.googleapis.com/v1beta'),
+        'api_key' => env('AI_API_KEY', ''),
+        'model' => env('AI_MODEL', 'gemini-3.6-flash'),
+        'timeout' => (int) env('AI_TIMEOUT', 45),
     ],
 
     'google' => [

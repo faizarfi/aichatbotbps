@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class AiLlmService
 {
+    protected string $provider;
     protected string $baseUrl;
     protected string $apiKey;
     protected string $model;
@@ -14,9 +15,10 @@ class AiLlmService
 
     public function __construct()
     {
-        $this->baseUrl = rtrim(config('services.ai.base_url', env('AI_BASE_URL', 'http://localhost:20128/v1')), '/');
+        $this->provider = config('services.ai.provider', env('AI_PROVIDER', 'gemini'));
+        $this->baseUrl = rtrim(config('services.ai.base_url', env('AI_BASE_URL', 'https://generativelanguage.googleapis.com/v1beta')), '/');
         $this->apiKey = config('services.ai.api_key', env('AI_API_KEY', ''));
-        $this->model = config('services.ai.model', env('AI_MODEL', 'ag/gemini-3-flash'));
+        $this->model = config('services.ai.model', env('AI_MODEL', 'gemini-3.6-flash'));
         $this->timeout = (int) config('services.ai.timeout', env('AI_TIMEOUT', 45));
     }
 
@@ -25,7 +27,19 @@ class AiLlmService
      */
     public function isConfigured(): bool
     {
-        return !empty($this->apiKey) && !empty($this->baseUrl);
+        return !empty($this->apiKey);
+    }
+
+    /**
+     * Deteksi apakah menggunakan Google AI Studio (Gemini Direct)
+     */
+    public function isGeminiDirect(): bool
+    {
+        return $this->provider === 'gemini'
+            || $this->provider === 'google'
+            || str_contains($this->baseUrl, 'googleapis.com')
+            || str_starts_with($this->apiKey, 'AQ.')
+            || str_starts_with($this->apiKey, 'AIza');
     }
 
     /**
@@ -47,53 +61,134 @@ class AiLlmService
             // 3. Susun system prompt resmi
             $systemPrompt = $this->buildSystemPrompt($contextText);
 
-            // 4. Susun riwayat pesan (history)
-            $messages = [
-                ['role' => 'system', 'content' => $systemPrompt],
-            ];
-
-            foreach (array_slice($chatHistory, -6) as $hist) {
-                if (isset($hist['sender_type']) && isset($hist['content'])) {
-                    $role = $hist['sender_type'] === 'visitor' ? 'user' : 'assistant';
-                    $messages[] = [
-                        'role' => $role,
-                        'content' => PersonalDataRedactor::redact($hist['content']),
-                    ];
-                }
+            // Mode A: Google AI Studio (Gemini Direct REST API)
+            if ($this->isGeminiDirect()) {
+                return $this->callGeminiApi($cleanUserMessage, $systemPrompt, $chatHistory);
             }
 
-            $messages[] = ['role' => 'user', 'content' => $cleanUserMessage];
+            // Mode B: OpenAI-Compatible Gateway (9router / OpenRouter / Local Gateway)
+            return $this->callOpenAiGateway($cleanUserMessage, $systemPrompt, $chatHistory);
 
-            // 5. Kirim request ke gateway LLM dengan kuota token lega untuk reasoning
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])
-                ->timeout($this->timeout)
-                ->post($this->baseUrl . '/chat/completions', [
-                    'model' => $this->model,
-                    'messages' => $messages,
-                    'temperature' => 0.3,
-                    'max_tokens' => 4096,
-                    'max_completion_tokens' => 4096,
-                    'stream' => false,
-                ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $content = $data['choices'][0]['message']['content'] ?? null;
-
-                if (!empty($content)) {
-                    return trim($content);
-                }
-            }
-
-            Log::warning('AI LLM Gateway non-successful response: ' . $response->status() . ' Body: ' . $response->body());
-            return null;
         } catch (\Throwable $e) {
             Log::error('AI LLM Gateway Exception: ' . $e->getMessage());
             return null;
         }
+    }
+
+    /**
+     * Panggilan langsung ke Google AI Studio (Gemini API)
+     */
+    protected function callGeminiApi(string $cleanUserMessage, string $systemPrompt, array $chatHistory): ?string
+    {
+        $cleanModel = ltrim($this->model, 'models/');
+        if (str_contains($cleanModel, '/')) {
+            $parts = explode('/', $cleanModel);
+            $cleanModel = end($parts);
+        }
+        if (in_array($cleanModel, ['gemini-3-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash', 'ag/gemini-3-flash'])) {
+            $cleanModel = 'gemini-3.6-flash';
+        }
+
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$cleanModel}:generateContent?key={$this->apiKey}";
+
+        $contents = [];
+        foreach (array_slice($chatHistory, -6) as $hist) {
+            if (isset($hist['sender_type']) && isset($hist['content'])) {
+                $role = $hist['sender_type'] === 'visitor' ? 'user' : 'model';
+                $contents[] = [
+                    'role' => $role,
+                    'parts' => [
+                        ['text' => PersonalDataRedactor::redact($hist['content'])],
+                    ],
+                ];
+            }
+        }
+        $contents[] = [
+            'role' => 'user',
+            'parts' => [
+                ['text' => $cleanUserMessage],
+            ],
+        ];
+
+        $payload = [
+            'contents' => $contents,
+            'systemInstruction' => [
+                'parts' => [
+                    ['text' => $systemPrompt],
+                ],
+            ],
+            'generationConfig' => [
+                'temperature' => 0.3,
+                'maxOutputTokens' => 4096,
+            ],
+        ];
+
+        $response = Http::withoutVerifying()
+            ->withHeaders([
+                'Content-Type' => 'application/json',
+            ])
+            ->timeout($this->timeout)
+            ->post($url, $payload);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            if (!empty($content)) {
+                return trim($content);
+            }
+        }
+
+        Log::warning('Google AI Studio non-successful response: ' . $response->status() . ' Body: ' . $response->body());
+        return null;
+    }
+
+    /**
+     * Panggilan ke OpenAI-compatible gateway (9router, OpenRouter, dll.)
+     */
+    protected function callOpenAiGateway(string $cleanUserMessage, string $systemPrompt, array $chatHistory): ?string
+    {
+        $messages = [
+            ['role' => 'system', 'content' => $systemPrompt],
+        ];
+
+        foreach (array_slice($chatHistory, -6) as $hist) {
+            if (isset($hist['sender_type']) && isset($hist['content'])) {
+                $role = $hist['sender_type'] === 'visitor' ? 'user' : 'assistant';
+                $messages[] = [
+                    'role' => $role,
+                    'content' => PersonalDataRedactor::redact($hist['content']),
+                ];
+            }
+        }
+
+        $messages[] = ['role' => 'user', 'content' => $cleanUserMessage];
+
+        $response = Http::withoutVerifying()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Content-Type' => 'application/json',
+            ])
+            ->timeout($this->timeout)
+            ->post($this->baseUrl . '/chat/completions', [
+                'model' => $this->model,
+                'messages' => $messages,
+                'temperature' => 0.3,
+                'max_tokens' => 4096,
+                'max_completion_tokens' => 4096,
+                'stream' => false,
+            ]);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            $content = $data['choices'][0]['message']['content'] ?? null;
+
+            if (!empty($content)) {
+                return trim($content);
+            }
+        }
+
+        Log::warning('AI LLM Gateway non-successful response: ' . $response->status() . ' Body: ' . $response->body());
+        return null;
     }
 
     /**

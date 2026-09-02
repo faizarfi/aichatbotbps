@@ -238,12 +238,21 @@ QUEUE_CONNECTION=database
 CACHE_STORE=database
 
 # -------------------------------------------------------------
-# KONFIGURASI AI ENGINE 9ROUTER (Gemini AI Gateway)
+# KONFIGURASI AI ENGINE (GOOGLE AI STUDIO GEMINI / 9ROUTER)
 # -------------------------------------------------------------
-AI_BASE_URL=https://api.9router.com/v1
-AI_API_KEY=sk-9router-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-AI_MODEL=ag/gemini-3-flash
+# Pilihan Utama: Google AI Studio (Direct Gemini API — Tanpa perlu buka gateway/CMD)
+AI_PROVIDER=gemini
+AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+AI_API_KEY=your_google_ai_studio_api_key_here
+AI_MODEL=gemini-3.6-flash
 AI_TIMEOUT=45
+
+# Pilihan Alternatif (9router AI Gateway):
+# AI_PROVIDER=openai
+# AI_BASE_URL=https://api.9router.com/v1
+# AI_API_KEY=sk-9router-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# AI_MODEL=ag/gemini-3-flash
+
 
 # Token Rahasia untuk Fitur Auto-Deploy via Browser / Webhook
 DEPLOY_SECRET_TOKEN=bps-karanganyar-secret-deploy-2026
