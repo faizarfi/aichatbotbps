@@ -46,6 +46,11 @@
                     <span class="iconify text-xs text-sky-400" data-icon="lucide:phone"></span>
                     <span>(0271) 495035</span>
                 </span>
+                <span class="text-slate-500">•</span>
+                <button type="button" onclick="toggleA11yMenu()" class="hover:text-white text-[#f7941d] transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Buka Menu Aksesibilitas">
+                    <span class="iconify text-xs" data-icon="lucide:accessibility"></span>
+                    <span>Aksesibilitas</span>
+                </button>
             </div>
         </div>
     </div>
@@ -133,6 +138,10 @@
                         </a>
                     @endauth
 
+                    <button type="button" onclick="toggleA11yMenu()" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-[#005b9f] transition-all border border-slate-200 cursor-pointer" title="Menu Aksesibilitas Web" aria-label="Buka Menu Aksesibilitas">
+                        <span class="iconify text-lg" data-icon="lucide:accessibility"></span>
+                    </button>
+
                     <a href="{{ route('chat.index') }}" class="px-4 py-2.5 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs font-extrabold rounded-xl transition-all shadow-md shadow-orange-500/20 flex items-center gap-1.5 ml-1">
                         <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
                         <span>Konsultasi Data</span>
@@ -141,6 +150,9 @@
 
                 {{-- Mobile Menu Button --}}
                 <div class="flex items-center md:hidden gap-1.5 shrink-0">
+                    <button type="button" onclick="toggleA11yMenu()" class="p-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 border border-slate-200" title="Menu Aksesibilitas">
+                        <span class="iconify text-lg text-[#005b9f]" data-icon="lucide:accessibility"></span>
+                    </button>
                     @if(!request()->routeIs('chat.*'))
                     <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-[#f7941d] text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Buka Konsultasi Data">
                         <span class="iconify text-lg" data-icon="lucide:message-square-text"></span>
@@ -174,6 +186,13 @@
             <a href="{{ route('status-aduan') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('status-aduan') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Lacak Status Tiket Aduan
             </a>
+            <button type="button" onclick="toggleA11yMenu()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-between border border-slate-200">
+                <div class="flex items-center gap-2">
+                    <span class="iconify text-base text-[#005b9f]" data-icon="lucide:accessibility"></span>
+                    <span>Menu Aksesibilitas Web</span>
+                </div>
+                <span class="px-1.5 py-0.5 rounded text-[10px] bg-blue-50 text-[#005b9f] font-bold">A11y</span>
+            </button>
 
             <div class="pt-3 border-t border-slate-100 space-y-2">
                 @auth
@@ -325,6 +344,9 @@
             timerProgressBar: true
         });
     </script>
+
+    {{-- Accessibility Menu Component --}}
+    <x-accessibility-menu />
 
     @stack('scripts')
 </body>

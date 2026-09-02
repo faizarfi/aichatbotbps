@@ -379,3 +379,119 @@
     }
 }
 
+/* ===================================================
+   Web Accessibility (A11y) Global Styles
+   =================================================== */
+
+/* 1. Font Size Scaling */
+html.a11y-font-sm {
+    font-size: 14px !important;
+}
+html.a11y-font-md {
+    font-size: 16px !important;
+}
+html.a11y-font-lg {
+    font-size: 18px !important;
+}
+html.a11y-font-xl {
+    font-size: 20px !important;
+}
+
+/* 2. Color Contrast Modes */
+html.a11y-contrast-high body {
+    background-color: #0b0f19 !important;
+    color: #f8fafc !important;
+}
+html.a11y-contrast-high .bg-white,
+html.a11y-contrast-high .bg-slate-50,
+html.a11y-contrast-high .bg-slate-100 {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+html.a11y-contrast-high h1,
+html.a11y-contrast-high h2,
+html.a11y-contrast-high h3,
+html.a11y-contrast-high h4,
+html.a11y-contrast-high h5,
+html.a11y-contrast-high h6 {
+    color: #fde047 !important;
+}
+html.a11y-contrast-high p,
+html.a11y-contrast-high span,
+html.a11y-contrast-high li {
+    color: #f1f5f9 !important;
+}
+html.a11y-contrast-high a {
+    color: #38bdf8 !important;
+    text-decoration: underline !important;
+}
+
+/* Grayscale */
+html.a11y-contrast-grayscale {
+    filter: grayscale(100%) !important;
+}
+
+/* Invert */
+html.a11y-contrast-invert {
+    filter: invert(100%) hue-rotate(180deg) !important;
+}
+html.a11y-contrast-invert img,
+html.a11y-contrast-invert video {
+    filter: invert(100%) hue-rotate(180deg) !important;
+}
+
+/* 3. Dyslexia / Readable Font */
+html.a11y-font-readable * {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* 4. Line Height */
+html.a11y-line-height-lg p,
+html.a11y-line-height-lg li,
+html.a11y-line-height-lg span {
+    line-height: 2 !important;
+}
+
+/* 5. Letter Spacing */
+html.a11y-letter-spacing-lg p,
+html.a11y-letter-spacing-lg li,
+html.a11y-letter-spacing-lg h1,
+html.a11y-letter-spacing-lg h2,
+html.a11y-letter-spacing-lg h3,
+html.a11y-letter-spacing-lg a {
+    letter-spacing: 0.12em !important;
+}
+
+/* 6. Highlight Links */
+html.a11y-highlight-links a {
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+    background-color: #fef08a !important;
+    color: #0f172a !important;
+    padding: 0 2px !important;
+    border-radius: 2px !important;
+}
+
+/* 7. Big Cursor */
+html.a11y-big-cursor,
+html.a11y-big-cursor * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24' fill='%2304325e' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 3 7 18 3-7 7-3L3 3z'/%3E%3C/svg%3E"), auto !important;
+}
+
+/* 8. Reading Guide Ruler */
+#a11y-reading-ruler {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    height: 18px;
+    background-color: rgba(247, 148, 29, 0.35);
+    border-top: 2px solid #f7941d;
+    border-bottom: 2px solid #f7941d;
+    pointer-events: none;
+    z-index: 999999;
+    display: none;
+    transform: translateY(-50%);
+}
+
+

@@ -152,5 +152,8 @@
             @endif
         });
     </script>
+
+    {{-- Accessibility Menu Component --}}
+    <x-accessibility-menu />
 </body>
 </html>

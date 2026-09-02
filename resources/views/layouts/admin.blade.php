@@ -163,6 +163,11 @@
                         <span class="text-xs font-bold text-[#00a651]">Sistem Online</span>
                     </div>
 
+                    {{-- Accessibility Button --}}
+                    <button type="button" onclick="toggleA11yMenu()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#005b9f] transition-all border border-slate-200 cursor-pointer" title="Menu Aksesibilitas" aria-label="Buka Menu Aksesibilitas">
+                        <span class="iconify text-lg" data-icon="lucide:accessibility"></span>
+                    </button>
+
                     {{-- Public Portal Link --}}
                     <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-[#04325e] hover:bg-[#004b87] rounded-xl transition-colors shadow-xs">
                         <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:external-link"></span>
@@ -261,6 +266,9 @@
             } catch (e) {}
         }
     </script>
+
+    {{-- Accessibility Menu Component --}}
+    <x-accessibility-menu />
 
     @stack('scripts')
 </body>
