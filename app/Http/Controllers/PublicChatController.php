@@ -79,14 +79,15 @@ class PublicChatController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        @set_time_limit(90);
+
         $validated = $request->validate([
             'message' => ['required', 'string', 'max:1000'],
             'session' => ['nullable', 'string', 'max:100'],
             'visitor_name' => ['nullable', 'string', 'max:100'],
         ]);
 
-        /** @var \App\Models\User|null $user */
-        $user = auth()->user();
+        $user = $request->user();
         $visitorName = $validated['visitor_name'] ?? $user?->name;
 
         $conversation = $this->chatService->getOrCreateConversation(
@@ -245,6 +246,48 @@ class PublicChatController extends Controller
         return response()->json([
             'success' => true,
             'status' => 'waiting',
+            'message' => [
+                'id' => $botMsg->id,
+                'sender_type' => 'bot',
+                'content' => $botMsg->content,
+                'created_at' => $botMsg->created_at->format('H:i'),
+            ]
+        ]);
+    }
+
+    /**
+     * Pengunjung membatalkan antrean petugas dan kembali ke AI Chatbot.
+     */
+    public function cancelOfficer(Request $request): JsonResponse
+    {
+        $sessionToken = $request->input('session');
+        if (!$sessionToken) {
+            return response()->json(['error' => 'Sesi tidak ditemukan.'], 400);
+        }
+
+        $conversation = Conversation::where('visitor_session', $sessionToken)
+            ->orWhere('public_id', $sessionToken)
+            ->first();
+
+        if (!$conversation) {
+            return response()->json(['error' => 'Percakapan tidak ditemukan.'], 404);
+        }
+
+        $conversation->update([
+            'status' => 'bot',
+            'assigned_to' => null,
+            'last_message_at' => now(),
+        ]);
+
+        $botMsg = Message::create([
+            'conversation_id' => $conversation->id,
+            'sender_type' => 'bot',
+            'content' => 'Permintaan pengalihan ke petugas telah dibatalkan. Anda kini telah dialihkan kembali ke Asisten AI Cerdas BPS Kabupaten Karanganyar. Silakan sampaikan data atau informasi statistik yang ingin Anda tanyakan.',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status' => 'bot',
             'message' => [
                 'id' => $botMsg->id,
                 'sender_type' => 'bot',

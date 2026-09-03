@@ -49,12 +49,14 @@
 .text-gradient {
     background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-gold {
     background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -252,68 +254,57 @@
    Responsive & Clean SweetAlert2 Styling (Mobile-First)
    =================================================== */
 .swal2-container {
-    padding: 0.75rem !important;
-    z-index: 99999 !important;
+    z-index: 999999 !important;
 }
 
-.swal2-popup {
-    width: 100% !important;
+/* Modal dialog popup (exclude Toast) */
+.swal2-popup:not(.swal2-toast) {
+    width: 92% !important;
     max-width: 440px !important;
-    padding: 1.5rem 1.25rem !important;
+    padding: 1.5rem !important;
     border-radius: 1.25rem !important;
     border: 1px solid #e2e8f0 !important;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
     background: #ffffff !important;
 }
 
-.swal2-icon {
-    width: 3.5rem !important;
-    height: 3.5rem !important;
+/* Keep SweetAlert2 native icon SVG & lines intact with gentle scale */
+.swal2-popup:not(.swal2-toast) .swal2-icon {
+    transform: scale(0.9);
     margin: 0.5rem auto 0.75rem auto !important;
-    border-width: 3px !important;
-}
-
-.swal2-icon .swal2-icon-content {
-    font-size: 2rem !important;
-    line-height: 3.5rem !important;
 }
 
 .swal2-title {
     font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
-    font-size: 1.15rem !important;
+    font-size: 1.2rem !important;
     font-weight: 800 !important;
     color: #0f172a !important;
-    padding: 0 0.5rem !important;
     margin: 0 0 0.5rem 0 !important;
     line-height: 1.35 !important;
 }
 
 .swal2-html-container {
-    font-size: 0.85rem !important;
-    line-height: 1.55 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
     color: #475569 !important;
-    margin: 0.25rem 0 0.85rem 0 !important;
-    padding: 0 0.25rem !important;
+    margin: 0.25rem 0 1rem 0 !important;
 }
 
 .swal2-actions {
-    width: 100% !important;
-    margin: 0.85rem auto 0 auto !important;
-    gap: 0.5rem !important;
+    margin: 1rem auto 0 auto !important;
+    gap: 0.625rem !important;
     display: flex !important;
     justify-content: center !important;
 }
 
 .swal2-styled {
     margin: 0 !important;
-    padding: 0.65rem 1.15rem !important;
+    padding: 0.65rem 1.25rem !important;
     border-radius: 0.75rem !important;
-    font-size: 0.825rem !important;
+    font-size: 0.85rem !important;
     font-weight: 700 !important;
-    letter-spacing: 0.01em !important;
     transition: all 0.15s ease-in-out !important;
-    min-height: 40px !important;
     box-shadow: none !important;
 }
 
@@ -335,48 +326,19 @@
     color: #1e293b !important;
 }
 
-/* Mobile specific tuning (Screen width <= 480px) */
-@media (max-width: 480px) {
-    .swal2-container {
-        padding: 0.5rem !important;
-    }
-
-    .swal2-popup {
-        max-width: calc(100vw - 1.5rem) !important;
-        padding: 1.25rem 1rem !important;
-        border-radius: 1rem !important;
-    }
-
-    .swal2-icon {
-        width: 3rem !important;
-        height: 3rem !important;
-        margin: 0.25rem auto 0.5rem auto !important;
-    }
-    .swal2-icon .swal2-icon-content {
-        font-size: 1.75rem !important;
-        line-height: 3rem !important;
-    }
-
-    .swal2-title {
-        font-size: 1.05rem !important;
-    }
-
-    .swal2-html-container {
-        font-size: 0.8rem !important;
-    }
-
-    .swal2-actions {
-        flex-direction: column-reverse !important;
-        width: 100% !important;
-        gap: 0.4rem !important;
-    }
-
-    .swal2-styled {
-        width: 100% !important;
-        padding: 0.6rem 1rem !important;
-        font-size: 0.8rem !important;
-        text-align: center !important;
-    }
+/* Toast popup styling */
+.swal2-popup.swal2-toast {
+    padding: 0.75rem 1rem !important;
+    border-radius: 0.875rem !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #e2e8f0 !important;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+    font-size: 0.85rem !important;
+}
+.swal2-popup.swal2-toast .swal2-title {
+    font-size: 0.85rem !important;
+    color: #1e293b !important;
+    margin: 0 !important;
 }
 
 /* ===================================================

@@ -226,6 +226,39 @@ floatingForm?.addEventListener('submit', function(e) {
     });
 });
 
+function replaceIconsAndFilterEmojisMini(text) {
+    if (!text) return '';
+    let res = text.replace(/\[icon:([a-z0-9\-]+)\]/gi, '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:$1"></span>');
+    const emojiMap = {
+        '📊': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:bar-chart-2"></span>',
+        '📈': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:trending-up"></span>',
+        '📉': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:trending-down"></span>',
+        '📌': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:bookmark"></span>',
+        '🛣️': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:route"></span>',
+        '🛣': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:route"></span>',
+        'ℹ️': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:info"></span>',
+        'ℹ': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:info"></span>',
+        '🏛️': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:landmark"></span>',
+        '🏛': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:landmark"></span>',
+        '📍': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:map-pin"></span>',
+        '📅': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:calendar"></span>',
+        '📞': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:phone"></span>',
+        '✉️': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:mail"></span>',
+        '✉': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:mail"></span>',
+        '🔗': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:external-link"></span>',
+        '🔍': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:search"></span>',
+        '💡': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:lightbulb"></span>',
+        '🧠': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:sparkles"></span>',
+        '⚠️': '<span class="iconify text-amber-600 inline-block align-middle mr-1" data-icon="lucide:alert-circle"></span>',
+        '🌾': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:wheat"></span>',
+        '👥': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:users"></span>',
+    };
+    for (const [emoji, iconHtml] of Object.entries(emojiMap)) {
+        res = res.split(emoji).join(iconHtml);
+    }
+    return res.replace(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+}
+
 function appendFloatingMessage(sender, text) {
     const isUser = sender === 'user';
     const div = document.createElement('div');
@@ -238,19 +271,29 @@ function appendFloatingMessage(sender, text) {
             </div>
         `;
     } else {
-        let formattedText = text;
+        let cleanedText = typeof replaceIconsAndFilterEmojisMini === 'function' 
+            ? replaceIconsAndFilterEmojisMini(text) 
+            : (typeof replaceIconsAndFilterEmojis === 'function' ? replaceIconsAndFilterEmojis(text) : text);
+        
+        let formattedText = cleanedText;
         if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
             try {
-                formattedText = marked.parse(text, { breaks: true, gfm: true });
+                const renderer = new marked.Renderer();
+                renderer.strong = function(token) {
+                    const t = typeof token === 'object' ? token.text : token;
+                    return '<span class="font-medium text-slate-800">' + t + '</span>';
+                };
+                marked.use({ renderer });
+                formattedText = marked.parse(cleanedText, { breaks: true, gfm: true });
             } catch (e) {
-                formattedText = escapeHtmlMini(text).replace(/\n/g, '<br>');
+                formattedText = escapeHtmlMini(cleanedText).replace(/\n/g, '<br>');
             }
         } else {
             // Simple robust fallback
-            formattedText = text
-                .replace(/^###[ \t]+(.*)$/gim, '<h3 class="font-extrabold text-blue-800 text-xs mt-2 mb-1">$1</h3>')
-                .replace(/^####[ \t]+(.*)$/gim, '<h4 class="font-bold text-slate-800 text-xs mt-1.5 mb-0.5">$1</h4>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>')
+            formattedText = cleanedText
+                .replace(/^###[ \t]+(.*)$/gim, '<h3 class="font-semibold text-blue-800 text-xs mt-2 mb-1">$1</h3>')
+                .replace(/^####[ \t]+(.*)$/gim, '<h4 class="font-semibold text-slate-800 text-xs mt-1.5 mb-0.5">$1</h4>')
+                .replace(/\*\*(.*?)\*\*/g, '<span class="font-medium text-slate-800">$1</span>')
                 .replace(/^[ \t]*[\*\-\+][ \t]+(.*)$/gim, '<li class="ml-3 list-disc text-slate-700 my-0.5">$1</li>')
                 .replace(/\n/g, '<br>');
         }
@@ -263,14 +306,46 @@ function appendFloatingMessage(sender, text) {
                 <div class="chat-content-body text-xs">${formattedText}</div>
                 <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px] text-slate-400">
                     <span class="text-blue-600 font-bold">Layanan BPS</span>
-                    <a href="{{ route('chat.index') }}" class="text-blue-600 hover:underline">Detail &rarr;</a>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="copyFloatingText(this)" data-content="${escapeHtmlMini(text)}" class="text-slate-500 hover:text-emerald-700 font-semibold flex items-center gap-0.5 cursor-pointer">
+                            <span class="iconify text-xs" data-icon="lucide:copy"></span>
+                            <span class="btn-copy-label">Salin</span>
+                        </button>
+                        <a href="{{ route('chat.index') }}" class="text-blue-600 hover:underline font-semibold">Detail &rarr;</a>
+                    </div>
                 </div>
             </div>
         `;
     }
 
     floatingMessages.appendChild(div);
+    if (window.Iconify && typeof window.Iconify.scan === 'function') {
+        window.Iconify.scan(div);
+    }
     scrollFloatingToBottom();
+}
+
+function copyFloatingText(btn) {
+    let text = btn.getAttribute('data-content') || '';
+    let cleanText = text
+        .replace(/```chart\s*\{[\s\S]*?\}\s*```/g, '')
+        .replace(/\[icon:[a-z0-9\-]+\]/gi, '')
+        .replace(/^[ \t]*[\*\-\+][ \t]+/gm, '• ')
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .trim();
+
+    const label = btn.querySelector('.btn-copy-label');
+    const icon = btn.querySelector('.iconify');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cleanText).then(() => {
+            if (label) label.textContent = 'Tersalin!';
+            if (icon) icon.setAttribute('data-icon', 'lucide:check');
+            setTimeout(() => {
+                if (label) label.textContent = 'Salin';
+                if (icon) icon.setAttribute('data-icon', 'lucide:copy');
+            }, 2000);
+        });
+    }
 }
 
 function escapeHtmlMini(str) {

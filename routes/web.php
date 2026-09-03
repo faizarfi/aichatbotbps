@@ -33,6 +33,9 @@ Route::post('/chat/message', [PublicChatController::class, 'store'])
 Route::post('/chat/request-officer', [PublicChatController::class, 'requestOfficer'])
     ->middleware('throttle:15,1')
     ->name('chat.request-officer');
+Route::post('/chat/cancel-officer', [PublicChatController::class, 'cancelOfficer'])
+    ->middleware('throttle:15,1')
+    ->name('chat.cancel-officer');
 Route::post('/chat/feedback', [PublicChatController::class, 'feedback'])
     ->middleware('throttle:30,1')
     ->name('chat.feedback');

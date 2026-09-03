@@ -191,6 +191,19 @@ class ChatService
             ];
         }
 
+        // 7. Deteksi Panjang Jalan Menurut Kondisi (Baik, Sedang, Rusak, Rusak Berat)
+        if (Str::contains($lower, ['jalan', 'kondisi jalan', 'jalan rusak', 'kerusakan jalan', 'aspal', 'infrastruktur jalan']) &&
+            (Str::contains($lower, ['grafik', 'chart', 'diagram', 'panjang', 'rusak', 'kondisi', 'angka', 'berapa', 'semuanya', 'data']) || Str::contains($reply, ['111,80', '111.80', '1.042,30', '1042.30', 'Kondisi Jalan', 'jalan rusak', 'rusak berat']))) {
+            return [
+                'type' => 'bar',
+                'title' => 'Panjang Jalan Menurut Kondisi di Kab. Karanganyar 2026 (km)',
+                'labels' => ['Baik', 'Sedang', 'Rusak', 'Rusak Berat'],
+                'data' => [686.15, 189.45, 111.80, 54.90],
+                'unit' => 'km',
+                'description' => 'Sumber: Kabupaten Karanganyar Dalam Angka 2026, Bab 8 Transportasi, Tabel 8.1.3'
+            ];
+        }
+
         return null;
     }
 
@@ -235,7 +248,7 @@ class ChatService
             ->values()
             ->all();
 
-        // D. Coba panggil AI LLM Gateway (9router / OpenRouter) dengan RAG
+        // D. Coba panggil AI LLM Gateway (Google AI Studio Gemini) dengan RAG & Reasoning
         if ($this->aiService->isConfigured()) {
             $history = $conversation->messages()
                 ->latest()
@@ -249,35 +262,198 @@ class ChatService
             $aiAnswer = $this->aiService->generateAnswer($message, $articles, $history);
 
             if (!empty($aiAnswer)) {
+                $smartSources = $this->resolveSmartSources($message, $aiAnswer, $sources);
+
                 return [
                     'reply' => $aiAnswer,
-                    'sources' => $sources ?: [['title' => 'Publikasi BPS Karanganyar Dalam Angka 2026', 'url' => 'https://karanganyarkab.bps.go.id']],
-                    'confidence' => 0.95,
+                    'sources' => $smartSources,
+                    'confidence' => 0.98,
                     'is_fallback' => false,
-                    'quick_options' => ['Cara memperoleh data', 'Jadwal layanan PST', 'Hubungi Petugas'],
+                    'quick_options' => ['Kondisi Jalan Karanganyar', 'Grafik Kemiskinan', 'Grafik IPM', 'Hubungi Petugas'],
                 ];
             }
         }
 
-        // E. Fallback 1: Jika AI tidak merespon, gunakan artikel dari pencarian lokal jika ada
-        if ($searchResult['bestMatch']) {
+        // E. Fallback 1: Jika AI tidak merespon, gunakan artikel dari pencarian lokal HANYA jika confidence cukup tinggi (>= 0.4)
+        if ($searchResult['bestMatch'] && ($searchResult['confidence'] ?? 0) >= 0.40) {
+            $smartSources = $this->resolveSmartSources($message, $searchResult['bestMatch']->answer, $sources);
+
             return [
                 'reply' => $searchResult['bestMatch']->answer,
-                'sources' => $sources ?: [['title' => 'BPS Kabupaten Karanganyar Dalam Angka 2026', 'url' => 'https://karanganyarkab.bps.go.id']],
+                'sources' => $smartSources,
                 'confidence' => $searchResult['confidence'],
                 'is_fallback' => false,
                 'quick_options' => ['Cara memperoleh data', 'Hubungi Petugas', 'Layanan lainnya'],
             ];
         }
 
-        // F. Fallback 2: Pesan cerdas jika tidak ditemukan artikel spesifik
+        // F. Fallback 2: Pesan informatif jika AI tidak merespon dan tidak ada artikel yang relevan
+        $smartSources = $this->resolveSmartSources($message, '', $sources);
+
         return [
-            'reply' => "Mohon maaf, saya belum menemukan rujukan yang sesuai untuk pertanyaan tersebut dalam basis data saat ini.\n\n**Saran Topik Data:**\n- *Jumlah penduduk Karanganyar 2026*\n- *Angka kemiskinan atau IPM Karanganyar*\n- *Data 17 Kecamatan (misal: Tawangmangu, Colomadu)*\n- *Jadwal buka dan jam layanan kantor PST BPS*\n\nAnda juga dapat memilih tombol **Hubungi Petugas** untuk berkonsultasi langsung dengan petugas kami.",
-            'sources' => [['title' => 'Portal Resmi BPS Karanganyar 2026', 'url' => 'https://karanganyarkab.bps.go.id']],
+            'reply' => "Mohon maaf, saat ini saya belum menemukan data yang persis sesuai untuk pertanyaan tersebut dalam basis data lokal.\n\n[icon:info] Topik Data Resmi BPS Karanganyar yang Tersedia:\n- Panjang jalan rusak dan kondisi jalan Karanganyar\n- Jumlah penduduk dan populasi 17 kecamatan\n- Angka kemiskinan dan Indeks Pembangunan Manusia (IPM)\n- Data pertanian, produksi beras/padi, dan industri\n- Jadwal dan tata cara permintaan data di kantor PST BPS\n\nSilakan ajukan pertanyaan dengan topik di atas atau klik Hubungi Petugas untuk terhubung langsung dengan petugas kami.",
+            'sources' => $smartSources,
             'confidence' => 0.0,
             'is_fallback' => true,
-            'quick_options' => ['Hubungi Petugas', 'Cara memperoleh data', 'Buat Aduan'],
+            'quick_options' => ['Hubungi Petugas', 'Kondisi Jalan Karanganyar', 'Cara memperoleh data'],
         ];
+    }
+
+    /**
+     * Pastikan semua tautan rujukan dokumen resmi mengarah langsung ke halaman subjek/tabel/publikasi spesifik
+     * dan tidak pernah hanya mengarah ke beranda umum (homepage).
+     */
+    protected function resolveSmartSources(string $userMessage, string $aiReply, array $initialSources = []): array
+    {
+        $haystack = mb_strtolower($userMessage . ' ' . $aiReply);
+        $topicSources = [];
+
+        // Prioritaskan topik dari pertanyaan pengguna terlebih dahulu, kemudian jawaban AI
+        $queryText = mb_strtolower($userMessage);
+
+        // 1. Data Pertanian, Padi & Beras
+        if (str_contains($queryText, 'padi') || str_contains($queryText, 'tani') || str_contains($queryText, 'pertanian') || str_contains($queryText, 'panen') || str_contains($queryText, 'beras')
+            || str_contains($haystack, 'produksi padi') || str_contains($haystack, 'sensus pertanian') || str_contains($haystack, 'luas panen')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Luas Panen dan Produksi Padi BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=padi',
+            ];
+            $topicSources[] = [
+                'title' => 'Buku Publikasi: Kabupaten Karanganyar Dalam Angka (Bab 5 Pertanian)',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+            ];
+        }
+
+        // 2. Data Jalan & Infrastruktur
+        if (str_contains($queryText, 'jalan') || str_contains($queryText, 'aspal') || str_contains($queryText, 'infrastruktur') || str_contains($queryText, 'rusak')
+            || str_contains($haystack, 'kondisi jalan') || str_contains($haystack, 'panjang jalan')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Panjang Jalan Menurut Tingkat Kondisi Jalan Kab. Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=panjang+jalan',
+            ];
+            $topicSources[] = [
+                'title' => 'Buku Publikasi: Kabupaten Karanganyar Dalam Angka (Bab 8 Transportasi)',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+            ];
+        }
+
+        // 3. Data Kemiskinan & Garis Kemiskinan
+        if (str_contains($queryText, 'miskin') || str_contains($queryText, 'kemiskinan') || str_contains($haystack, 'penduduk miskin') || str_contains($haystack, 'garis kemiskinan')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Data Kemiskinan dan Garis Kemiskinan Kab. Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=kemiskinan',
+            ];
+            $topicSources[] = [
+                'title' => 'Buku Publikasi: Kabupaten Karanganyar Dalam Angka (Bab 4 Sosial)',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+            ];
+        }
+
+        // 4. Indeks Pembangunan Manusia (IPM)
+        if (str_contains($queryText, 'ipm') || str_contains($queryText, 'pembangunan manusia') || str_contains($haystack, 'indeks pembangunan manusia')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Indeks Pembangunan Manusia (IPM) BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=IPM',
+            ];
+            $topicSources[] = [
+                'title' => 'Berita Resmi Statistik: Perkembangan IPM BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/pressrelease?keyword=indeks+pembangunan+manusia',
+            ];
+        }
+
+        // 5. Kependudukan & Wilayah (Penduduk, Demografi, 17 Kecamatan)
+        if (str_contains($queryText, 'penduduk') || str_contains($queryText, 'populasi') || str_contains($queryText, 'demografi') || str_contains($queryText, 'kecamatan') || str_contains($queryText, 'desa')
+            || str_contains($haystack, 'jumlah penduduk') || str_contains($haystack, 'daftar kecamatan') || str_contains($haystack, '17 kecamatan')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Jumlah Penduduk Menurut Kecamatan di Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=penduduk',
+            ];
+            $topicSources[] = [
+                'title' => 'Buku Publikasi: Kabupaten Karanganyar Dalam Angka (Bab 3 Kependudukan)',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+            ];
+        }
+
+        // 6. Ketenagakerjaan & Pengangguran (TPT)
+        if (str_contains($haystack, 'penganggur') || str_contains($haystack, 'tpt') || str_contains($haystack, 'tenaga kerja') || str_contains($haystack, 'sakernas')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Tingkat Pengangguran Terbuka (TPT) BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=pengangguran',
+            ];
+        }
+
+        // 7. PDRB & Pertumbuhan Ekonomi
+        if (str_contains($haystack, 'pdrb') || str_contains($haystack, 'ekonomi') || str_contains($haystack, 'adhb') || str_contains($haystack, 'adhk')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: PDRB dan Pertumbuhan Ekonomi Kab. Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=PDRB',
+            ];
+        }
+
+        // 8. Inflasi & IHK
+        if (str_contains($haystack, 'inflasi') || str_contains($haystack, 'ihk') || str_contains($haystack, 'harga konsumen')) {
+            $topicSources[] = [
+                'title' => 'Tabel Statistik: Indeks Harga Konsumen dan Inflasi BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=inflasi',
+            ];
+        }
+
+        // 9. Pendataan Sosial & Kesejahteraan Rakyat
+        if (str_contains($haystack, 'bansos') || str_contains($haystack, 'bantuan') || str_contains($haystack, 'dtks') || str_contains($haystack, 'regsosek')) {
+            $topicSources[] = [
+                'title' => 'Publikasi BPS: Analisis Indikator Kesejahteraan Rakyat Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+            ];
+        }
+
+        // 10. Prosedur Permohonan Data / PST
+        if (str_contains($haystack, 'minta data') || str_contains($haystack, 'unduh data') || str_contains($haystack, 'permohonan') || str_contains($haystack, 'pst')) {
+            $topicSources[] = [
+                'title' => 'Katalog Buku Publikasi Resmi BPS Kabupaten Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication',
+            ];
+        }
+
+        // Bersihkan initial sources dari URL homepage murni
+        $cleanedInitial = [];
+        foreach ($initialSources as $s) {
+            $url = $s['url'] ?? '';
+            $title = $s['title'] ?? '';
+            if (in_array(rtrim($url, '/'), ['https://karanganyarkab.bps.go.id', 'http://karanganyarkab.bps.go.id', ''])) {
+                $url = 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html';
+            }
+            $cleanedInitial[] = ['title' => $title, 'url' => $url];
+        }
+
+        $merged = array_merge($topicSources, $cleanedInitial);
+
+        if (empty($merged)) {
+            $merged = [
+                [
+                    'title' => 'Buku Publikasi: Kabupaten Karanganyar Dalam Angka 2026',
+                    'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+                ],
+                [
+                    'title' => 'Portal Tabel Statistik BPS Kabupaten Karanganyar',
+                    'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table',
+                ],
+            ];
+        }
+
+        $unique = [];
+        $result = [];
+        foreach ($merged as $item) {
+            $url = $item['url'];
+            if (!isset($unique[$url])) {
+                $unique[$url] = true;
+                $result[] = $item;
+            }
+            if (count($result) >= 2) {
+                break;
+            }
+        }
+
+        return $result;
     }
 
     /**

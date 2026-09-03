@@ -26,6 +26,7 @@ class KnowledgeSearchService
         'aduan' => ['keluhan', 'lapor', 'komplain', 'kritik', 'aspirasi', 'tiket aduan', 'wadul'],
         'kda' => ['karanganyar dalam angka', 'buku statistik', 'publikasi', 'tahunan', 'pdf'],
         'grafik' => ['chart', 'diagram', 'tren', 'perkembangan', 'grafik', 'visualisasi', 'kurva', 'tabel', 'statistik'],
+        'jalan' => ['panjang jalan', 'jalan rusak', 'kondisi jalan', 'aspal', 'rusak', 'rusak berat', 'infrastruktur', 'jembatan', 'transportasi', 'marga'],
     ];
 
     /**
@@ -78,8 +79,9 @@ class KnowledgeSearchService
 
         $topScore = $scored->first()['score'];
 
+        // Ambang batas (threshold) dinaikkan menjadi 35 agar tidak salah mencocokkan artikel yang tidak relevan
         return [
-            'bestMatch' => $topScore >= 15 ? $scored->first()['article'] : null,
+            'bestMatch' => $topScore >= 35 ? $scored->first()['article'] : null,
             'candidates' => $scored->take($limit)->pluck('article'),
             'confidence' => min(1.0, round($topScore / 100, 4)),
         ];
@@ -121,10 +123,10 @@ class KnowledgeSearchService
             if (strlen($word) < 3) continue;
 
             if (str_contains($lowerTitle, $word)) {
-                $score += 20;
+                $score += 25;
             }
             if (str_contains($lowerQuestion, $word)) {
-                $score += 15;
+                $score += 20;
             }
             if (str_contains($lowerAnswer, $word)) {
                 $score += 8;
@@ -132,7 +134,7 @@ class KnowledgeSearchService
 
             foreach ($keywords as $kw) {
                 if (str_contains($kw, $word)) {
-                    $score += 15;
+                    $score += 20;
                 }
             }
         }
@@ -141,11 +143,11 @@ class KnowledgeSearchService
         foreach ($expandedWords as $syn) {
             if (strlen($syn) < 3) continue;
             if (str_contains($lowerTitle, $syn) || str_contains($lowerQuestion, $syn)) {
-                $score += 12;
+                $score += 15;
             }
             foreach ($keywords as $kw) {
                 if (str_contains($kw, $syn)) {
-                    $score += 10;
+                    $score += 12;
                 }
             }
         }
@@ -179,8 +181,14 @@ class KnowledgeSearchService
         $clean = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', Str::lower($text));
         $words = preg_split('/\s+/', $clean, -1, PREG_SPLIT_NO_EMPTY);
 
-        // Abaikan stopwords umum bahasa Indonesia
-        $stopwords = ['yang', 'untuk', 'pada', 'ke', 'dari', 'di', 'dan', 'ini', 'itu', 'adalah', 'apakah', 'bagaimana', 'bisa', 'tolong', 'mohon', 'ada', 'apa', 'saya', 'kami', 'anda', 'dengan', 'atau', 'saja', 'pun', 'dong', 'sih'];
+        // Abaikan stopwords umum dan kata generik domain agar tidak terjadi false-positive match
+        $stopwords = [
+            'yang', 'untuk', 'pada', 'ke', 'dari', 'di', 'dan', 'ini', 'itu', 'adalah',
+            'apakah', 'bagaimana', 'bisa', 'tolong', 'mohon', 'ada', 'apa', 'saya', 'kami',
+            'anda', 'dengan', 'atau', 'saja', 'pun', 'dong', 'sih', 'berikan', 'minta', 'kasih',
+            'tampilkan', 'sebutkan', 'berapa', 'mana', 'karanganyar', 'kabupaten', 'bps', 'data',
+            'tentang', 'terkait', 'semuanya', 'rujukan', 'halaman', 'bab'
+        ];
         return array_values(array_diff($words, $stopwords));
     }
 }

@@ -46,6 +46,27 @@
             </div>
         </div>
 
+        {{-- Handover Waiting Indicator Bar (Tanda Merah Jika Belum Dialihkan Dari Admin) --}}
+        <div id="handover-waiting-bar" class="hidden bg-rose-50 border-b border-rose-200 px-3.5 sm:px-6 py-2.5 flex items-center justify-between gap-3 text-rose-800 text-xs transition-all shadow-inner">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <span class="relative flex h-3 w-3 shrink-0">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-600"></span>
+                </span>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <strong class="font-bold text-rose-900">Menunggu Respon Petugas BPS</strong>
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-200/70 text-rose-900 border border-rose-300">Belum Dialihkan oleh Admin</span>
+                    </div>
+                    <p class="text-rose-700 text-[11px] sm:text-xs mt-0.5 truncate">Permintaan Anda sedang dalam antrean. Anda dapat membatalkan dan kembali ke AI kapan saja.</p>
+                </div>
+            </div>
+            <button type="button" onclick="cancelOfficerHandoff()" class="shrink-0 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-100 text-rose-700 border border-rose-300 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-all active:scale-95" title="Batalkan Panggilan Petugas">
+                <span class="iconify text-sm text-rose-600" data-icon="lucide:x-circle"></span>
+                <span>Batalkan & Balik ke AI</span>
+            </button>
+        </div>
+
         {{-- Messages Scroll Area --}}
         <div id="chat-messages" class="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3.5 sm:space-y-5 bg-slate-50/70">
 
@@ -276,54 +297,96 @@ function renderAllMessages(messages) {
     scrollToBottom();
 }
 
+function replaceIconsAndFilterEmojis(text) {
+    if (!text) return '';
+
+    // 1. Ubah tag [icon:name] menjadi elemen icon Lucide
+    let res = text.replace(/\[icon:([a-z0-9\-]+)\]/gi, '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:$1"></span>');
+
+    // 2. Konversi emoji yang sering muncul menjadi Lucide Icons
+    const emojiMap = {
+        '📊': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:bar-chart-2"></span>',
+        '📈': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:trending-up"></span>',
+        '📉': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:trending-down"></span>',
+        '📌': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:bookmark"></span>',
+        '🛣️': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:route"></span>',
+        '🛣': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:route"></span>',
+        'ℹ️': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:info"></span>',
+        'ℹ': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:info"></span>',
+        '🏛️': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:landmark"></span>',
+        '🏛': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:landmark"></span>',
+        '📍': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:map-pin"></span>',
+        '📅': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:calendar"></span>',
+        '📞': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:phone"></span>',
+        '✉️': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:mail"></span>',
+        '✉': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:mail"></span>',
+        '🔗': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:external-link"></span>',
+        '🔍': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:search"></span>',
+        '💡': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:lightbulb"></span>',
+        '🧠': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:sparkles"></span>',
+        '⚠️': '<span class="iconify text-amber-600 inline-block align-middle mr-1.5" data-icon="lucide:alert-circle"></span>',
+        '🌾': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:wheat"></span>',
+        '👥': '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:users"></span>',
+    };
+
+    for (const [emoji, iconHtml] of Object.entries(emojiMap)) {
+        res = res.split(emoji).join(iconHtml);
+    }
+
+    // 3. Bersihkan sisa emoji Unicode grafis lainnya agar bebas emoji
+    res = res.replace(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+
+    return res;
+}
+
 function formatBotContent(raw) {
     if (!raw) return '';
+
+    let cleaned = replaceIconsAndFilterEmojis(raw);
 
     // 1. Prioritaskan Marked.js bila library sudah dimuat
     if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
         try {
+            const renderer = new marked.Renderer();
+            // Hindari teks bold hitam yang kaku, ganti dengan tipografi natural dan nyaman dibaca
+            renderer.strong = function(token) {
+                const text = typeof token === 'object' ? token.text : token;
+                return '<span class="font-medium text-slate-800">' + text + '</span>';
+            };
+            marked.use({ renderer });
             marked.setOptions({
                 gfm: true,
                 breaks: true,
                 smartypants: false
             });
-            let html = marked.parse(raw);
-            html = html.replace(/<a /g, '<a target="_blank" rel="noopener" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1" ');
+            let html = marked.parse(cleaned);
+            html = html.replace(/<a /g, '<a target="_blank" rel="noopener" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1" ');
             return html;
         } catch (e) {
             console.warn('Marked parser warning:', e);
         }
     }
 
-    // 2. Parser Markdown Pure JS Super Lengkap (Heading, List, Bold, Italic, Link, Code)
-    let text = raw;
-
-    // Bersihkan karakter kontrol berlebih
+    // 2. Parser Markdown Pure JS Fallback
+    let text = cleaned;
     text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    text = text.replace(/^######[ \t]+(.*)$/gim, '<h6 class="text-xs font-semibold text-slate-800 mt-2.5 mb-1">$1</h6>');
+    text = text.replace(/^#####[ \t]+(.*)$/gim, '<h5 class="text-xs font-semibold text-slate-800 mt-2.5 mb-1">$1</h5>');
+    text = text.replace(/^####[ \t]+(.*)$/gim, '<h4 class="text-xs font-semibold text-blue-900 mt-3 mb-1">$1</h4>');
+    text = text.replace(/^###[ \t]+(.*)$/gim, '<h3 class="text-sm font-semibold text-blue-800 mt-3.5 mb-1.5">$1</h3>');
+    text = text.replace(/^##[ \t]+(.*)$/gim, '<h2 class="text-base font-semibold text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-100">$1</h2>');
+    text = text.replace(/^#[ \t]+(.*)$/gim, '<h1 class="text-lg font-semibold text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-200">$1</h1>');
 
-    // Heading Markdown (#, ##, ###, ####, #####, ######)
-    text = text.replace(/^######[ \t]+(.*)$/gim, '<h6 class="text-xs font-bold text-slate-800 mt-2.5 mb-1">$1</h6>');
-    text = text.replace(/^#####[ \t]+(.*)$/gim, '<h5 class="text-xs font-bold text-slate-800 mt-2.5 mb-1">$1</h5>');
-    text = text.replace(/^####[ \t]+(.*)$/gim, '<h4 class="text-xs font-bold text-blue-900 mt-3 mb-1">$1</h4>');
-    text = text.replace(/^###[ \t]+(.*)$/gim, '<h3 class="text-sm font-extrabold text-blue-800 mt-3.5 mb-1.5">$1</h3>');
-    text = text.replace(/^##[ \t]+(.*)$/gim, '<h2 class="text-base font-extrabold text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-100">$1</h2>');
-    text = text.replace(/^#[ \t]+(.*)$/gim, '<h1 class="text-lg font-black text-slate-900 mt-4 mb-2 pb-1 border-b border-slate-200">$1</h1>');
+    // Bold (**text**) diubah menjadi teks mengalir natural tanpa cetak tebal hitam
+    text = text.replace(/\*\*(.*?)\*\*/g, '<span class="font-medium text-slate-800">$1</span>');
+    text = text.replace(/__(.*?)__/g, '<span class="font-medium text-slate-800">$1</span>');
 
-    // Bold (**text** atau __text__)
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>');
-    text = text.replace(/__(.*?)__/g, '<strong class="font-bold text-slate-900">$1</strong>');
-
-    // Italic (*text* atau _text_)
     text = text.replace(/(^|[^\*])\*([^\*\n]+)\*([^\*]|$)/g, '$1<em class="italic text-slate-700">$2</em>$3');
     text = text.replace(/(^|[^_])_([^_\n]+)_([^_]|$)/g, '$1<em class="italic text-slate-700">$2</em>$3');
 
-    // Unordered Lists (* item, - item, + item)
     text = text.replace(/^[ \t]*[\*\-\+][ \t]+(.*)$/gim, '<li class="my-1">$1</li>');
-
-    // Numbered Lists (1. item)
     text = text.replace(/^[ \t]*(\d+)\.[ \t]+(.*)$/gim, '<li class="my-1" value="$1">$2</li>');
 
-    // Wrap consecutive <li> in <ul>
     text = text.replace(/(<li class="my-1"[^>]*>[\s\S]*?<\/li>\s*)+/gi, function(match) {
         if (match.includes('value="')) {
             return '<ol class="list-decimal pl-5 my-2 space-y-1">' + match + '</ol>';
@@ -331,13 +394,8 @@ function formatBotContent(raw) {
         return '<ul class="list-disc pl-5 my-2 space-y-1">' + match + '</ul>';
     });
 
-    // Links: [title](url)
-    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1">$1 <span class="iconify" data-icon="lucide:external-link"></span></a>');
-
-    // Inline Code: `code`
+    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">$1 <span class="iconify" data-icon="lucide:external-link"></span></a>');
     text = text.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded text-xs font-mono border border-slate-200">$1</code>');
-
-    // Newlines preservation (hanya jika bukan tag heading/list)
     text = text.replace(/\n\n/g, '<div class="h-2"></div>');
     text = text.replace(/\n/g, '<br>');
 
@@ -351,6 +409,10 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
 
     const wrapper = document.createElement('div');
     wrapper.className = `flex ${isVisitor ? 'justify-end' : 'justify-start'} chat-msg-wrapper`;
+    
+    if (messageId) {
+        wrapper.id = 'msg-box-' + messageId;
+    }
 
     let canvasId = '';
     let chartData = chartDataParam;
@@ -372,9 +434,15 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="bg-white border-2 border-blue-400 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-sm">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-blue-700 mb-2">
-                            <span class="iconify text-base" data-icon="lucide:user-check"></span>
-                            <span class="truncate">${escapeHtml(senderName || 'Petugas BPS Karanganyar')}</span>
+                        <div class="flex items-center justify-between gap-1.5 text-xs font-bold text-blue-700 mb-2 pb-1.5 border-b border-blue-100">
+                            <div class="flex items-center gap-1.5 truncate">
+                                <span class="iconify text-base" data-icon="lucide:user-check"></span>
+                                <span class="truncate">${escapeHtml(senderName || 'Petugas BPS Karanganyar')}</span>
+                            </div>
+                            <button type="button" onclick="copyMessageText(this)" data-content="${escapeHtml(content)}" title="Salin Pesan Petugas" class="btn-copy px-2 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 hover:bg-emerald-50 text-blue-700 hover:text-emerald-700 border border-blue-200 hover:border-emerald-200 transition-all flex items-center gap-1 cursor-pointer shadow-xs shrink-0">
+                                <span class="iconify text-xs sm:text-sm" data-icon="lucide:copy"></span>
+                                <span class="btn-copy-label">Salin</span>
+                            </button>
                         </div>
                         <div class="chat-content-body text-xs sm:text-sm break-words">${formatBotContent(content)}</div>
                     </div>
@@ -441,16 +509,14 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         let feedbackHtml = '';
         if (messageId) {
             feedbackHtml = `
-                <div class="mt-3 flex items-center justify-between pt-2.5 border-t border-slate-100" id="feedback-box-${messageId}">
-                    <span class="text-[10px] text-slate-400">Apakah informasi ini membantu?</span>
-                    <div class="flex items-center gap-1.5">
-                        <button onclick="submitFeedback(${messageId}, 'helpful')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${feedback === 'helpful' ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700'} transition-all flex items-center gap-1 cursor-pointer">
-                            <span class="iconify text-xs" data-icon="lucide:thumbs-up"></span>
-                            <span>Ya</span>
+                <div id="feedback-box-${messageId}" class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                    <span class="font-medium">Apakah jawaban ini akurat & membantu?</span>
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="submitFeedback(${messageId}, 'helpful')" title="Membantu" class="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer">
+                            <span class="iconify text-sm" data-icon="lucide:thumbs-up"></span>
                         </button>
-                        <button onclick="submitFeedback(${messageId}, 'not_helpful')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border ${feedback === 'not_helpful' ? 'bg-rose-50 text-rose-700 border-rose-300' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-rose-50 hover:text-rose-700'} transition-all flex items-center gap-1 cursor-pointer">
-                            <span class="iconify text-xs" data-icon="lucide:thumbs-down"></span>
-                            <span>Tidak</span>
+                        <button type="button" onclick="submitFeedback(${messageId}, 'not_helpful')" title="Kurang Membantu" class="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-rose-500 transition-colors cursor-pointer">
+                            <span class="iconify text-sm" data-icon="lucide:thumbs-down"></span>
                         </button>
                     </div>
                 </div>
@@ -458,7 +524,7 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         }
 
         // Clean text content for text-to-speech
-        const rawContentSafe = escapeHtml(displayContent).replace(/'/g, "\\'");
+        const rawContentSafe = displayContent.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '');
 
         wrapper.innerHTML = `
             <div class="flex gap-2 sm:gap-3 max-w-2xl">
@@ -472,10 +538,16 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
                                 <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
                                 Layanan PST BPS Karanganyar
                             </span>
-                            <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="shrink-0 btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
-                                <span class="iconify text-xs sm:text-sm" data-icon="lucide:volume-2"></span>
-                                <span>Dengarkan</span>
-                            </button>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button type="button" onclick="copyMessageText(this)" data-content="${escapeHtml(rawContentSafe)}" title="Salin Teks Jawaban" class="btn-copy px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 transition-all flex items-center gap-1 cursor-pointer shadow-xs">
+                                    <span class="iconify text-xs sm:text-sm" data-icon="lucide:copy"></span>
+                                    <span class="btn-copy-label">Salin</span>
+                                </button>
+                                <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="shrink-0 btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
+                                    <span class="iconify text-xs sm:text-sm" data-icon="lucide:volume-2"></span>
+                                    <span>Dengarkan</span>
+                                </button>
+                            </div>
                         </div>
                         <div class="chat-content-body text-xs sm:text-sm break-words">${formatBotContent(displayContent)}</div>
                         ${chartBoxHtml}
@@ -498,6 +570,9 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
     messagesArea.appendChild(wrapper);
     if (canvasId && chartData) {
         renderMessageChart(canvasId, chartData);
+    }
+    if (window.Iconify && typeof window.Iconify.scan === 'function') {
+        window.Iconify.scan(wrapper);
     }
     scrollToBottom();
 }
@@ -706,13 +781,65 @@ chatForm.addEventListener('submit', function(e) {
     });
 });
 
+function updateStatusBadge(status, officerName = null) {
+    const pill = document.getElementById('chat-status-pill');
+    const waitingBar = document.getElementById('handover-waiting-bar');
+    const officerBtn = document.getElementById('btn-request-officer');
+    if (!pill) return;
+
+    if (status === 'waiting') {
+        // Tanda merah: Menunggu respon / Belum dialihkan dari admin
+        pill.className = 'shrink-0 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-rose-500/25 text-rose-200 border border-rose-500/50 flex items-center gap-1.5 shadow-xs';
+        pill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span><span>Menunggu Respon Petugas</span>`;
+
+        if (waitingBar) waitingBar.classList.remove('hidden');
+
+        if (officerBtn) {
+            officerBtn.className = 'p-2 sm:px-3.5 sm:py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold border border-rose-700 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer';
+            officerBtn.setAttribute('onclick', 'cancelOfficerHandoff()');
+            officerBtn.setAttribute('title', 'Batalkan Antrean Petugas dan Balik ke AI');
+            officerBtn.innerHTML = `<span class="iconify text-base text-white" data-icon="lucide:x-circle"></span><span class="hidden sm:inline">Batalkan Antrean</span>`;
+        }
+    } else if (status === 'handled') {
+        // Petugas admin telah mengambil alih
+        pill.className = 'shrink-0 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-blue-500/25 text-blue-200 border border-blue-500/50 flex items-center gap-1.5 shadow-xs';
+        pill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span><span>Terhubung: ${escapeHtml(officerName || 'Petugas BPS')}</span>`;
+
+        if (waitingBar) waitingBar.classList.add('hidden');
+
+        if (officerBtn) {
+            officerBtn.className = 'p-2 sm:px-3.5 sm:py-2 rounded-xl bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold border border-slate-800 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer';
+            officerBtn.setAttribute('onclick', 'cancelOfficerHandoff()');
+            officerBtn.setAttribute('title', 'Kembali ke Chatbot AI');
+            officerBtn.innerHTML = `<span class="iconify text-base text-white" data-icon="lucide:bot"></span><span class="hidden sm:inline">Kembali ke AI</span>`;
+        }
+    } else {
+        // Mode normal AI Chatbot
+        pill.className = 'shrink-0 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1';
+        pill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Layanan AI Aktif</span>`;
+
+        if (waitingBar) waitingBar.classList.add('hidden');
+
+        if (officerBtn) {
+            officerBtn.className = 'p-2 sm:px-3.5 sm:py-2 rounded-xl bg-[#f7941d] hover:bg-[#e07e0c] text-white text-xs font-bold border border-amber-600 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer';
+            officerBtn.setAttribute('onclick', 'requestOfficerHandoff()');
+            officerBtn.setAttribute('title', 'Hubungkan ke Petugas');
+            officerBtn.innerHTML = `<span class="iconify text-base text-white" data-icon="lucide:headset"></span><span class="hidden sm:inline">Hubungi Petugas</span>`;
+        }
+    }
+    if (window.Iconify && typeof window.Iconify.scan === 'function') {
+        window.Iconify.scan(pill);
+        if (officerBtn) window.Iconify.scan(officerBtn);
+    }
+}
+
 function requestOfficerHandoff() {
     Swal.fire({
         title: 'Hubungi Petugas BPS?',
         text: 'Percakapan Anda akan dialihkan ke antrean petugas BPS Karanganyar untuk ditanggapi langsung pada jam kerja (Senin–Jumat, 08.00–15.30 WIB).',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#2563eb',
+        confirmButtonColor: '#005b9f',
         cancelButtonColor: '#64748b',
         confirmButtonText: 'Ya, Hubungkan Petugas',
         cancelButtonText: 'Batal',
@@ -734,13 +861,13 @@ function requestOfficerHandoff() {
                     updateStatusBadge(data.status);
                 }
                 if (data.message) {
-                    appendMessageElement('bot', data.message.content, [], data.message.id);
+                    appendMessageElement('bot', data.message.content, [], data.message.id, data.message.created_at);
                 }
                 Swal.fire({
                     icon: 'success',
                     title: 'Permintaan Diteruskan',
-                    text: 'Anda telah masuk ke antrean petugas BPS Karanganyar. Mohon tunggu balasan petugas di halaman ini.',
-                    confirmButtonColor: '#2563eb'
+                    text: 'Anda telah masuk ke antrean petugas BPS Karanganyar. Status saat ini menunggu konfirmasi dan respon petugas.',
+                    confirmButtonColor: '#005b9f'
                 });
             })
             .catch(() => {
@@ -748,7 +875,54 @@ function requestOfficerHandoff() {
                     icon: 'error',
                     title: 'Gagal',
                     text: 'Gagal mengirim permintaan ke petugas. Silakan coba lagi.',
-                    confirmButtonColor: '#2563eb'
+                    confirmButtonColor: '#005b9f'
+                });
+            });
+        }
+    });
+}
+
+function cancelOfficerHandoff() {
+    Swal.fire({
+        title: 'Kembali ke Chatbot AI?',
+        text: 'Antrean panggilan ke petugas akan dibatalkan dan Anda dapat langsung bertanya kembali dengan Asisten AI BPS Karanganyar.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#005b9f',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Kembali ke AI',
+        cancelButtonText: 'Tetap Antre',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('{{ route("chat.cancel-officer") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ session: visitorSession })
+            })
+            .then(r => r.json())
+            .then(data => {
+                updateStatusBadge('active');
+                if (data.message) {
+                    appendMessageElement('bot', data.message.content, [], data.message.id, data.message.created_at);
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Antrean Dibatalkan',
+                    text: 'Anda telah dialihkan kembali ke layanan AI Chatbot BPS Karanganyar.',
+                    confirmButtonColor: '#005b9f'
+                });
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Membatalkan',
+                    text: 'Terjadi kesalahan jaringan saat membatalkan antrean.',
+                    confirmButtonColor: '#005b9f'
                 });
             });
         }
@@ -887,6 +1061,107 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function copyMessageText(btn) {
+    let text = btn.getAttribute('data-content') || '';
+    // Clean out chart blocks, icon tags, and excessive asterisks for pure clean text
+    let cleanText = text
+        .replace(/```chart\s*\{[\s\S]*?\}\s*```/g, '')
+        .replace(/\[icon:[a-z0-9\-]+\]/gi, '')
+        .replace(/^[ \t]*[\*\-\+][ \t]+/gm, '• ')
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+
+    const doSuccess = () => {
+        const label = btn.querySelector('.btn-copy-label');
+        const icon = btn.querySelector('.iconify');
+        const origClasses = btn.className;
+
+        btn.className = 'btn-copy px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 transition-all flex items-center gap-1 cursor-pointer shadow-xs';
+        if (label) label.textContent = 'Tersalin!';
+        if (icon) icon.setAttribute('data-icon', 'lucide:check');
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Teks jawaban berhasil disalin!'
+        });
+
+        setTimeout(() => {
+            btn.className = origClasses;
+            if (label) label.textContent = 'Salin';
+            if (icon) icon.setAttribute('data-icon', 'lucide:copy');
+        }, 2200);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cleanText).then(doSuccess).catch(() => fallbackCopy(cleanText, doSuccess));
+    } else {
+        fallbackCopy(cleanText, doSuccess);
+    }
+}
+
+function fallbackCopy(text, callback) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+        document.execCommand('copy');
+        if (typeof callback === 'function') callback();
+    } catch (e) {
+        console.error('Fallback copy failed', e);
+    }
+    document.body.removeChild(ta);
+}
+
+const seenMessageIds = new Set();
+let isPollingHistory = false;
+
+function pollHistory() {
+    if (isPollingHistory) return;
+    const session = localStorage.getItem('bps_chat_session') || visitorSession;
+    if (!session) return;
+
+    isPollingHistory = true;
+    fetch('{{ route("chat.messages") }}?session=' + encodeURIComponent(session), {
+        headers: { 'Accept': 'application/json' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        isPollingHistory = false;
+        if (data.status) {
+            updateStatusBadge(data.status, data.officer_name);
+        }
+        if (Array.isArray(data.messages)) {
+            data.messages.forEach(msg => {
+                if (msg.id) {
+                    if (!seenMessageIds.has(msg.id) && !document.getElementById('msg-box-' + msg.id)) {
+                        seenMessageIds.add(msg.id);
+                        appendMessageElement(
+                            msg.sender_type,
+                            msg.content,
+                            msg.sources || [],
+                            msg.id,
+                            msg.created_at,
+                            msg.sender_name,
+                            msg.feedback,
+                            [],
+                            msg.chart || null
+                        );
+                    } else {
+                        seenMessageIds.add(msg.id);
+                    }
+                }
+            });
+        }
+    })
+    .catch(() => {
+        isPollingHistory = false;
+    });
 }
 
 // Initial history fetch and periodic polling (every 3 seconds)
