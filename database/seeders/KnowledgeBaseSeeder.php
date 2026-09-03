@@ -6,7 +6,6 @@ use App\Models\KnowledgeCategory;
 use App\Models\KnowledgeArticle;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class KnowledgeBaseSeeder extends Seeder
 {
@@ -24,69 +23,133 @@ class KnowledgeBaseSeeder extends Seeder
             [
                 'name' => 'Pelayanan Statistik Terpadu (PST)',
                 'slug' => 'pst-dan-layanan-data',
-                'description' => 'Informasi mengenai prosedur, tata cara permintaan data, konsultasi statistik, dan pojok statistik di BPS Karanganyar.',
+                'description' => 'Standar pelayanan resmi, jenis layanan, prosedur permohonan data, konsultasi, data mikro, wilkerstat, dan tarif PNBP di BPS Kabupaten Karanganyar.',
                 'articles' => [
                     [
-                        'title' => 'Cara Memperoleh Data Statistik BPS Karanganyar 2026',
-                        'question' => 'Bagaimana cara meminta atau memperoleh data statistik BPS Kabupaten Karanganyar terbaru tahun 2026?',
-                        'answer' => "Pelayanan data statistik BPS Kabupaten Karanganyar dapat diperoleh melalui:\n1. Layanan Chatbot AI Resmi ini: Anda dapat langsung menanyakan data statistik Karanganyar terbaru dan sistem akan menyajikan angka resmi, analisis, serta visualisasi grafik langsung di ruang chat ini.\n2. Layanan Konsultasi Tatap Muka: Pelayanan Statistik Terpadu (PST) di Kantor BPS Kabupaten Karanganyar pada jam kerja resmi (Senin-Jumat).\n3. Konsultasi Petugas: Klik tombol Hubungi Petugas di ruang percakapan ini untuk terhubung langsung dengan petugas statistik BPS Karanganyar.",
-                        'keywords' => ['minta data', 'permohonan data', 'unduh data', 'cara dapat data', 'prosedur data', 'skripsi', 'penelitian', 'download', '2026'],
-                        'source_title' => 'Standar Pelayanan BPS Kabupaten Karanganyar 2026',
+                        'title' => 'Standar dan 7 Layanan Utama Pelayanan Statistik Terpadu (PST) BPS Karanganyar',
+                        'question' => 'Apa itu Pelayanan Statistik Terpadu (PST) BPS Karanganyar dan apa saja 7 jenis layanan utamanya?',
+                        'answer' => "Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar adalah pintu gerbang resmi pelayanan publik satu atap untuk memperoleh data statistik, publikasi, dan konsultasi statistik yang transparan, profesional, dan akuntabel.\n\nBerdasarkan Standar Pelayanan BPS (Keputusan Kepala BPS No. 444 Tahun 2022), terdapat 7 Layanan Utama PST:\n1. Layanan Perpustakaan Cetak & Digital: Akses membaca buku publikasi fisik di ruang PST atau mengunduh softcopy PDF/Excel di portal resmi secara gratis.\n2. Layanan Konsultasi Statistik: Bimbingan tatap muka atau daring mengenai konsep, definisi indikator, metodologi survei/sensus, interpretasi angka, dan penjelasan metadata statistik.\n3. Layanan Rekomendasi Kegiatan Statistik (ROMANTIK): Pelayanan telaah metodologi bagi Organisasi Perangkat Daerah (OPD) Pemkab Karanganyar yang akan menyelenggarakan survei/pendataan sektoral sesuai amanat Satu Data Indonesia (SDI).\n4. Layanan Penyediaan Data Mikro (Microdata) & Peta Spasial Wilkerstat: Akses raw data hasil survei (Susenas, Sakernas, Sensus) dan shapefile peta batas wilayah kerja statistik untuk analisis riset mendalam.\n5. Layanan Pembinaan Statistik Sektoral (EPSS & Desa Cantik): Evaluasi Penyelenggaraan Statistik Sektoral bagi pemda serta pembinaan literasi data bagi perangkat desa/kelurahan.\n6. Layanan Pojok Statistik: Kolaborasi dengan perguruan tinggi untuk mendekatkan edukasi data kepada sivitas akademika.\n7. Layanan Penanganan Pengaduan: Fasilitas penyampaian aduan, kritik, dan saran pelayanan melalui loket PST maupun formulir daring portal ini.",
+                        'keywords' => ['pst', 'pelayanan statistik terpadu', 'standar pelayanan', '7 layanan', 'layanan bps', 'fungsi pst', 'produk pst', 'maklumat pelayanan'],
+                        'source_title' => 'Standar Pelayanan BPS Kabupaten Karanganyar (Kepka BPS No. 444/2022)',
                         'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
                     ],
                     [
-                        'title' => 'Biaya dan Tarif Layanan Data Statistik',
-                        'question' => 'Berapa biaya untuk mendapatkan data atau konsultasi statistik di BPS?',
-                        'answer' => "Layanan data statistik dasar, unduh publikasi elektronik (softcopy PDF/Excel), dan konsultasi statistik di BPS Kabupaten Karanganyar adalah 100% GRATIS (Tanpa Biaya). Pembelian buku cetak edisi khusus tertentu dikenakan tarif PNBP resmi sesuai Peraturan Pemerintah dan disetor langsung ke Kas Negara.",
-                        'keywords' => ['biaya', 'tarif', 'harga data', 'gratis', 'pnbp', 'bayar', 'retribusi'],
-                        'source_title' => 'PP Tarif PNBP BPS',
+                        'title' => 'Prosedur Permohonan Data Mikro dan Peta Wilkerstat (Tarif Rp0 untuk Mahasiswa/Peneliti)',
+                        'question' => 'Bagaimana syarat dan cara mendapatkan data mikro (raw data) atau peta digital Wilkerstat untuk skripsi/penelitian?',
+                        'answer' => "Data mikro (data mentah perorangan/rumah tangga yang telah dianonimkan) dan peta digital Wilkerstat (format Shapefile/GIS) dapat diperoleh melalui loket PST BPS Kabupaten Karanganyar atau Pelayanan Statistik Terpadu Online.\n\nKetentuan Tarif Rp0,- (Bebas Biaya PNBP):\nSesuai Peraturan Pemerintah (PP) No. 86 Tahun 2021 tentang Tarif atas Jenis PNBP yang Berlaku pada BPS, mahasiswa yang menyusun skripsi/tesis/disertasi, dosen peneliti, serta instansi pemerintah berhak mendapatkan tarif Rp0,- (GRATIS).\n\nPersyaratan Pengajuan Data Mikro & Wilkerstat:\n1. Mengisi formulir permohonan data di loket PST atau daring.\n2. Melampirkan Surat Pengantar resmi dari Dekan Fakultas/Kampus atau instansi pemohon.\n3. Melampirkan Proposal Penelitian/Skripsi yang memuat rincian variabel dan cakupan data yang dibutuhkan.\n4. Fotokopi Kartu Tanda Penduduk (KTP) dan Kartu Tanda Mahasiswa (KTM).\n5. Menandatangani Formulir Komitmen Penggunaan Data (hanya untuk riset akademis dan tidak disebarluaskan komersial).\n\nPetugas PST BPS Karanganyar akan memverifikasi berkas dalam waktu 1-3 hari kerja sebelum berkas data mikro diserahkan.",
+                        'keywords' => ['data mikro', 'raw data', 'wilkerstat', 'shapefile', 'shp', 'skripsi', 'tesis', 'mahasiswa', 'gratis', 'rp 0', 'bebas pnbp', 'pp 86 tahun 2021', 'penelitian'],
+                        'source_title' => 'Standar Pelayanan Data Mikro & Wilkerstat BPS (PP No. 86 Tahun 2021)',
                         'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
                     ],
                     [
-                        'title' => 'Layanan Konsultasi dan Rekomendasi Statistik (ROMANTIK)',
-                        'question' => 'Bagaimana cara melakukan konsultasi statistik atau pengajuan rekomendasi kegiatan statistik?',
-                        'answer' => "Konsultasi statistik dan pengajuan Rekomendasi Kegiatan Statistik (ROMANTIK) dapat diajukan oleh OPD Pemkab Karanganyar, instansi vertikal, maupun akademisi melalui website https://romantik.bps.go.id atau loket PST BPS Karanganyar. Tim BPS akan memberikan telaah metodologi, rancangan kuesioner, konsep definisi, serta penjaminan kualitas statistik sektoral.",
-                        'keywords' => ['konsultasi', 'romantik', 'rekomendasi statistik', 'metodologi', 'survei', 'opd', 'sektoral'],
-                        'source_title' => 'Portal ROMANTIK BPS',
-                        'source_url' => 'https://romantik.bps.go.id',
+                        'title' => 'Prosedur Layanan Konsultasi Statistik Resmi BPS',
+                        'question' => 'Bagaimana alur dan prosedur konsultasi statistik di BPS Kabupaten Karanganyar?',
+                        'answer' => "Layanan Konsultasi Statistik BPS Kabupaten Karanganyar terbuka untuk seluruh masyarakat, peneliti, mahasiswa, ASN OPD, maupun pelaku usaha tanpa dipungut biaya (100% GRATIS).\n\nCakupan Materi Konsultasi:\n1. Konsultasi Konsep dan Definisi: Memahami batasan operasional istilah statistik resmi (seperti Garis Kemiskinan, Angkatan Kerja, Pengangguran, PDRB, IPM).\n2. Konsultasi Metodologi Survei: Penentuan populasi, kerangka sampel, teknik sampling probabilitas, rancangan instrumen/kuesioner, dan margin of error.\n3. Konsultasi Analisis dan Interpretasi: Membaca tabel komparasi, tren deret waktu, dan pemanfaatan data untuk evaluasi program pembangunan.\n4. Konsultasi Metadata Statistik: Standarisasi variabel dan indikator sesuai prinsip Satu Data Indonesia.\n\nSaluran Konsultasi:\n- Daring/Interaktif: Melalui Asisten AI Chatbot ini dan fitur Hubungi Petugas untuk konsultasi tertulis real-time.\n- Tatap Muka: Datang langsung ke Ruang PST Kantor BPS Kabupaten Karanganyar pada hari kerja resmi (Senin-Jumat).",
+                        'keywords' => ['konsultasi statistik', 'konsultasi', 'bimbingan statistik', 'tanya data', 'metodologi', 'sampling', 'definisi indikator', 'analisis data'],
+                        'source_title' => 'Standar Konsultasi Statistik BPS Kabupaten Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
                     ],
                     [
-                        'title' => 'Program Pembinaan Desa Cantik (Desa Cinta Statistik)',
-                        'question' => 'Apa itu program Desa Cantik di Kabupaten Karanganyar?',
-                        'answer' => "Program Desa Cinta Statistik (Desa Cantik) merupakan program pembinaan BPS Karanganyar kepada aparatur desa/kelurahan untuk meningkatkan literasi dan tata kelola data statistik di tingkat desa. Tujuannya agar perencanaan pembangunan desa dan penyaluran program bantuan berbasis data yang valid, akurat, dan mutakhir.",
-                        'keywords' => ['desa cantik', 'desa cinta statistik', 'kelurahan', 'data desa', 'pembinaan statistik'],
-                        'source_title' => 'Program Desa Cantik BPS Karanganyar 2026',
-                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication?keyword=desa+cantik',
+                        'title' => 'Layanan Rekomendasi Kegiatan Statistik Sektoral (ROMANTIK)',
+                        'question' => 'Apa itu layanan ROMANTIK BPS dan bagaimana tahapan pengajuannya bagi OPD Pemkab Karanganyar?',
+                        'answer' => "ROMANTIK (Rekomendasi Kegiatan Statistik) adalah layanan resmi BPS sebagai Pembina Data Statistik sesuai amanat UU No. 16 Tahun 1997 dan Perpres No. 39 Tahun 2019 tentang Satu Data Indonesia (SDI).\n\nTujuan ROMANTIK:\n1. Menghindari duplikasi pengumpulan data statistik sektoral antar-OPD di lingkungan Pemerintah Kabupaten Karanganyar.\n2. Menjamin rancangan metodologi, instrumen survei, dan teknik sampling memenuhi kaidah statistik yang baku.\n3. Menghasilkan metadata statistik kegiatan dan indikator yang terstandarisasi secara nasional.\n\nTahapan Pengajuan ROMANTIK:\n1. OPD pemohon menyiapkan rancangan kegiatan statistik (proposal, kuesioner, jadwal, dan metodologi).\n2. Tim Pembina Statistik BPS Kabupaten Karanganyar melakukan telaah kelayakan metodologi, konsep definisi, dan klasifikasi data.\n3. Jika rancangan memenuhi standar, Kepala BPS Kabupaten Karanganyar menerbitkan Surat Rekomendasi Kegiatan Statistik resmi.\n4. OPD melaksanakan survei dan menyerahkan hasil metadata ke portal Satu Data.",
+                        'keywords' => ['romantik', 'rekomendasi statistik', 'survei opd', 'statistik sektoral', 'satu data indonesia', 'sdi', 'pembina data', 'telaah metodologi'],
+                        'source_title' => 'Pedoman Penyelenggaraan Rekomendasi Kegiatan Statistik (ROMANTIK) BPS',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
+                    ],
+                    [
+                        'title' => 'Evaluasi Penyelenggaraan Statistik Sektoral (EPSS) dan Indeks Pembangunan Statistik (IPS)',
+                        'question' => 'Apa itu EPSS dan Indeks Pembangunan Statistik (IPS) Kabupaten Karanganyar?',
+                        'answer' => "Evaluasi Penyelenggaraan Statistik Sektoral (EPSS) adalah proses penilaian sistematis oleh BPS untuk mengukur tingkat kematangan (maturity level) penyelenggaraan statistik sektoral pada instansi pemerintah daerah.\n\nOutput EPSS:\nEPSS menghasilkan nilai Indeks Pembangunan Statistik (IPS) dengan skala 1 hingga 5. Nilai IPS Kabupaten Karanganyar menjadi salah satu indikator kinerja reformasi birokrasi tematik pemerintah daerah.\n\n5 Domain Penilaian EPSS:\n1. Prinsip Satu Data Indonesia (Standar Data, Metadata, Interoperabilitas, Kode Referensi/Data Induk).\n2. Kualitas Data (Relevansi, Akurasi, Ketepatan Waktu, Aksesibilitas, Keterbandingan, Keterpaduan).\n3. Proses Bisnis Statistik (Perencanaan, Pengumpulan, Pemeriksaan, Diseminasi data sesuai GSBPM).\n4. Kelembagaan Statistik (Penyelenggara, Pembina, Walidata, dan Forum Satu Data).\n5. Statistik Nasional (Pemanfaatan data statistik untuk perencanaan pembangunan daerah).",
+                        'keywords' => ['epss', 'ips', 'indeks pembangunan statistik', 'statistik sektoral', 'evaluasi', 'kematangan data', 'domain epss', 'gsbpm'],
+                        'source_title' => 'Pedoman Evaluasi Penyelenggaraan Statistik Sektoral (EPSS) BPS',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
+                    ],
+                    [
+                        'title' => 'Program Desa Cantik (Desa Cinta Statistik) di Kabupaten Karanganyar',
+                        'question' => 'Apa itu Program Desa Cantik (Desa Cinta Statistik) di Kabupaten Karanganyar?',
+                        'answer' => "Program Desa Cinta Statistik (Desa Cantik) merupakan program inovasi BPS untuk melakukan pembinaan statistik secara berkelanjutan kepada aparatur pemerintah desa dan kelurahan di Kabupaten Karanganyar.\n\nTujuan Utama Desa Cantik:\n1. Meningkatkan literasi, kesadaran, dan kapabilitas aparat desa dalam mengelola data potensi, demografi, dan kesejahteraan warganya.\n2. Menstandarisasi tata kelola data desa agar valid, akurat, dan mutakhir sehingga program bantuan sosial atau pembangunan desa tepat sasaran.\n3. Mendorong terwujudnya sistem informasi profil desa berbasis data presisi (monografi desa digital).\n\nDi Kabupaten Karanganyar, desa-desa binaan Desa Cantik telah mampu mempublikasikan infografis dan buku profil data desa secara mandiri.",
+                        'keywords' => ['desa cantik', 'desa cinta statistik', 'kelurahan cantik', 'pembinaan desa', 'data desa', 'monografi', 'literasi statistik'],
+                        'source_title' => 'Program Desa Cantik BPS Kabupaten Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
+                    ],
+                    [
+                        'title' => 'Tarif dan Biaya Layanan Data Statistik BPS (PP No. 86 Tahun 2021)',
+                        'question' => 'Berapa biaya layanan data dan konsultasi di BPS Kabupaten Karanganyar?',
+                        'answer' => "Layanan data BPS Kabupaten Karanganyar mengedepankan prinsip keterbukaan informasi publik dan berorientasi pada kepuasan masyarakat:\n\n1. Layanan GRATIS (Rp 0,-):\n- Unduh seluruh publikasi elektronik (softcopy PDF, buku KDA, dll): Rp0,- (Gratis).\n- Akses tabel statistik dinamis, infografis, dan Berita Resmi Statistik (BRS): Rp0,- (Gratis).\n- Konsultasi statistik di loket PST maupun online via Chatbot/Petugas: Rp0,- (Gratis).\n- Permohonan Data Mikro & Peta Wilkerstat untuk skripsi/tesis/penelitian akademis: Rp0,- (Gratis, berdasar PP 86/2021 Pasal 3).\n\n2. Layanan Dikenakan Tarif PNBP Resmi (PP No. 86 Tahun 2021):\n- Pembelian buku fisik/cetak publikasi resmi edisi khusus (dikenai tarif cetak resmi).\n- Seluruh penerimaan tarif PNBP disetorkan langsung 100% ke Kas Negara melalui kode billing SIMPONI tanpa pungutan liar.",
+                        'keywords' => ['biaya', 'tarif', 'harga', 'gratis', 'pnbp', 'pp 86 tahun 2021', 'bayar', 'retribusi', 'bebas biaya', 'rp0', 'rp 0'],
+                        'source_title' => 'PP No. 86 Tahun 2021 tentang Tarif atas Jenis PNBP BPS',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
+                    ],
+                    [
+                        'title' => 'Maklumat Pelayanan dan Budaya Kerja BerAKHLAK BPS Karanganyar',
+                        'question' => 'Apa isi Maklumat Pelayanan dan nilai-nilai budaya kerja BPS Kabupaten Karanganyar?',
+                        'answer' => "BPS Kabupaten Karanganyar berkomitmen memberikan pelayanan prima yang berintegritas tinggi:\n\nMaklumat Pelayanan BPS Karanganyar:\n'Dengan ini, kami menyatakan sanggup menyelenggarakan pelayanan sesuai standar pelayanan yang telah ditetapkan dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai ketentuan peraturan perundang-undangan yang berlaku.'\n\nBudaya Kerja & Core Values BPS:\n1. BerAKHLAK (Core Values ASN):\n- Berorientasi Pelayanan: Memahami dan memenuhi kebutuhan data masyarakat dengan ramah dan solutif.\n- Akuntabel: Bertanggung jawab atas akurasi dan objektivitas data.\n- Kompeten: Terus meningkatkan keahlian metodologi statistik.\n- Harmonis: Menjaga iklim kemitraan dengan seluruh pemangku kepentingan.\n- Loyal: Berdedikasi penuh untuk bangsa dan negara.\n- Adaptif: Cepat berinovasi melalui teknologi digital dan kecerdasan artifisial.\n- Kolaboratif: Membangun sinergi Satu Data dengan instansi pemda dan akademisi.\n2. Nilai Inti Statistik (PIA): Profesional, Integritas, dan Amanah.",
+                        'keywords' => ['maklumat pelayanan', 'budaya kerja', 'berakhlak', 'core values', 'pia', 'janji layanan', 'integritas bps'],
+                        'source_title' => 'Maklumat Pelayanan BPS Kabupaten Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/profil',
                     ],
                 ]
             ],
             [
-                'name' => 'Jadwal, Lokasi & Kontak',
-                'slug' => 'jadwal-lokasi-kontak',
-                'description' => 'Informasi jam kerja operasional, alamat kantor, telepon, dan kanal komunikasi resmi.',
+                'name' => 'Kamus & Metodologi Konsep Statistik Resmi',
+                'slug' => 'metodologi-dan-konsep-statistik',
+                'description' => 'Penjelasan konsep resmi, rumus, dan metodologi penghitungan indikator statistik BPS (kemiskinan, IPM, ketenagakerjaan, PDRB, inflasi, dan sensus).',
                 'articles' => [
                     [
-                        'title' => 'Jadwal dan Jam Operasional Pelayanan PST',
-                        'question' => 'Kapan jam buka dan hari operasional layanan BPS Kabupaten Karanganyar?',
-                        'answer' => "Jadwal pelayanan tatap muka Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar adalah:\n- Senin s.d. Kamis: Pukul 08.00 - 15.30 WIB (Istirahat 12.00 - 13.00 WIB)\n- Jumat: Pukul 08.00 - 15.00 WIB (Istirahat 11.30 - 13.00 WIB)\n- Sabtu, Minggu, dan Hari Libur Nasional: Tutup / Libur.\nLayanan portal website dan asisten chatbot ini dapat diakses 24 jam setiap hari.",
-                        'keywords' => ['jadwal', 'jam buka', 'jam kerja', 'operasional', 'hari layanan', 'waktu buka', 'hari apa'],
-                        'source_title' => 'Jam Operasional PST BPS Karanganyar 2026',
-                        'source_url' => 'https://karanganyarkab.bps.go.id/id/profil',
+                        'title' => 'Konsep dan Metodologi Penghitungan Kemiskinan BPS (Pendekatan Kebutuhan Dasar / Cost of Basic Needs)',
+                        'question' => 'Bagaimana metodologi dan konsep BPS dalam mengukur kemiskinan dan Garis Kemiskinan?',
+                        'answer' => "Untuk mengukur kemiskinan secara objektif dan dapat diperbandingkan antarwaktu, BPS menggunakan konsep kemampuan memenuhi kebutuhan dasar (Cost of Basic Needs Approach / CBN).\n\nKonsep Utama Kemiskinan BPS:\n1. Garis Kemiskinan (GK): Nilai pengeluaran minimum yang dibutuhkan seseorang untuk memenuhi kebutuhan dasar makanan dan nonmakanan per kapita per bulan.\n   - Garis Kemiskinan Makanan (GKM): Nilai pengeluaran kebutuhan minimum makanan yang disetarakan dengan 2.100 kilokalori (kkal) per kapita per hari (terdiri dari 52 komoditas pangan pokok).\n   - Garis Kemiskinan Bukan Makanan (GKBM): Nilai kebutuhan minimum untuk perumahan, sandang, pendidikan, dan kesehatan (terdiri dari 51 komoditas nonmakanan).\n   - Rumus: GK = GKM + GKBM.\n\n2. Kategori Penduduk Miskin: Penduduk yang memiliki rata-rata pengeluaran per kapita per bulan di bawah Garis Kemiskinan.\n\n3. Tiga Indikator Kemiskinan BPS (Foster-Greer-Thorbecke / FGT):\n- Persentase Penduduk Miskin (Headcount Index / P0): Mengukur proporsi penduduk miskin terhadap total penduduk (Karanganyar 2026: 7,92% atau 72,40 ribu jiwa).\n- Indeks Kedalaman Kemiskinan (Poverty Gap Index / P1): Mengukur rata-rata kesenjangan pengeluaran masing-masing penduduk miskin terhadap Garis Kemiskinan.\n- Indeks Keparahan Kemiskinan (Poverty Severity Index / P2): Mengukur ketimpangan pengeluaran di antara penduduk miskin itu sendiri.",
+                        'keywords' => ['metodologi kemiskinan', 'garis kemiskinan', 'cara hitung kemiskinan', '2100 kkal', 'gkm', 'gkbm', 'p0', 'p1', 'p2', 'susenas', 'cbn', 'cost of basic needs'],
+                        'source_title' => 'Buku Analisis Kemiskinan BPS Kabupaten Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=kemiskinan',
                     ],
                     [
-                        'title' => 'Alamat dan Kontak Kantor BPS Karanganyar',
-                        'question' => 'Di mana alamat kantor BPS Karanganyar dan bagaimana cara menghubunginya?',
-                        'answer' => "Kantor BPS Kabupaten Karanganyar beralamat di:\nJl. Lawu No. 202B, Badran Asri, Cangakan, Kec. Karanganyar, Kabupaten Karanganyar, Jawa Tengah 57714.\n\nKontak Resmi:\n- Telepon: (0271) 495035\n- Email: bps3313@bps.go.id\n- Website: https://karanganyarkab.bps.go.id",
-                        'keywords' => ['alamat', 'lokasi', 'kantor', 'nomor telepon', 'email', 'maps', 'posisi', 'hubungi'],
-                        'source_title' => 'Profil Kontak BPS Kabupaten Karanganyar 2026',
-                        'source_url' => 'https://karanganyarkab.bps.go.id/id/profil',
+                        'title' => 'Konsep dan Metodologi Indeks Pembangunan Manusia (IPM)',
+                        'question' => 'Bagaimana metodologi penghitungan Indeks Pembangunan Manusia (IPM) dan apa saja komponennya?',
+                        'answer' => "Indeks Pembangunan Manusia (IPM) mengukur capaian pembangunan manusia berbasis tiga dimensi dasar kualitas hidup:\n\n1. Dimensi Umur Panjang dan Hidup Sehat:\n- Indikator: Umur Harapan Hidup saat lahir (AHH). Merefleksikan derajat kesehatan dan kelangsungan hidup anak sejak lahir (Karanganyar 2026: 78,12 tahun).\n\n2. Dimensi Pengetahuan (Pendidikan):\n- Harapan Lama Sekolah (HLS): Lama sekolah (dalam tahun) yang diharapkan akan dirasakan oleh anak pada usia 7 tahun (Karanganyar 2026: 14,02 tahun, setara diploma/sarjana).\n- Rata-rata Lama Sekolah (RLS): Jumlah tahun belajar yang telah diselesaikan oleh penduduk usia 25 tahun ke atas (Karanganyar 2026: 9,15 tahun, setara tamat SMP).\n\n3. Dimensi Standar Hidup Layak (Ekonomi):\n- Indikator: Pengeluaran Riil per Kapita yang Disesuaikan (Purchasing Power Parity / PPP) berbasis harga konstan (Karanganyar 2026: Rp 13,42 juta per tahun).\n\nKategori Status Capaian IPM BPS:\n- Sangat Tinggi: IPM ≥ 80\n- Tinggi: 70 ≤ IPM < 80 (Capaian Karanganyar: 78,15 poin)\n- Sedang: 60 ≤ IPM < 70\n- Rendah: IPM < 60",
+                        'keywords' => ['metodologi ipm', 'komponen ipm', 'cara hitung ipm', 'hls', 'rls', 'ahh', 'pengeluaran riil', 'pembangunan manusia', 'dimensi ipm'],
+                        'source_title' => 'Berita Resmi Statistik: Perkembangan IPM BPS Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=IPM',
+                    ],
+                    [
+                        'title' => 'Konsep Ketenagakerjaan: Angkatan Kerja, Bekerja, dan Pengangguran Terbuka (TPT)',
+                        'question' => 'Bagaimana definisi dan perbedaan Angkatan Kerja, Bekerja, TPT, dan TPAK menurut Survei Sakernas BPS?',
+                        'answer' => "Berdasarkan pedoman Survei Angkatan Kerja Nasional (Sakernas) BPS dan standar International Labour Organization (ILO):\n\n1. Penduduk Usia Kerja: Seluruh penduduk berusia 15 tahun ke atas.\n\n2. Klasifikasi Penduduk Usia Kerja:\n- Angkatan Kerja: Penduduk usia kerja yang aktif secara ekonomi, terdiri dari orang yang BEKERJA dan PENGANGGUR.\n- Bukan Angkatan Kerja: Penduduk usia kerja yang tidak bekerja dan tidak mencari pekerjaan, meliputi kelompok sekolah/kuliah, mengurus rumah tangga, atau pensiunan/cacat.\n\n3. Definisi Bekerja BPS: Kegiatan ekonomi yang dilakukan seseorang dengan maksud memperoleh atau membantu memperoleh penghasilan, paling sedikit 1 jam berturut-turut tanpa terputus dalam seminggu terakhir.\n\n4. Indikator Ketenagakerjaan Utama:\n- Tingkat Pengangguran Terbuka (TPT): Persentase jumlah penganggur terhadap total angkatan kerja. (Karanganyar 2026: 4,85%).\n  Rumus: TPT = (Jumlah Penganggur / Total Angkatan Kerja) × 100%.\n- Tingkat Partisipasi Angkatan Kerja (TPAK): Persentase penduduk angkatan kerja terhadap total penduduk usia kerja. (Karanganyar 2026: 72,40%).\n  Rumus: TPAK = (Total Angkatan Kerja / Penduduk Usia Kerja 15+) × 100%.",
+                        'keywords' => ['sakernas', 'ketenagakerjaan', 'definisi bekerja', 'pengangguran', 'tpt', 'tpak', 'angkatan kerja', 'usia kerja', 'metodologi ketenagakerjaan'],
+                        'source_title' => 'Tabel Statistik Ketenagakerjaan Sakernas BPS Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=pengangguran',
+                    ],
+                    [
+                        'title' => 'Konsep PDRB: Perbedaan Harga Berlaku (ADHB) vs Harga Konstan (ADHK)',
+                        'question' => 'Apa perbedaan Produk Domestik Regional Bruto (PDRB) ADHB dan ADHK serta cara menghitung pertumbuhan ekonomi?',
+                        'answer' => "Produk Domestik Regional Bruto (PDRB) adalah jumlah nilai tambah bruto yang dihasilkan oleh seluruh unit usaha ekonomi di suatu wilayah dalam periode tertentu.\n\nPerbedaan Mendasar ADHB vs ADHK:\n1. PDRB Atas Dasar Harga Berlaku (ADHB):\n- Menggunakan harga pasar pada tahun yang bersangkutan.\n- Menggambarkan besaran nilai riil output ekonomi, struktur perekonomian, dan pendapatan per kapita.\n- PDRB ADHB Kabupaten Karanganyar tahun 2026 tercatat sekitar Rp 44,8 Triliun.\n\n2. PDRB Atas Dasar Harga Konstan (ADHK):\n- Menggunakan harga pada satu tahun dasar tetap (saat ini tahun dasar 2010).\n- Menghilangkan pengaruh inflasi atau perubahan harga barang, sehingga murni mengukur pertumbuhan kuantitas volume barang dan jasa fisik.\n- Digunakan secara resmi untuk menghitung Laju Pertumbuhan Ekonomi (LPE).\n- Laju Pertumbuhan Ekonomi (PDRB ADHK) Kabupaten Karanganyar 2026 tumbuh sebesar 5,68%.",
+                        'keywords' => ['pdrb', 'adhb', 'adhk', 'perbedaan adhb adhk', 'pertumbuhan ekonomi', 'nilai tambah bruto', 'harga berlaku', 'harga konstan'],
+                        'source_title' => 'Publikasi PDRB Kabupaten Karanganyar Menurut Lapangan Usaha',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=PDRB',
+                    ],
+                    [
+                        'title' => 'Konsep Inflasi dan Indeks Harga Konsumen (IHK) BPS',
+                        'question' => 'Bagaimana BPS menghitung inflasi dan apa itu Indeks Harga Konsumen (IHK)?',
+                        'answer' => "Inflasi adalah kecenderungan naiknya harga-harga barang dan jasa secara umum dan terus-menerus dalam jangka waktu tertentu.\n\nMetodologi Penghitungan Inflasi BPS:\n1. Indeks Harga Konsumen (IHK): Indeks yang mengukur perubahan harga sekeranjang komoditas barang dan jasa yang dikonsumsi oleh rumah tangga.\n2. Survei Biaya Hidup (SBH): BPS melakukan survei berkala untuk menentukan paket komoditas dan diagram timbang IHK (makanan, minuman, perumahan, listrik, sandang, transportasi, kesehatan, rekreasi, pendidikan).\n3. Jenis Penghitungan Inflasi:\n- Inflasi Bulanan (Month-to-Month / m-to-m): Perubahan IHK bulan berjalan dibanding IHK bulan sebelumnya.\n- Inflasi Tahunan (Year-on-Year / y-on-y): Perubahan IHK bulan berjalan dibanding IHK bulan yang sama pada tahun sebelumnya. (Laju inflasi y-on-y Karanganyar 2026 stabil di 2,82% dengan IHK 125,85).\n- Inflasi Tahun Kalender (Year-to-Date / y-to-d): Perubahan IHK bulan berjalan dibanding IHK Desember tahun sebelumnya.",
+                        'keywords' => ['inflasi', 'ihk', 'indeks harga konsumen', 'survei biaya hidup', 'sbh', 'cara hitung inflasi', 'year on year', 'month to month'],
+                        'source_title' => 'Tabel Statistik Perkembangan IHK dan Inflasi BPS Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=inflasi',
+                    ],
+                    [
+                        'title' => 'Tiga Sensus Nasional Utama Penyelenggaraan BPS',
+                        'question' => 'Apa saja 3 Sensus Nasional yang diselenggarakan oleh BPS dan kapan waktu pelaksanaannya?',
+                        'answer' => "Berdasarkan amanat UU No. 16 Tahun 1997 tentang Statistik, BPS menyelenggarakan tiga sensus nasional besar setiap 10 tahun sekali secara bergantian:\n\n1. Sensus Penduduk (SP):\n- Dilaksanakan pada tahun yang berakhiran angka 0 (misal: SP2000, SP2010, SP2020).\n- Tujuan: Mencacah seluruh penduduk Indonesia untuk menghasilkan data demografi, jumlah, persebaran, dan komposisi penduduk hingga level wilayah terkecil.\n\n2. Sensus Pertanian (ST):\n- Dilaksanakan pada tahun yang berakhiran angka 3 (misal: ST2003, ST2013, ST2023).\n- Tujuan: Memotret struktur pertanian, populasi petani gurem, kepemilikan lahan, komoditas unggulan, dan adopsi teknologi pertanian (Urban Farming & Smart Farming).\n\n3. Sensus Ekonomi (SE):\n- Dilaksanakan pada tahun yang berakhiran angka 6 (misal: SE2006, SE2016, SE2026).\n- Tujuan: Mencacah seluruh aktivitas unit usaha/perusahaan nonpertanian (UMKM hingga korporasi besar) untuk memetakan daya saing dan struktur perekonomian nasional.",
+                        'keywords' => ['sensus', 'sensus penduduk', 'sensus pertanian', 'sensus ekonomi', 'sp', 'st', 'se', 'siklus sensus', '10 tahunan'],
+                        'source_title' => 'Buku Pedoman Sensus BPS',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
                     ],
                 ]
             ],
             [
-                'name' => 'Publikasi dan Data Populer (Rilis 2026)',
+                'name' => 'Publikasi dan Data Populer Karanganyar 2026',
                 'slug' => 'publikasi-dan-data',
-                'description' => 'Publikasi rutin seperti Karanganyar Dalam Angka 2026, Sensus, Indikator Kemiskinan, Pertumbuhan Ekonomi, PDRB, dan Inflasi.',
+                'description' => 'Publikasi resmi dan data statistik makro Kabupaten Karanganyar rilis tahun 2026.',
                 'articles' => [
                     [
                         'title' => 'Publikasi Kabupaten Karanganyar Dalam Angka (KDA) 2026',
@@ -95,6 +158,14 @@ class KnowledgeBaseSeeder extends Seeder
                         'keywords' => ['kda', 'karanganyar dalam angka 2026', 'buku statistik', 'data tahunan', 'download pdf', 'publikasi 2026'],
                         'source_title' => 'Publikasi BPS: Kabupaten Karanganyar Dalam Angka 2026',
                         'source_url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+                    ],
+                    [
+                        'title' => 'Data Panjang Jalan dan Kondisi Jalan Rusak Kabupaten Karanganyar 2026',
+                        'question' => 'Berapa panjang jalan rusak dan kondisi jalan di Kabupaten Karanganyar tahun 2026?',
+                        'answer' => "Berdasarkan rilis resmi BPS Kabupaten Karanganyar (Kabupaten Karanganyar Dalam Angka 2026, Bab 8 Transportasi dan Komunikasi, Tabel 8.1.3), total panjang jalan kabupaten di Kabupaten Karanganyar tercatat sepanjang 1.042,30 km.\n\nRincian kondisi jalan kabupaten:\n- Kondisi Baik: 686,15 km (65,83%)\n- Kondisi Sedang: 189,45 km (18,18%)\n- Kondisi Rusak: 111,80 km (10,73%)\n- Kondisi Rusak Berat: 54,90 km (5,26%)\nTotal panjang jalan rusak (rusak + rusak berat) adalah 166,70 km atau sekitar 15,99% dari total jalan kabupaten.\n\nRincian jenis permukaan jalan:\n- Permukaan Aspal: 988,50 km (94,84%)\n- Permukaan Kerikil: 38,20 km (3,66%)\n- Tanah/Lainnya: 15,60 km (1,50%)\n\n📌 Rujukan Resmi:\nPublikasi BPS: Kabupaten Karanganyar Dalam Angka 2026\nBab 8: Transportasi dan Komunikasi\nTabel 8.1.3: Panjang Jalan Menurut Tingkat Kerusakan/Kondisi Jalan\nWebsite Resmi: https://karanganyarkab.bps.go.id/id/statistics-table?keyword=panjang+jalan",
+                        'keywords' => ['jalan', 'jalan rusak', 'panjang jalan', 'kondisi jalan', 'rusak berat', 'aspal', 'kerikil', 'infrastruktur', 'transportasi', '1042', '111.80', '2026'],
+                        'source_title' => 'Tabel Statistik: Panjang Jalan Menurut Tingkat Kondisi Kab. Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=panjang+jalan',
                     ],
                     [
                         'title' => 'Data Kependudukan Kabupaten Karanganyar 2026',
@@ -153,14 +224,6 @@ class KnowledgeBaseSeeder extends Seeder
                         'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=padi',
                     ],
                     [
-                        'title' => 'Data Panjang Jalan dan Kondisi Jalan Rusak Kabupaten Karanganyar 2026',
-                        'question' => 'Berapa panjang jalan rusak dan kondisi jalan di Kabupaten Karanganyar tahun 2026?',
-                        'answer' => "Berdasarkan rilis resmi BPS Kabupaten Karanganyar (Kabupaten Karanganyar Dalam Angka 2026, Bab 8 Transportasi dan Komunikasi, Tabel 8.1.3), total panjang jalan kabupaten di Kabupaten Karanganyar tercatat sepanjang 1.042,30 km.\n\nRincian kondisi jalan kabupaten:\n- Kondisi Baik: 686,15 km (65,83%)\n- Kondisi Sedang: 189,45 km (18,18%)\n- Kondisi Rusak: 111,80 km (10,73%)\n- Kondisi Rusak Berat: 54,90 km (5,26%)\nTotal panjang jalan rusak (rusak + rusak berat) adalah 166,70 km atau sekitar 15,99% dari total jalan kabupaten.\n\nRincian jenis permukaan jalan:\n- Permukaan Aspal: 988,50 km (94,84%)\n- Permukaan Kerikil: 38,20 km (3,66%)\n- Tanah/Lainnya: 15,60 km (1,50%)\n\n📌 Rujukan Resmi:\nPublikasi BPS: Kabupaten Karanganyar Dalam Angka 2026\nBab 8: Transportasi dan Komunikasi\nTabel 8.1.3: Panjang Jalan Menurut Tingkat Kerusakan/Kondisi Jalan\nWebsite Resmi: https://karanganyarkab.bps.go.id/id/statistics-table?keyword=panjang+jalan",
-                        'keywords' => ['jalan', 'jalan rusak', 'panjang jalan', 'kondisi jalan', 'rusak berat', 'aspal', 'kerikil', 'infrastruktur', 'transportasi', '1042', '111.80', '2026'],
-                        'source_title' => 'Tabel Statistik: Panjang Jalan Menurut Tingkat Kondisi Kab. Karanganyar',
-                        'source_url' => 'https://karanganyarkab.bps.go.id/id/statistics-table?keyword=panjang+jalan',
-                    ],
-                    [
                         'title' => 'Daftar Lengkap 17 Kecamatan dan 177 Desa/Kelurahan di Karanganyar 2026',
                         'question' => 'Sebutkan daftar seluruh kecamatan dan desa/kelurahan di Kabupaten Karanganyar?',
                         'answer' => "Kabupaten Karanganyar terbagi menjadi 17 Kecamatan dan 177 Desa/Kelurahan (162 Desa, 15 Kelurahan):\n\n1. Jatipuro (10 Desa): Jatimulyo, Jatipuro, Jatipurwo, Jatisobo, Jatisuko, Jatiwarno, Klegen, Ngepungsari, Pesanggrahan, Petung.\n2. Jatiyoso (9 Desa): Beruk, Jatisawit, Jatiyoso, Karangsari, Petung, Tlobo, Wonokeling, Wonorejo, Wukirsari.\n3. Jumapolo (12 Desa): Bakalan, Giriwondo, Jatirejo, Jumantoro, Jumapolo, Kadipiro, Karangbangun, Kedawung, Kwangsan, Lemahbang, Paseban, Ploso.\n4. Jumantono (11 Desa): Blorong, Gemantar, Genengan, Kebak, Ngunut, Sambirejo, Sedayu, Sringin, Sukosari, Tugu, Tunggulrejo.\n5. Matesih (9 Desa): Dawung, Gantiwarno, Girilayu, Karangbangun, Koripan, Matesih, Ngadiluwih, Pablengan, Plosorejo.\n6. Tawangmangu (10 Desa/Kel): 3 Kelurahan (Blumbang, Kalisoro, Tawangmangu), 7 Desa (Bandardawung, Gondosuli, Karanglo, Nglebak, Plumbon, Sepanjang, Tengklik).\n7. Ngargoyoso (9 Desa): Berjo, Dukuh, Girimulyo, Jatirejo, Kemuning, Ngargoyoso, Nglegok, Pulosari, Segorogunung.\n8. Karangpandan (11 Desa): Bangsri, Dayu, Doplang, Gerdu, Gondangmanis, Harjosari, Karang, Karangpandan, Ngemplak, Salam, Tohkuning.\n9. Karanganyar Kota (12 Kelurahan): Bejen, Bolong, Cangakan, Delingan, Gayamdompo, Gedong, Jantiharjo, Jungke, Karanganyar, Lalung, Popongan, Tegalgede.\n10. Tasikmadu (10 Desa): Buran, Gaum, Kaliboto, Kaling, Karangmojo, Kragilan, Ngijo, Pandeyan, Papahan, Suruh.\n11. Jaten (8 Desa/Kel): 1 Kelurahan (Brujul), 7 Desa (Dagen, Jaten, Jati, Jetis, Ngringo, Sroyo, Suruhkalang).\n12. Colomadu (11 Desa): Baturan, Blulukan, Bolon, Gajahan, Gawanan, Gedongan, Klodran, Malangjiwan, Ngasem, Paulan, Tohudan.\n13. Gondangrejo (13 Desa): Bulurejo, Dayu, Jatikuwung, Jeruksawit, Karangturi, Kragan, Krendowahono, Plesungan, Rejosari, Selokaton, Tuban, Wonorejo, Wonosari.\n14. Kebakkramat (10 Desa): Alastuwo, Banjarharjo, Kaliwuluh, Kebak, Kemiri, Macanan, Malanggaten, Nangsri, Pulosari, Waru.\n15. Mojogedang (13 Desa): Buntar, Gebyog, Gentungan, Kaliboto, Kedungjeruk, Mojogedang, Mojoroto, Munggur, Ngadirejo, Pendem, Pereng, Pojok, Sewurejo.\n16. Kerjo (10 Desa): Botok, Ganten, Gempolan, Karangrejo, Kuto, Kwadungan, Plosorejo, Sumberejo, Tamansari, Tawangsari.\n17. Jenawi (9 Desa): Anggrasmanis, Balong, Gumeng, Jenawi, Lempong, Menjing, Seloromo, Sidomukti, Trengguli.",
@@ -176,13 +239,28 @@ class KnowledgeBaseSeeder extends Seeder
                         'source_title' => 'Publikasi Kecamatan Kebakkramat Dalam Angka',
                         'source_url' => 'https://karanganyarkab.bps.go.id/id/publication?keyword=kebakkramat',
                     ],
+                ]
+            ],
+            [
+                'name' => 'Jadwal, Lokasi & Kontak',
+                'slug' => 'jadwal-lokasi-kontak',
+                'description' => 'Informasi jam kerja operasional, alamat kantor, telepon, dan kanal komunikasi resmi BPS Karanganyar.',
+                'articles' => [
                     [
-                        'title' => 'Tugas dan Peran Statistik Sosial Ekonomi BPS Karanganyar',
-                        'question' => 'Apa peran BPS Karanganyar dalam pendataan sosial ekonomi masyarakat (Regsosek & Susenas)?',
-                        'answer' => "Badan Pusat Statistik (BPS) Kabupaten Karanganyar bertugas mengumpulkan data statistik dasar melalui pendataan lapangan yang objektif (seperti Registrasi Sosial Ekonomi / Regsosek dan Susenas) untuk memotret kondisi riil masyarakat. BPS berperan murni sebagai lembaga independen penyedia data statistik resmi dan tidak bertindak sebagai penentu kebijakan penerimaan bantuan atau program bantuan tertentu.",
-                        'keywords' => ['bansos', 'bantuan sosial', 'regsosek', 'susenas', 'pendataan', 'profil sosial', 'kesejahteraan'],
-                        'source_title' => 'Publikasi BPS: Indikator Kesejahteraan Rakyat Karanganyar',
-                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+                        'title' => 'Jadwal dan Jam Operasional Pelayanan PST BPS Karanganyar',
+                        'question' => 'Kapan jam buka dan hari operasional layanan PST BPS Kabupaten Karanganyar?',
+                        'answer' => "Jadwal pelayanan tatap muka Pelayanan Statistik Terpadu (PST) di Kantor BPS Kabupaten Karanganyar adalah:\n- Senin s.d. Kamis: Pukul 08.00 - 15.30 WIB (Istirahat Pukul 12.00 - 13.00 WIB)\n- Jumat: Pukul 08.00 - 15.00 WIB (Istirahat Pukul 11.30 - 13.00 WIB)\n- Sabtu, Minggu, dan Hari Libur Nasional: Tutup / Libur.\n\nLayanan portal daring website resmi dan Asisten AI Chatbot PST ini dapat diakses 24 jam nonstop setiap hari.",
+                        'keywords' => ['jadwal', 'jam buka', 'jam kerja', 'operasional', 'hari layanan', 'waktu buka', 'hari apa'],
+                        'source_title' => 'Jam Operasional PST BPS Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/profil',
+                    ],
+                    [
+                        'title' => 'Alamat dan Kontak Kantor BPS Kabupaten Karanganyar',
+                        'question' => 'Di mana alamat kantor BPS Karanganyar dan bagaimana cara menghubunginya?',
+                        'answer' => "Kantor BPS Kabupaten Karanganyar beralamat di:\nJl. Lawu No. 202B, Badran Asri, Cangakan, Kec. Karanganyar, Kabupaten Karanganyar, Jawa Tengah 57714.\n\nKontak Resmi:\n- Telepon: (0271) 495035\n- Email: bps3313@bps.go.id\n- Website Resmi: https://karanganyarkab.bps.go.id",
+                        'keywords' => ['alamat', 'lokasi', 'kantor', 'nomor telepon', 'email', 'maps', 'posisi', 'hubungi'],
+                        'source_title' => 'Profil Kontak BPS Kabupaten Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/profil',
                     ],
                 ]
             ],
@@ -194,18 +272,18 @@ class KnowledgeBaseSeeder extends Seeder
                     [
                         'title' => 'Prosedur Penyampaian dan Penanganan Aduan Layanan',
                         'question' => 'Bagaimana alur dan prosedur pengaduan pelayanan di BPS Karanganyar?',
-                        'answer' => "Untuk menyampaikan pengaduan atau keluhan:\n1. Buka menu 'Aduan' pada portal ini atau kunjungi /aduan.\n2. Isi formulir dengan nama, kontak yang dapat dihubungi, kategori aduan, dan uraian lengkap permasalahan (bisa sertakan lampiran dokumen/foto pendukung).\n3. Setelah dikirim, Anda akan menerima Nomor Tiket Aduan resmi (misal: ADU-2026-000001).\n4. Anda dapat memantau status penanganan aduan kapan saja melalui menu 'Cek Status Aduan'.\n5. Petugas BPS akan memverifikasi dan menindaklanjuti dalam 1-3 hari kerja.",
-                        'keywords' => ['aduan', 'pengaduan', 'keluhan', 'lapor', 'komplain', 'tiket', 'status tiket', '2026'],
+                        'answer' => "Untuk menyampaikan pengaduan atau keluhan layanan:\n1. Buka menu 'Aduan' pada portal ini atau kunjungi /aduan.\n2. Isi formulir dengan nama, kontak yang dapat dihubungi, kategori aduan, dan uraian lengkap permasalahan (dapat menyertakan lampiran dokumen pendukung).\n3. Setelah dikirim, Anda akan menerima Nomor Tiket Aduan resmi (misal: ADU-2026-000001).\n4. Anda dapat memantau status penanganan aduan kapan saja melalui menu 'Cek Status Aduan'.\n5. Petugas BPS Karanganyar akan memverifikasi dan menindaklanjuti dalam 1-3 hari kerja.",
+                        'keywords' => ['aduan', 'pengaduan', 'keluhan', 'lapor', 'komplain', 'tiket', 'status tiket'],
                         'source_title' => 'Formulir Pengaduan Pelayanan BPS Karanganyar',
                         'source_url' => '/aduan',
                     ],
                     [
                         'title' => 'Pengalihan Percakapan ke Petugas Manusia (Human Handoff)',
                         'question' => 'Bagaimana jika chatbot tidak dapat menjawab pertanyaan saya?',
-                        'answer' => "Jika chatbot tidak menemukan informasi yang Anda cari atau Anda membutuhkan konsultasi mendalam, Anda dapat mengklik tombol 'Hubungi Petugas' di ruang percakapan. Percakapan Anda akan diteruskan ke antrean petugas BPS Kabupaten Karanganyar untuk ditanggapi secara langsung pada jam operasional kerja (Senin–Jumat, 08.00–15.30 WIB).",
+                        'answer' => "Jika Anda membutuhkan konsultasi mendalam atau kasus spesifik, Anda dapat mengklik tombol 'Hubungi Petugas' di ruang percakapan. Percakapan Anda akan diteruskan ke antrean petugas BPS Kabupaten Karanganyar untuk ditanggapi secara langsung pada jam operasional kerja (Senin–Jumat, 08.00–15.30 WIB). Anda juga dapat membatalkan antrean sewaktu-waktu dan kembali ke Asisten AI.",
                         'keywords' => ['petugas', 'hubungi petugas', 'admin manusia', 'operator', 'cs', 'bantuan langsung', 'live chat'],
-                        'source_title' => 'Layanan Konsultasi Online PST BPS Karanganyar 2026',
-                        'source_url' => 'https://pst.bps.go.id',
+                        'source_title' => 'Layanan Konsultasi Online PST BPS Karanganyar',
+                        'source_url' => 'https://karanganyarkab.bps.go.id/id/publication',
                     ],
                 ]
             ]
@@ -245,4 +323,3 @@ class KnowledgeBaseSeeder extends Seeder
         }
     }
 }
-

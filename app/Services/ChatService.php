@@ -406,21 +406,30 @@ class ChatService
             ];
         }
 
-        // 10. Prosedur Permohonan Data / PST
-        if (str_contains($haystack, 'minta data') || str_contains($haystack, 'unduh data') || str_contains($haystack, 'permohonan') || str_contains($haystack, 'pst')) {
+        // 10. Prosedur Permohonan Data, Data Mikro, Wilkerstat / PST
+        if (str_contains($haystack, 'minta data') || str_contains($haystack, 'unduh data') || str_contains($haystack, 'permohonan') || str_contains($haystack, 'pst')
+            || str_contains($haystack, 'data mikro') || str_contains($haystack, 'wilkerstat') || str_contains($haystack, 'skripsi') || str_contains($haystack, 'raw data')) {
             $topicSources[] = [
-                'title' => 'Katalog Buku Publikasi Resmi BPS Kabupaten Karanganyar',
+                'title' => 'Standar Pelayanan Data & Publikasi BPS Kabupaten Karanganyar',
                 'url' => 'https://karanganyarkab.bps.go.id/id/publication',
             ];
         }
 
-        // Bersihkan initial sources dari URL homepage murni
+        // 11. Rekomendasi Kegiatan Statistik (ROMANTIK) & EPSS
+        if (str_contains($haystack, 'romantik') || str_contains($haystack, 'rekomendasi') || str_contains($haystack, 'epss') || str_contains($haystack, 'ips') || str_contains($haystack, 'desa cantik')) {
+            $topicSources[] = [
+                'title' => 'Pedoman Rekomendasi Statistik Sektoral (ROMANTIK) BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/publication',
+            ];
+        }
+
+        // Bersihkan initial sources dari URL non-karanganyarkab.bps.go.id
         $cleanedInitial = [];
         foreach ($initialSources as $s) {
             $url = $s['url'] ?? '';
             $title = $s['title'] ?? '';
-            if (in_array(rtrim($url, '/'), ['https://karanganyarkab.bps.go.id', 'http://karanganyarkab.bps.go.id', ''])) {
-                $url = 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html';
+            if (empty($url) || !str_contains($url, 'karanganyarkab.bps.go.id') || in_array(rtrim($url, '/'), ['https://karanganyarkab.bps.go.id', 'http://karanganyarkab.bps.go.id', ''])) {
+                $url = 'https://karanganyarkab.bps.go.id/id/publication';
             }
             $cleanedInitial[] = ['title' => $title, 'url' => $url];
         }
