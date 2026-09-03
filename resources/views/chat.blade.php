@@ -215,6 +215,8 @@ const typingIndicator = document.getElementById('typing-indicator');
 const charCounter = document.getElementById('chat-char-counter');
 const statusPill = document.getElementById('chat-status-pill');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+const seenMessageIds = new Set();
+let isPollingHistory = false;
 
 // Retrieve or generate visitor session token
 let visitorSession = localStorage.getItem('bps_chat_session');
@@ -246,56 +248,6 @@ function scrollToBottom() {
     }
 }
 
-// Load message history & start live polling
-function pollHistory() {
-    if (!visitorSession) return;
-
-    fetch('{{ route("chat.messages") }}?session=' + encodeURIComponent(visitorSession))
-        .then(r => r.json())
-        .then(data => {
-            if (data.status) {
-                updateStatusBadge(data.status, data.officer_name);
-            }
-
-            if (data.messages && data.messages.length > 0) {
-                const currentCount = messagesArea.querySelectorAll('.chat-msg-wrapper').length;
-                if (data.messages.length > currentCount) {
-                    const qw = document.getElementById('quick-questions-wrapper');
-                    if (qw) qw.classList.add('hidden');
-
-                    renderAllMessages(data.messages);
-                }
-            }
-        })
-        .catch(() => {});
-}
-
-function updateStatusBadge(status, officerName) {
-    if (!statusPill) return;
-    if (status === 'waiting') {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center gap-1 animate-pulse';
-        statusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span>Menunggu Petugas</span>';
-    } else if (status === 'handled') {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-400/20 text-blue-300 border border-blue-400/30 flex items-center gap-1';
-        statusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span><span>' + escapeHtml(officerName ? 'Petugas: ' + officerName : 'Terhubung Petugas') + '</span>';
-    } else if (status === 'closed') {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-400/20 text-slate-300 border border-slate-400/30';
-        statusPill.textContent = 'Sesi Selesai';
-    } else {
-        statusPill.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1';
-        statusPill.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Layanan Aktif</span>';
-    }
-}
-
-function renderAllMessages(messages) {
-    messagesArea.querySelectorAll('.chat-msg-wrapper').forEach(e => e.remove());
-
-    messages.forEach(msg => {
-        appendMessageElement(msg.sender_type, msg.content, msg.sources, msg.id, msg.created_at, msg.sender_name, msg.feedback, [], msg.chart);
-    });
-
-    scrollToBottom();
-}
 
 function replaceIconsAndFilterEmojis(text) {
     if (!text) return '';
@@ -731,7 +683,8 @@ chatForm.addEventListener('submit', function(e) {
     const qw = document.getElementById('quick-questions-wrapper');
     if (qw) qw.classList.add('hidden');
 
-    appendMessageElement('visitor', text);
+    const tempMsgId = 'temp-' + Date.now();
+    appendMessageElement('visitor', text, [], tempMsgId);
 
     chatInput.value = '';
     chatInput.style.height = 'auto';
@@ -765,11 +718,24 @@ chatForm.addEventListener('submit', function(e) {
             updateStatusBadge(data.status, data.officer_name);
         }
 
+        // Tautkan id visitor asli dari database agar polling tidak menduplikasinya
+        if (data.visitor_message && data.visitor_message.id) {
+            seenMessageIds.add(data.visitor_message.id);
+            const tempEl = document.getElementById('msg-box-' + tempMsgId);
+            if (tempEl) {
+                tempEl.id = 'msg-box-' + data.visitor_message.id;
+            }
+        }
+
         const botMsg = data.bot_message || (typeof data.reply === 'object' ? data.reply : { content: data.reply, sources: data.sources || [], id: null });
         const replyText = botMsg?.content || (typeof data.reply === 'string' ? data.reply : '');
         const replySources = botMsg?.sources || data.sources || [];
         const replyId = botMsg?.id || null;
         const replyTime = botMsg?.created_at || null;
+
+        if (replyId) {
+            seenMessageIds.add(replyId);
+        }
 
         if (replyText) {
             appendMessageElement('bot', replyText, replySources, replyId, replyTime, null, null, data.quick_options || [], botMsg?.chart || data.chart || null);
@@ -1118,9 +1084,6 @@ function fallbackCopy(text, callback) {
     document.body.removeChild(ta);
 }
 
-const seenMessageIds = new Set();
-let isPollingHistory = false;
-
 function pollHistory() {
     if (isPollingHistory) return;
     const session = localStorage.getItem('bps_chat_session') || visitorSession;
@@ -1137,24 +1100,41 @@ function pollHistory() {
             updateStatusBadge(data.status, data.officer_name);
         }
         if (Array.isArray(data.messages)) {
+            if (data.messages.length > 0) {
+                const qw = document.getElementById('quick-questions-wrapper');
+                if (qw) qw.classList.add('hidden');
+            }
+
             data.messages.forEach(msg => {
                 if (msg.id) {
-                    if (!seenMessageIds.has(msg.id) && !document.getElementById('msg-box-' + msg.id)) {
+                    // Jika pesan sudah pernah dirender di DOM, tandai dan lewati
+                    if (seenMessageIds.has(msg.id) || document.getElementById('msg-box-' + msg.id)) {
                         seenMessageIds.add(msg.id);
-                        appendMessageElement(
-                            msg.sender_type,
-                            msg.content,
-                            msg.sources || [],
-                            msg.id,
-                            msg.created_at,
-                            msg.sender_name,
-                            msg.feedback,
-                            [],
-                            msg.chart || null
-                        );
-                    } else {
-                        seenMessageIds.add(msg.id);
+                        return;
                     }
+
+                    // Jika ini pesan visitor dan ada elemen temporary visitor yang cocok, mutasikan id-nya
+                    if (msg.sender_type === 'visitor') {
+                        const tempEl = messagesArea.querySelector('[id^="msg-box-temp-"]');
+                        if (tempEl) {
+                            tempEl.id = 'msg-box-' + msg.id;
+                            seenMessageIds.add(msg.id);
+                            return;
+                        }
+                    }
+
+                    seenMessageIds.add(msg.id);
+                    appendMessageElement(
+                        msg.sender_type,
+                        msg.content,
+                        msg.sources || [],
+                        msg.id,
+                        msg.created_at,
+                        msg.sender_name,
+                        msg.feedback,
+                        [],
+                        msg.chart || null
+                    );
                 }
             });
         }
