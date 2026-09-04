@@ -9,50 +9,50 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-bps.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
-</head><body class="bg-slate-50 font-sans antialiased text-slate-800 selection:bg-[#005b9f] selection:text-white flex flex-col min-h-screen">
+</head><body class="bg-slate-50 font-sans antialiased text-slate-800 selection:bg-[#003c80] selection:text-white flex flex-col min-h-screen">
 
     {{-- Modern Preloader Screen --}}
     <x-preloader />
 
     {{-- Official BPS Top Bar --}}
-    <div class="bg-[#04325e] text-slate-200 text-[11px] py-1.5 border-b border-blue-900/60 hidden md:block">
+    <div class="bg-[#002b6a] text-slate-200 text-[11px] py-1.5 border-b border-blue-900/60 hidden md:block">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <span class="flex items-center gap-1 font-semibold text-slate-300">
                     <span class="iconify text-xs text-[#f7941d]" data-icon="lucide:calendar"></span>
                     <span>{{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM Y') }}</span>
                 </span>
-                <span class="text-slate-500">•</span>
-                <span class="font-medium text-slate-300">Badan Pusat Statistik Republik Indonesia</span>
+                <span class="text-blue-400/60">•</span>
+                <span class="font-medium text-slate-300">Badan Pusat Statistik Kabupaten Karanganyar (MFD 3313)</span>
             </div>
             <div class="flex items-center gap-4">
                 <a href="https://karanganyarkab.bps.go.id" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1 font-semibold">
                     <span class="iconify text-xs text-[#f7941d]" data-icon="lucide:globe"></span>
-                    <span>Website BPS Karanganyar</span>
+                    <span>Portal BPS Karanganyar</span>
                 </a>
-                <span class="text-slate-500">•</span>
+                <span class="text-blue-400/60">•</span>
                 <a href="https://pst.bps.go.id" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1 font-semibold">
                     <span class="iconify text-xs text-[#00a651]" data-icon="lucide:external-link"></span>
                     <span>PST BPS RI</span>
                 </a>
-                <span class="text-slate-500">•</span>
+                <span class="text-blue-400/60">•</span>
                 <span class="flex items-center gap-1 text-slate-300">
-                    <span class="iconify text-xs text-sky-400" data-icon="lucide:phone"></span>
-                    <span>(0271) 495035</span>
+                    <span class="iconify text-xs text-sky-300" data-icon="lucide:phone"></span>
+                    <span>(0271) 495047</span>
                 </span>
-                <span class="text-slate-500">•</span>
+                <span class="text-blue-400/60">•</span>
                 <button type="button" onclick="openLanguageModal()" class="hover:text-white text-emerald-300 transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Pilih Bahasa / Select Language">
                     <span class="iconify text-xs" data-icon="lucide:globe"></span>
                     <span id="current-lang-topbar">Bahasa Indonesia</span>
                 </button>
-                <span class="text-slate-500">•</span>
+                <span class="text-blue-400/60">•</span>
                 <button type="button" onclick="toggleA11yMenu()" class="hover:text-white text-[#f7941d] transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Buka Menu Aksesibilitas">
                     <span class="iconify text-xs" data-icon="lucide:accessibility"></span>
                     <span>Aksesibilitas</span>
@@ -62,7 +62,7 @@
     </div>
 
     {{-- Main Navbar (BPS Official Style) --}}
-    <nav class="sticky top-0 z-40 bg-white border-b-2 border-[#005b9f] shadow-sm transition-all">
+    <nav class="sticky top-0 z-40 bg-white border-b-2 border-[#003c80] shadow-sm transition-all">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex items-center justify-between h-16 sm:h-20">
                 {{-- Brand Identity --}}
@@ -259,7 +259,7 @@
     </main>
 
     {{-- Official BPS Footer (Deep Navy Corporate & Orange Accent) --}}
-    <footer class="bg-[#04325e] text-slate-200 border-t-4 border-[#f7941d] mt-auto">
+    <footer class="bg-[#002b6a] text-slate-200 border-t-4 border-[#f7941d] mt-auto">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
                 {{-- Col 1: Brand & Bio --}}
@@ -274,7 +274,7 @@
                         </div>
                     </div>
                     <p class="text-xs sm:text-sm leading-relaxed text-slate-300 pr-4">
-                        Penyedia data statistik berkualitas untuk Indonesia Maju. Melayani permohonan data statistik, publikasi berkala, konsultasi PST, dan penanganan aspirasi masyarakat Kabupaten Karanganyar.
+                        Penyedia data statistik berkualitas untuk Indonesia Maju. Melayani permohonan data statistik, publikasi berkala, rekomendasi statistik (ROMANTIK), data mikro berstandar PP 86/2021, dan konsultasi PST bagi masyarakat Kabupaten Karanganyar.
                     </p>
                     <div class="pt-2 flex flex-wrap items-center gap-2.5">
                         <a href="https://karanganyarkab.bps.go.id" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-colors flex items-center gap-1.5 shadow-xs">
@@ -283,45 +283,54 @@
                         </a>
                         <a href="https://pst.bps.go.id" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-colors flex items-center gap-1.5 shadow-xs">
                             <span class="iconify text-[#00a651]" data-icon="lucide:external-link"></span>
-                            <span>Portal PST Pusat</span>
+                            <span>Portal PST BPS RI</span>
                         </a>
                     </div>
                 </div>
 
-                {{-- Col 2: Layanan --}}
+                {{-- Col 2: Layanan & Ekosistem PST --}}
                 <div class="md:col-span-3 space-y-3">
                     <h4 class="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-2 flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-[#f7941d]"></span>
-                        <span>Layanan PST</span>
+                        <span>Layanan PST & Digital</span>
                     </h4>
-                    <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300">
-                        <li><a href="{{ route('home') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Beranda Utama</a></li>
-                        <li><a href="{{ route('chat.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Konsultasi Data Online</a></li>
-                        <li><a href="{{ route('districts.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Statistik 17 Kecamatan</a></li>
-                        <li><a href="{{ route('calculators.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Kalkulator Statistik</a></li>
-                        <li><a href="{{ route('aduan.create') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Saluran Pengaduan Resmi</a></li>
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-300">
+                        <li><a href="{{ route('home') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Beranda Data Makro</a></li>
+                        <li><a href="{{ route('chat.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Konsultasi PST & Chat AI</a></li>
+                        <li><a href="https://pst.bps.go.id/layanan/pembelian" target="_blank" rel="noopener" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Data Mikro (Tarif Rp0)</a></li>
+                        <li><a href="https://romantik.bps.go.id" target="_blank" rel="noopener" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Rekomendasi ROMANTIK</a></li>
+                        <li><a href="https://webapi.bps.go.id/developer/" target="_blank" rel="noopener" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> WebAPI BPS Developer</a></li>
+                        <li><a href="{{ route('districts.index') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Data 17 Kecamatan</a></li>
+                        <li><a href="{{ route('aduan.create') }}" class="hover:text-white font-medium transition-colors flex items-center gap-2"><span class="iconify text-[#f7941d]" data-icon="lucide:chevron-right"></span> Saluran Aduan & SP4N</a></li>
                     </ul>
                 </div>
 
-                {{-- Col 3: Kontak PST --}}
+                {{-- Col 3: Kontak PST Karanganyar --}}
                 <div class="md:col-span-4 space-y-3">
                     <h4 class="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-2 flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-[#00a651]"></span>
-                        <span>Kontak Pelayanan</span>
+                        <span>Kontak Pelayanan PST</span>
                     </h4>
                     <div class="space-y-2.5 text-xs sm:text-sm text-slate-300">
                         <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
                             <span class="iconify mt-0.5 shrink-0 text-[#f7941d] text-lg" data-icon="lucide:map-pin"></span>
                             <div>
                                 <span class="font-bold text-white block">Kantor BPS Karanganyar:</span>
-                                <span class="text-slate-300 text-xs">Jl. Lawu No. 202B, Cangakan, Karanganyar 57714</span>
+                                <span class="text-slate-300 text-xs leading-relaxed">Komplek Perkantoran Cangakan, Jl. Majapahit No. 11 B, Badran Asri, Bejen, Karanganyar 57712 (Rujukan: Jl. Lawu No. 202B)</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
                             <span class="iconify shrink-0 text-[#00a651] text-lg" data-icon="lucide:phone"></span>
                             <div>
                                 <span class="font-bold text-white block">Telepon Pelayanan:</span>
-                                <span class="text-slate-300 text-xs">(0271) 495035 / (0271) 495045</span>
+                                <span class="text-slate-300 text-xs">(0271) 495047 / (0271) 495035</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+                            <span class="iconify shrink-0 text-[#00a651] text-lg" data-icon="lucide:message-circle"></span>
+                            <div>
+                                <span class="font-bold text-white block">WhatsApp PST Resmi:</span>
+                                <a href="https://wa.me/6289605933133" target="_blank" rel="noopener" class="text-emerald-300 hover:underline text-xs font-semibold">0896-0593-3133</a>
                             </div>
                         </div>
                         <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
@@ -337,11 +346,13 @@
 
             {{-- Bottom info --}}
             <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left text-xs text-slate-400">
-                <p>&copy; {{ date('Y') }} Badan Pusat Statistik Kabupaten Karanganyar. Seluruh Hak Cipta Dilindungi.</p>
+                <p>&copy; {{ date('Y') }} Badan Pusat Statistik Kabupaten Karanganyar (MFD: 3313). Seluruh Hak Cipta Dilindungi.</p>
                 <div class="flex items-center gap-3">
                     <span class="text-slate-300">Standar Pelayanan Terpadu (PST)</span>
                     <span>•</span>
-                    <span class="text-[#00a651] font-bold">Zona Integritas WBK/WBBM</span>
+                    <span class="text-[#f7941d] font-bold">#DataMencerdaskanBangsa</span>
+                    <span>•</span>
+                    <span class="text-[#00a651] font-bold">WBK / WBBM</span>
                 </div>
             </div>
         </div>

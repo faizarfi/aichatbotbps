@@ -12,7 +12,18 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                bps: {
+                    navy: '#002b6a',
+                    blue: '#003c80',
+                    corporate: '#005b9f',
+                    sky: '#0093dd',
+                    orange: '#f7941d',
+                    green: '#00a651',
+                    dark: '#02183b',
+                },
             },
         },
     },

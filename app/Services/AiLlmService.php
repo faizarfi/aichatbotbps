@@ -476,55 +476,80 @@ Portal resmi BPS Kabupaten Karanganyar (karanganyarkab.bps.go.id) mengelola data
    - Allstats BPS: Aplikasi mobile resmi BPS untuk mengakses data statistik Indonesia dan daerah kapan saja, di mana saja.
 
 =======================================================
-STANDAR PELAYANAN STATISTIK TERPADU (PST) BPS:
+STANDAR PELAYANAN STATISTIK TERPADU (PST) BPS RI & DAERAH:
 =======================================================
-PST BPS Kabupaten Karanganyar menyelenggarakan 7 Layanan Utama (Kepka BPS No. 444/2022):
-1. Layanan Perpustakaan Cetak & Digital:
-   - Menyediakan koleksi buku publikasi fisik di ruang baca PST Kantor BPS Karanganyar.
-   - Menyediakan unduh softcopy publikasi lengkap (PDF) dan tabel data (Excel) secara mandiri di website resmi: 100% GRATIS.
-2. Layanan Konsultasi Statistik:
-   - Konsultasi mengenai konsep, definisi indikator, metodologi survei/sensus, penentuan sampel probabilitas, interpretasi data statistik, dan standarisasi metadata statistik: 100% GRATIS.
-   - Dapat dilakukan tatap muka di ruang PST atau secara daring melalui chat.
-3. Layanan Rekomendasi Kegiatan Statistik (ROMANTIK):
-   - Layanan telaah metodologi bagi Organisasi Perangkat Daerah (OPD) Pemkab Karanganyar yang akan melakukan survei/pendataan sektoral agar tidak duplikatif dan memenuhi standar Satu Data Indonesia (SDI).
-4. Layanan Penyediaan Data Mikro (Microdata) & Peta Wilkerstat (Tarif Rp 0,- Berdasarkan PP 86/2021):
-   - Data mikro adalah data mentah perorangan/rumah tangga hasil survei BPS (Susenas, Sakernas, Sensus) yang telah dianonimkan untuk menjaga kerahasiaan responden sesuai UU No. 16 Tahun 1997.
-   - Peta Wilkerstat adalah peta digital batas wilayah kerja statistik (provinsi, kabupaten, kecamatan, desa/kelurahan, blok sensus) dalam format Shapefile (SHP).
-   - Tarif Rp0,- (GRATIS): Diberikan kepada mahasiswa (skripsi, tesis, disertasi), dosen peneliti, dan instansi pemerintah dengan melampirkan: (1) Surat Pengantar Kampus/Instansi, (2) Proposal Penelitian/Skripsi, (3) KTP dan KTM, (4) Mengisi Formulir Komitmen Penggunaan Data di PST BPS Karanganyar.
-5. Layanan Pembinaan Statistik Sektoral (EPSS & Desa Cantik):
-   - Evaluasi Penyelenggaraan Statistik Sektoral (EPSS) untuk mengukur Indeks Pembangunan Statistik (IPS) pemerintah daerah melalui portal INDAH (indah.bps.go.id).
-   - Program Desa Cinta Statistik (Desa Cantik): pembinaan literasi dan tata kelola data di tingkat desa/kelurahan se-Kabupaten Karanganyar.
-6. Layanan Pojok Statistik:
-   - Pusat layanan dan edukasi statistik BPS di perguruan tinggi untuk mendukung riset akademis mahasiswa dan dosen.
-7. Layanan Penanganan Pengaduan & PPID:
-   - Fasilitas pelaporan keluhan dan pengawasan integritas layanan melalui:
-     * Loket PST langsung
-     * Formulir daring portal: menu Aduan
-     * Tautan resmi pengaduan BPS: http://s.bps.go.id/pengaduan3313
-     * Kanal nasional SP4N-LAPOR!
-   - Layanan Keterbukaan Informasi Publik melalui PPID BPS Karanganyar (https://ppid.bps.go.id/?mfd=3313).
-   - Survei Kebutuhan Data (SKD): Penilaian kepuasan konsumen data berkala di http://s.bps.go.id/skd3313.
+PST BPS Kabupaten Karanganyar dan BPS RI menyelenggarakan standar pelayanan terpadu satu atap (berdasarkan Perka BPS tentang Standar Pelayanan 2024 dan Kepka BPS No. 444/2022) melalui portal pst.bps.go.id:
 
-Maklumat Pelayanan BPS Karanganyar:
-'Dengan ini, kami menyatakan sanggup menyelenggarakan pelayanan sesuai standar pelayanan yang telah ditetapkan dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai peraturan perundang-undangan yang berlaku.'
-Nilai Budaya Kerja: BerAKHLAK (Berorientasi Pelayanan, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, Kolaboratif) & Core Values PIA (Profesional, Integritas, Amanah).
-Motto Pelayanan: #DataMencerdaskanBangsa.
+1. LAYANAN PERPUSTAKAAN (Layanan Umum - Tarif Rp0,- / GRATIS):
+   - Akses koleksi buku publikasi statistik fisik di ruang baca PST Kantor BPS Kabupaten Karanganyar.
+   - Akses publikasi digital lengkap format PDF dan tabel dinamis Excel secara mandiri di website resmi (karanganyarkab.bps.go.id) dan perpustakaan.bps.go.id: 100% GRATIS dan dapat diunduh langsung tanpa registrasi berbayar.
+   - Cakupan koleksi: publikasi kependudukan, sosial ketenagakerjaan, pertanian, ekonomi, industri, dan kompendium Karanganyar Dalam Angka (KDA).
 
-Jam Operasional Pelayanan Tatap Muka PST:
-- Senin s.d. Kamis: 08.00 - 15.30 WIB (Istirahat 12.00 - 13.00 WIB)
-- Jumat: 08.00 - 15.00 WIB (Istirahat 11.30 - 13.00 WIB)
-- Layanan daring website dan Chatbot AI: 24 jam setiap hari nonstop.
+2. LAYANAN PRODUK STATISTIK BERBAYAR & TARIF PNBP (PP No. 86 Tahun 2021):
+   - Menjual produk data statistik berbayar yang masuk dalam Penerimaan Negara Bukan Pajak (PNBP) resmi BPS:
+     * Data Mikro (Microdata / Raw Data): data mentah level individu, rumah tangga, atau usaha hasil survei/sensus BPS (seperti Susenas, Sakernas, Podes, Sensus Penduduk, Sensus Pertanian ST2023, Sensus Ekonomi) yang telah dianonimkan untuk menjaga kerahasiaan responden sesuai UU No. 16 Tahun 1997.
+     * Peta Digital Wilkerstat: peta spasial batas wilayah kerja statistik dalam format Shapefile (SHP / GIS) dari level provinsi, kabupaten, kecamatan, desa/kelurahan, hingga blok sensus.
+     * Publikasi Statistik Cetak.
+   - KETENTUAN TARIF RP 0,- (BEBAS BIAYA PNBP / 100% GRATIS) UNTUK PENDIDIKAN & PENELITIAN:
+     * Berdasarkan PP No. 86 Tahun 2021 Pasal 3 dan Perka BPS, tarif Rp 0,- (GRATIS) diberikan kepada:
+       a. MAHASISWA yang menyusun tugas akhir, skripsi, tesis, atau disertasi.
+       b. DOSEN PENELITI untuk keperluan riset ilmiah akademis.
+       c. INSTANSI PEMERINTAH (Kementerian, Lembaga, Dinas, Pemerintah Daerah) untuk perumusan kebijakan dan perencanaan pembangunan.
+     * SYARAT LENGKAP PENGAJUAN DATA MIKRO & WILKERSTAT TARIF RP0,- MAHASISWA:
+       1. Surat Pengantar Resmi dari Perguruan Tinggi / Dekanat Fakultas (bertandatangan basah/stempel atau TTE resmi).
+       2. Proposal Penelitian / Skripsi yang telah disahkan dosen pembimbing (memuat latar belakang, tujuan, variabel spesifik, tahun data, dan cakupan wilayah yang dibutuhkan).
+       3. Identitas resmi: Kartu Tanda Penduduk (KTP) dan Kartu Tanda Mahasiswa (KTM) aktif.
+       4. Menandatangani Formulir Komitmen Penggunaan Data Mikro di PST (pernyataan bahwa data hanya digunakan untuk keperluan riset akademis yang diajukan, tidak dikomersialkan, tidak dipindahtangankan ke pihak ketiga, dan wajib mencantumkan BPS sebagai sumber data).
+   - ALUR PERMOHONAN BERBAYAR KOMERSIAL / UMUM:
+     * Pengguna mendaftar di pst.bps.go.id -> Pilih produk data mikro/peta/publikasi -> Verifikasi oleh petugas PST -> Terbit Kode Billing Simponi (Kementerian Keuangan RI) -> Pembayaran melalui Teller Bank, ATM, Mobile Banking, atau marketplace rekanan (Tokopedia/Indomaret) -> Sistem memverifikasi otomatis -> Tautan unduh produk data aktif di akun pengguna PST.
 
-Identitas Kantor & Kontak Resmi BPS Kabupaten Karanganyar:
-- Nama Instansi: Badan Pusat Statistik Kabupaten Karanganyar
-- Kode Satuan Kerja / MFD: 3313
-- Alamat Kantor: Komplek Perkantoran Cangakan, Jl. Majapahit No. 11 B, Badran Asri, Bejen, Kec. Karanganyar, Kabupaten Karanganyar, Jawa Tengah 57712 (dan gedung rujukan Jl. Lawu No. 202B).
-- Telepon: (0271) 495047 / (0271) 495035
-- Faks: (0271) 495047
-- WhatsApp PST Resmi: 0896-0593-3133 (+6289605933133)
-- Email: bps3313@bps.go.id
-- Website Resmi: https://karanganyarkab.bps.go.id
-- Media Sosial Resmi: Instagram @bps_karanganyar, YouTube @bps_karanganyar, Twitter/X @BpsKaranganyar, Facebook Bps Karanganyar.
+3. LAYANAN KONSULTASI STATISTIK (Layanan Umum - Tarif Rp0,- / GRATIS):
+   - Layanan pembimbingan dan konsultasi statistik resmi mengenai:
+     * Konsep dan Definisi Operasional: pemahaman batasan indikator (kemiskinan CBN, IPM 3 dimensi, TPT, PDRB ADHB vs ADHK, inflasi SBH, angka fertilitas/mortalitas).
+     * Metodologi Survei & Sensus: rancangan populasi, teknik sampling probabilitas, margin of error, desain instrumen kuesioner, validasi data.
+     * Metadata Statistik & Standar Data: penyusunan metadata kegiatan dan metadata indikator sesuai kaidah Satu Data Indonesia (SDI).
+     * Klasifikasi Baku: KBLI (Klasifikasi Baku Lapangan Usaha Indonesia), KBJI (Klasifikasi Baku Jabatan Indonesia).
+     * Interpretasi & Analisis Data Statistik: cara membaca tabel komparasi, tren deret waktu, dan narasi kebijakan berbasis data.
+   - Saluran Konsultasi:
+     * Daring: Melalui Asisten AI Chatbot ini, live chat WhatsApp PST BPS Karanganyar (0896-0593-3133), atau Zoom Konsultasi Online.
+     * Tatap Muka: Datang langsung ke Ruang PST Kantor BPS Kabupaten Karanganyar pada jam operasional hari kerja.
+
+4. LAYANAN REKOMENDASI KEGIATAN STATISTIK / ROMANTIK (Layanan Instansi Pemerintah - Tarif Rp0,- / GRATIS):
+   - Dasar Hukum: UU No. 16 Tahun 1997 tentang Statistik, PP No. 51 Tahun 1999 tentang Penyelenggaraan Statistik, dan Perpres No. 39 Tahun 2019 tentang Satu Data Indonesia (SDI).
+   - Wajib diajukan oleh Organisasi Perangkat Daerah (OPD) Pemerintah Kabupaten Karanganyar dan instansi pemerintah sebelum menyelenggarakan survei atau kegiatan statistik sektoral.
+   - Tujuan: Menghindari duplikasi survei antar-dinas, menjamin efisiensi anggaran negara, serta memastikan rancangan instrumen, sampel, dan metodologi telah memenuhi standar nasional.
+   - Alur Pengajuan: OPD menyusun rancangan survei -> Mengajukan telaah rekomendasi via portal romantik.bps.go.id atau loket PST -> Tim Pembina Statistik BPS memeriksa kelayakan rancangan metodologi -> BPS menerbitkan SURAT REKOMENDASI KEGIATAN STATISTIK dengan KODE IDENTITAS REKOMENDASI RESMI.
+
+5. LAYANAN DEVELOPER & INTEGRASI DATA STATISTIK:
+   - WebAPI BPS (webapi.bps.go.id/developer/): Layanan antarmuka pemrograman aplikasi (REST API) berformat JSON untuk menghubungkan data statistik BPS (indikator makro, subjek statistik, tabel dinamis, publikasi) ke sistem informasi pemda, dashboard eksekutif, atau aplikasi buatan pengembang independen. Pendaftaran App ID gratis.
+   - StatInaLab / Statistics Indonesia Data Lab (statinalab.bps.go.id): Fasilitas lingkungan komputasi penelitian yang aman (secure data enclave) on-site untuk peneliti dan akademisi tingkat lanjut dalam memproses data mikro detail/sensitif tanpa risiko pelanggaran kerahasiaan data responden.
+   - Transdata (pst.bps.go.id/layanan/transdata): Sistem informasi pertukaran data elektronik khusus antara BPS dengan Kementerian/Lembaga berdasarkan Perjanjian Kerja Sama (PKS).
+
+6. LAYANAN PEMBINAAN STATISTIK SEKTORAL:
+   - EPSS (Evaluasi Penyelenggaraan Statistik Sektoral): Penilaian kematangan tata kelola data statistik pada pemda menghasilkan Indeks Pembangunan Statistik (IPS) melalui portal INDAH (indah.bps.go.id).
+   - Program Desa Cantik (Desa Cinta Statistik): Pembinaan aparatur desa/kelurahan di Kabupaten Karanganyar untuk mendata potensi desa, profil kemiskinan warga, dan pemanfaatan data desa.
+   - Pojok Statistik: Kolaborasi layanan dan edukasi statistik BPS di lingkungan kampus perguruan tinggi.
+
+7. MAKLUMAT PELAYANAN & PENJAMINAN MUTU:
+   - Maklumat Resmi: 'Dengan ini, kami menyatakan sanggup menyelenggarakan pelayanan sesuai standar pelayanan yang telah ditetapkan dan apabila tidak menepati janji ini, kami siap menerima sanksi sesuai peraturan perundang-undangan yang berlaku.'
+   - Nilai Budaya: BerAKHLAK dan Core Values PIA (Profesional, Integritas, Amanah) serta slogan #MelayaniDenganHati dan #DataMencerdaskanBangsa.
+   - Evaluasi Konsumen (SKD): Survei Kebutuhan Data secara daring di s.bps.go.id/skd3313 untuk mengukur Indeks Kepuasan Konsumen (IKK) dan Indeks Persepsi Anti Korupsi (IPAK).
+   - Penanganan Pengaduan: Loket pengaduan PST, menu formulir Aduan portal ini, portal aduan daerah s.bps.go.id/pengaduan3313, dan portal nasional SP4N-LAPOR! (lapor.go.id).
+
+WAKTU & IDENTITAS KANTOR PST BPS KABUPATEN KARANGANYAR:
+- Jam Operasional Pelayanan Tatap Muka:
+  * Senin s.d. Kamis: 08.00 - 15.30 WIB (Istirahat 12.00 - 13.00 WIB)
+  * Jumat: 08.00 - 15.00 WIB (Istirahat 11.30 - 13.00 WIB)
+  * Layanan daring portal web & AI Chatbot: 24 Jam Aktif Nonstop
+- Identitas Resmi BPS Kabupaten Karanganyar:
+  * Nama Instansi: Badan Pusat Statistik Kabupaten Karanganyar
+  * Kode Wilayah / MFD: 3313
+  * Alamat Kantor: Komplek Perkantoran Cangakan, Jl. Majapahit No. 11 B, Badran Asri, Bejen, Kec. Karanganyar, Kabupaten Karanganyar, Jawa Tengah 57712 (Gedung rujukan: Jl. Lawu No. 202B)
+  * Telepon: (0271) 495047 / (0271) 495035
+  * WhatsApp PST: 0896-0593-3133 (+6289605933133)
+  * Email: bps3313@bps.go.id
+  * Portal BPS Karanganyar: https://karanganyarkab.bps.go.id
+  * Portal PST BPS RI: https://pst.bps.go.id
 
 =======================================================
 KAMUS METODOLOGI & KONSEP STATISTIK RESMI BPS:

@@ -6,12 +6,12 @@
             type="button"
             onclick="toggleFloatingChat()"
             aria-label="Buka Layanan PST BPS"
-            class="flex items-center gap-2.5 px-4 py-3 bg-[#04325e] hover:bg-[#004b87] text-white rounded-full shadow-xl shadow-blue-950/30 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-[#f7941d] group cursor-pointer">
+            class="flex items-center gap-2.5 px-4 py-3 bg-[#002b6a] hover:bg-[#003c80] text-white rounded-full shadow-xl shadow-blue-950/30 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-[#f7941d] group cursor-pointer">
         <div class="relative shrink-0">
             <div class="w-8 h-8 rounded-full bg-white p-1 flex items-center justify-center shadow-sm">
                 <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
             </div>
-            <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#04325e] animate-pulse"></span>
+            <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#002b6a] animate-pulse"></span>
         </div>
         <div class="text-left pr-1 hidden sm:block">
             <span class="text-[9.5px] text-[#f7941d] block uppercase font-black tracking-wider leading-none">BPS Karanganyar</span>
@@ -26,7 +26,7 @@
          class="hidden flex flex-col w-[92vw] sm:w-[390px] h-[520px] max-h-[82vh] bg-white rounded-3xl border border-slate-200 shadow-2xl shadow-slate-900/30 overflow-hidden transition-all duration-300">
         
         {{-- Header (BPS Corporate Navy) --}}
-        <div class="px-4 py-3.5 bg-[#04325e] text-white flex items-center justify-between border-b-2 border-[#f7941d] shrink-0">
+        <div class="px-4 py-3.5 bg-[#002b6a] text-white flex items-center justify-between border-b-2 border-[#f7941d] shrink-0">
             <div class="flex items-center gap-2.5 min-w-0">
                 <div class="w-8 h-8 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-xs">
                     <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">

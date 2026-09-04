@@ -9,13 +9,13 @@
     <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col h-[calc(100dvh-5rem)] sm:h-[calc(100vh-160px)] min-h-[480px]">
 
         {{-- Chat Header (Official BPS Navy & Orange) --}}
-        <div class="px-3 sm:px-6 py-3 sm:py-4 border-b-2 border-[#f7941d] bg-[#04325e] flex items-center justify-between text-white shadow-md gap-2">
+        <div class="px-3 sm:px-6 py-3 sm:py-4 border-b-2 border-[#f7941d] bg-[#002b6a] flex items-center justify-between text-white shadow-md gap-2">
             <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
                 <div class="relative shrink-0">
                     <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white p-1 sm:p-1.5 flex items-center justify-center shadow-xs">
                         <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
-                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-400 border-2 border-[#04325e]"></span>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-400 border-2 border-[#002b6a]"></span>
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
@@ -110,39 +110,39 @@
 
             {{-- Quick Topic Chips --}}
             <div id="quick-questions-wrapper" class="ml-0 sm:ml-12 pt-1 space-y-2">
-                <p class="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">PILIHAN TOPIK LAYANAN:</p>
+                <p class="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">PILIHAN TOPIK LAYANAN PST & STATISTIK 2026:</p>
                 <div class="flex flex-wrap gap-1.5 sm:gap-2">
-                    <button onclick="sendQuickMessage('Cara memperoleh data statistik BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-blue-600" data-icon="lucide:file-text"></span>
-                        <span>Cara Memperoleh Data</span>
+                    <button onclick="sendQuickMessage('Bagaimana syarat pengajuan data mikro skripsi mahasiswa tarif Rp0 sesuai PP 86/2021?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-[#ea580c] bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-[#ea580c]" data-icon="lucide:database"></span>
+                        <span>Data Mikro Tarif Rp0</span>
                     </button>
-                    <button onclick="sendQuickMessage('Jadwal dan jam buka operasional PST')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-amber-600" data-icon="lucide:clock"></span>
-                        <span>Jadwal Layanan PST</span>
+                    <button onclick="sendQuickMessage('Apa itu ROMANTIK dan bagaimana alur rekomendasi survei statistik untuk dinas/OPD?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-[#00a651]" data-icon="lucide:file-check-2"></span>
+                        <span>Rekomendasi ROMANTIK</span>
                     </button>
-                    <button onclick="sendQuickMessage('Publikasi Karanganyar Dalam Angka (KDA)')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-indigo-600" data-icon="lucide:book-open"></span>
-                        <span>Karanganyar Dalam Angka</span>
+                    <button onclick="sendQuickMessage('Berapa panjang jalan rusak di Kabupaten Karanganyar tahun 2026?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-[#003c80] border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-[#003c80]" data-icon="lucide:route"></span>
+                        <span>Jalan Rusak 2026</span>
                     </button>
-                    <button onclick="sendQuickMessage('Data kemiskinan dan garis kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                    <button onclick="sendQuickMessage('Berapa angka kemiskinan dan garis kemiskinan Karanganyar 2026?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-[#003c80] border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
                         <span class="iconify text-sm text-rose-600" data-icon="lucide:trending-down"></span>
-                        <span>Angka Kemiskinan</span>
+                        <span>Kemiskinan 7,92%</span>
                     </button>
-                    <button onclick="sendQuickMessage('Alamat kantor dan kontak BPS Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-emerald-600" data-icon="lucide:map-pin"></span>
-                        <span>Alamat & Kontak</span>
+                    <button onclick="sendQuickMessage('Bagaimana cara developer mengakses WebAPI BPS untuk integrasi data?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-purple-700" data-icon="lucide:code-2"></span>
+                        <span>WebAPI Developer</span>
                     </button>
-                    <button onclick="sendQuickMessage('Tampilkan grafik tren kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-amber-600" data-icon="lucide:bar-chart-2"></span>
+                    <button onclick="sendQuickMessage('Jadwal jam buka layanan PST dan kontak WhatsApp resmi')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-[#003c80] border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-amber-600" data-icon="lucide:clock"></span>
+                        <span>Jadwal & Kontak PST</span>
+                    </button>
+                    <button onclick="sendQuickMessage('Tampilkan grafik tren kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-[#0093dd]" data-icon="lucide:bar-chart-2"></span>
                         <span>Grafik Kemiskinan</span>
                     </button>
-                    <button onclick="sendQuickMessage('Tampilkan grafik IPM Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-sky-600" data-icon="lucide:line-chart"></span>
+                    <button onclick="sendQuickMessage('Tampilkan grafik capaian IPM Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-indigo-800 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
+                        <span class="iconify text-sm text-indigo-600" data-icon="lucide:line-chart"></span>
                         <span>Grafik IPM</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Grafik perbandingan penduduk kecamatan terbanyak')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-emerald-600" data-icon="lucide:users"></span>
-                        <span>Grafik Kecamatan</span>
                     </button>
                 </div>
             </div>

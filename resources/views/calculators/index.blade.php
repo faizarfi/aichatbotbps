@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
     {{-- Header Banner (BPS Corporate Navy) --}}
-    <div class="bg-gradient-to-br from-[#04325e] via-[#004b87] to-[#013a63] text-white rounded-3xl p-6 sm:p-10 border-b-4 border-[#f7941d] shadow-md relative overflow-hidden">
+    <div class="bg-gradient-to-br from-[#002b6a] via-[#003c80] to-[#043277] text-white rounded-3xl p-6 sm:p-10 border-b-4 border-[#f7941d] shadow-md relative overflow-hidden">
         <div class="max-w-2xl relative z-10">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-slate-100 border border-white/20 mb-3">
                 <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:calculator"></span>
@@ -24,7 +24,7 @@
     {{-- Tabs Toolbar --}}
     <div class="flex justify-center">
         <div class="inline-flex p-1.5 rounded-2xl bg-slate-100 border border-slate-200 shadow-xs">
-            <button type="button" onclick="switchCalcTab('inflation')" id="tab-btn-inflation" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-[#005b9f] text-white shadow-xs transition-all flex items-center gap-2">
+            <button type="button" onclick="switchCalcTab('inflation')" id="tab-btn-inflation" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-[#003c80] text-white shadow-xs transition-all flex items-center gap-2">
                 <span class="iconify text-base" data-icon="lucide:trending-up"></span>
                 <span>Kalkulator Inflasi (IHK BPS)</span>
             </button>

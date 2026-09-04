@@ -406,24 +406,52 @@ class ChatService
             ];
         }
 
-        // 10. Prosedur Permohonan Data, Data Mikro, Wilkerstat / PST
+        // 10. Prosedur Permohonan Data, Data Mikro, Wilkerstat / PST BPS
         if (str_contains($haystack, 'minta data') || str_contains($haystack, 'unduh data') || str_contains($haystack, 'permohonan') || str_contains($haystack, 'pst')
-            || str_contains($haystack, 'data mikro') || str_contains($haystack, 'wilkerstat') || str_contains($haystack, 'skripsi') || str_contains($haystack, 'raw data')) {
+            || str_contains($haystack, 'data mikro') || str_contains($haystack, 'wilkerstat') || str_contains($haystack, 'skripsi') || str_contains($haystack, 'raw data') || str_contains($haystack, 'pnbp') || str_contains($haystack, 'simponi')) {
             $topicSources[] = [
-                'title' => 'Standar Pelayanan Data & Publikasi BPS Kabupaten Karanganyar',
-                'url' => 'https://karanganyarkab.bps.go.id/id/publication',
+                'title' => 'Portal Pelayanan Statistik Terpadu (PST) BPS RI',
+                'url' => 'https://pst.bps.go.id/',
+            ];
+            $topicSources[] = [
+                'title' => 'Layanan Pembelian Produk & Tarif PP No. 86/2021',
+                'url' => 'https://pst.bps.go.id/layanan/pembelian',
             ];
         }
 
         // 11. Rekomendasi Kegiatan Statistik (ROMANTIK) & EPSS
         if (str_contains($haystack, 'romantik') || str_contains($haystack, 'rekomendasi') || str_contains($haystack, 'epss') || str_contains($haystack, 'ips') || str_contains($haystack, 'desa cantik')) {
             $topicSources[] = [
-                'title' => 'Pedoman Rekomendasi Statistik Sektoral (ROMANTIK) BPS Karanganyar',
-                'url' => 'https://karanganyarkab.bps.go.id/id/publication',
+                'title' => 'Portal Rekomendasi Kegiatan Statistik (ROMANTIK) BPS',
+                'url' => 'https://romantik.bps.go.id/',
+            ];
+            $topicSources[] = [
+                'title' => 'Pedoman Rekomendasi Statistik Sektoral (ROMANTIK) BPS',
+                'url' => 'https://pst.bps.go.id/layanan/romantik',
             ];
         }
 
-        // 12. Tabel Dinamis & Query Builder BPS
+        // 12. Layanan Developer WebAPI & StatInaLab
+        if (str_contains($haystack, 'webapi') || str_contains($haystack, 'api') || str_contains($haystack, 'developer') || str_contains($haystack, 'json') || str_contains($haystack, 'statinalab') || str_contains($haystack, 'transdata')) {
+            if (str_contains($haystack, 'statinalab')) {
+                $topicSources[] = [
+                    'title' => 'StatInaLab (Statistics Indonesia Data Lab) BPS',
+                    'url' => 'https://statinalab.bps.go.id/',
+                ];
+            } else if (str_contains($haystack, 'transdata')) {
+                $topicSources[] = [
+                    'title' => 'Layanan Transdata Pertukaran Data BPS',
+                    'url' => 'https://pst.bps.go.id/layanan/transdata',
+                ];
+            } else {
+                $topicSources[] = [
+                    'title' => 'Portal WebAPI BPS Developer',
+                    'url' => 'https://webapi.bps.go.id/developer/',
+                ];
+            }
+        }
+
+        // 13. Tabel Dinamis & Query Builder BPS
         if (str_contains($haystack, 'query builder') || str_contains($haystack, 'tabel dinamis') || str_contains($haystack, 'custom tabel') || str_contains($haystack, 'kustomisasi tabel')) {
             $topicSources[] = [
                 'title' => 'Tabel Dinamis / Query Builder Data BPS Karanganyar',
