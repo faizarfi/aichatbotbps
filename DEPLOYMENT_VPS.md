@@ -29,7 +29,7 @@
 
 ## 1. Spesifikasi Server & Kebutuhan Sistem
 
-Aplikasi dibangun menggunakan arsitektur modern **Laravel 12**, **Tailwind CSS**, **Iconify**, generator **Laporan Rekapitulasi PDF**, dan integrasi **9router AI Gateway (Gemini API)**:
+Aplikasi dibangun menggunakan arsitektur modern **Laravel 12**, **Tailwind CSS**, **Iconify**, generator **Laporan Rekapitulasi PDF**, integrasi **Google AI Studio (Gemini 3.6 Flash)**, dan **Sistem Multi-Bahasa Global (Google Cloud Translation 80+ Bahasa)**:
 
 | Komponen | Spesifikasi Minimum | Rekomendasi Production |
 | :--- | :--- | :--- |
