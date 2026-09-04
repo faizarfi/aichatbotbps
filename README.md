@@ -83,4 +83,5 @@ Untuk panduan lengkap langkah demi langkah mengenai cara memasang website ini di
 
 ## 👤 Pengembang
 
-Dikembangkan oleh **Faiz Arfian Ilhami** untuk Badan Pusat Statistik (BPS) Kabupaten Karanganyar.
+Dikembangkan oleh **Faiz Arfian Ilhami**
+ 
