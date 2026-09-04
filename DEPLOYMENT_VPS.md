@@ -14,7 +14,7 @@
 - [4. Langkah 3: Instalasi Composer & Node.js 20 LTS](#4-langkah-3-instalasi-composer--nodejs-20-lts)
 - [5. Langkah 4: Pembuatan Database MySQL](#5-langkah-4-pembuatan-database-mysql)
 - [6. Langkah 5: Clone Repositori & Hak Akses Direktori](#6-langkah-5-clone-repositori--hak-akses-direktori)
-- [7. Langkah 6: Konfigurasi Environment (`.env`) & 9router AI Engine](#7-langkah-6-konfigurasi-environment-env--9router-ai-engine)
+- [7. Langkah 6: Konfigurasi Environment (`.env`) & AI Engine](#7-langkah-6-konfigurasi-environment-env--ai-engine)
 - [8. Langkah 7: Kompilasi Aset Frontend & Caching Laravel](#8-langkah-7-kompilasi-aset-frontend--caching-laravel)
 - [9. Langkah 8: Konfigurasi Virtual Host Nginx & SSL HTTPS](#9-langkah-8-konfigurasi-virtual-host-nginx--ssl-https)
 - [10. Langkah 9: Setup Queue Worker (Supervisor) & Cron Scheduler](#10-langkah-9-setup-queue-worker-supervisor--cron-scheduler)
@@ -47,16 +47,19 @@ Aplikasi dibangun menggunakan arsitektur modern **Laravel 12**, **Tailwind CSS**
 ## 2. Langkah 1: Persiapan & Pengamanan Awal Server Linux
 
 Hubungkan ke server VPS Anda melalui terminal SSH:
+
 ```bash
 ssh root@IP_SERVER_ANDA
 ```
 
 ### A. Update dan Upgrade Paket Sistem
+
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
 
 ### B. Buat Pengguna Baru dengan Hak Akses Sudo
+
 ```bash
 # 1. Tambahkan user baru (contoh: bpsadmin)
 adduser bpsadmin
@@ -69,6 +72,7 @@ su - bpsadmin
 ```
 
 ### C. Konfigurasi Firewall Keamanan (UFW)
+
 ```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
@@ -79,6 +83,7 @@ sudo ufw enable
 ```
 
 ### D. Buat Swap Memory 2GB (Wajib untuk RAM 1GB–2GB)
+
 ```bash
 sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
@@ -92,6 +97,7 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 ## 3. Langkah 2: Instalasi Web Stack (LEMP)
 
 ### A. Instal Nginx Web Server
+
 ```bash
 sudo apt install nginx -y
 sudo systemctl enable nginx
@@ -99,6 +105,7 @@ sudo systemctl start nginx
 ```
 
 ### B. Instal PHP 8.3 & Ekstensi yang Dibutuhkan
+
 ```bash
 sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
@@ -111,22 +118,28 @@ sudo apt install -y php8.3-fpm php8.3-cli php8.3-mysql php8.3-common \
 ```
 
 Optimalkan batas unggah dokumen publikasi & berkas lampiran aduan pada PHP-FPM:
+
 ```bash
 sudo nano /etc/php/8.3/fpm/php.ini
 ```
+
 Sesuaikan parameter berikut:
+
 ```ini
 upload_max_filesize = 15M
 post_max_size = 20M
 memory_limit = 256M
 max_execution_time = 60
 ```
+
 Simpan (`CTRL+O`, `ENTER`), keluar (`CTRL+X`), lalu restart PHP-FPM:
+
 ```bash
 sudo systemctl restart php8.3-fpm
 ```
 
 ### C. Instal Database Server MySQL
+
 ```bash
 sudo apt install mysql-server -y
 sudo systemctl enable mysql
@@ -141,6 +154,7 @@ sudo mysql_secure_installation
 ## 4. Langkah 3: Instalasi Composer & Node.js 20 LTS
 
 ### A. Instal Composer (PHP Package Manager)
+
 ```bash
 cd ~
 curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
@@ -149,6 +163,7 @@ composer -V
 ```
 
 ### B. Instal Node.js 20 & NPM (Untuk Kompilasi Vite Assets)
+
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
@@ -161,11 +176,13 @@ npm -v
 ## 5. Langkah 4: Pembuatan Database MySQL
 
 Masuk ke konsol MySQL:
+
 ```bash
 sudo mysql -u root -p
 ```
 
 Eksekusi perintah SQL berikut:
+
 ```sql
 CREATE DATABASE bps_karanganyar CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -182,6 +199,7 @@ EXIT;
 ## 6. Langkah 5: Clone Repositori & Hak Akses Direktori
 
 ### A. Clone Proyek ke Folder `/var/www/`
+
 ```bash
 sudo mkdir -p /var/www/chatbot-bps
 sudo chown -R $USER:$USER /var/www/chatbot-bps
@@ -192,6 +210,7 @@ cd /var/www/chatbot-bps
 ```
 
 ### B. Atur Izin Hak Akses File Web Server
+
 ```bash
 sudo chown -R www-data:www-data /var/www/chatbot-bps
 sudo chmod -R 755 /var/www/chatbot-bps
@@ -201,9 +220,10 @@ sudo usermod -a -G www-data $USER
 
 ---
 
-## 7. Langkah 6: Konfigurasi Environment (`.env`) & 9router AI Engine
+## 7. Langkah 6: Konfigurasi Environment (`.env`) & AI Engine
 
 Salin berkas konfigurasi:
+
 ```bash
 cd /var/www/chatbot-bps
 cp .env.example .env
@@ -252,7 +272,6 @@ AI_TIMEOUT=45
 # AI_BASE_URL=https://api.9router.com/v1
 # AI_API_KEY=sk-9router-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # AI_MODEL=ag/gemini-3-flash
-
 
 # Token Rahasia untuk Fitur Auto-Deploy via Browser / Webhook
 DEPLOY_SECRET_TOKEN=bps-karanganyar-secret-deploy-2026
@@ -314,6 +333,7 @@ php artisan event:cache
 ```
 
 Pastikan kepemilikan folder storage tetap milik `www-data`:
+
 ```bash
 sudo chown -R www-data:www-data storage bootstrap/cache
 ```
@@ -323,6 +343,7 @@ sudo chown -R www-data:www-data storage bootstrap/cache
 ## 9. Langkah 8: Konfigurasi Virtual Host Nginx & SSL HTTPS
 
 ### A. Buat Server Block Nginx
+
 ```bash
 sudo nano /etc/nginx/sites-available/chatbot-bps
 ```
@@ -378,6 +399,7 @@ server {
 ```
 
 Aktifkan konfigurasi Nginx:
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/chatbot-bps /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
@@ -386,10 +408,12 @@ sudo systemctl reload nginx
 ```
 
 ### B. Pasang Sertifikat SSL Gratis (Let's Encrypt / Certbot)
+
 ```bash
 sudo apt install certbot python3-certbot-nginx -y
 sudo certbot --nginx -d karanganyarkab.bps.go.id -d www.karanganyarkab.bps.go.id
 ```
+
 Pilih opsi **Redirect HTTP to HTTPS (Otomatis)**.
 
 ---
@@ -397,6 +421,7 @@ Pilih opsi **Redirect HTTP to HTTPS (Otomatis)**.
 ## 10. Langkah 9: Setup Queue Worker (Supervisor) & Cron Scheduler
 
 ### A. Konfigurasi Background Worker (Supervisor)
+
 ```bash
 sudo apt install supervisor -y
 sudo systemctl enable supervisor
@@ -406,6 +431,7 @@ sudo nano /etc/supervisor/conf.d/bps-worker.conf
 ```
 
 Isi konfigurasi worker:
+
 ```ini
 [program:bps-worker]
 process_name=%(program_name)s_%(process_num)02d
@@ -421,7 +447,8 @@ stdout_logfile=/var/www/chatbot-bps/storage/logs/worker.log
 stopwaitsecs=3600
 ```
 
-Terapkan:
+Terapkan konfigurasi supervisor:
+
 ```bash
 sudo supervisorctl reread
 sudo supervisorctl update
@@ -429,10 +456,13 @@ sudo supervisorctl start bps-worker:*
 ```
 
 ### B. Konfigurasi Laravel Cron Job Scheduler
+
 ```bash
 sudo crontab -u www-data -e
 ```
+
 Tambahkan baris berikut di paling bawah:
+
 ```cron
 * * * * * cd /var/www/chatbot-bps && php artisan schedule:run >> /dev/null 2>&1
 ```
@@ -446,14 +476,17 @@ Untuk mempermudah pembaruan (*update*) aplikasi tanpa perlu repot membuka Termin
 ---
 
 ### Opsi A: Deploy Instan via URL Browser (Sangat Mudah)
+
 Anda cukup membuka link rahasia di browser laptop atau smartphone Anda kapan saja untuk memicu pembaruan otomatis.
 
 1. **Buat file endpoint deploy di folder publik**:
+
    ```bash
    sudo nano /var/www/chatbot-bps/public/deploy-webhook.php
    ```
 
 2. **Tempelkan skrip PHP berikut**:
+
    ```php
    <?php
    // Skrip Auto-Deploy Web BPS Karanganyar
@@ -495,25 +528,32 @@ Anda cukup membuka link rahasia di browser laptop atau smartphone Anda kapan saj
    ```
 
 3. **Berikan izin eksekusi perintah sudo untuk `www-data`**:
+
    ```bash
    sudo visudo
    ```
+
    Tambahkan baris berikut di baris paling bawah:
+
    ```sudoers
    www-data ALL=(ALL) NOPASSWD: /usr/bin/supervisorctl restart bps-worker:*
    www-data ALL=(ALL) NOPASSWD: /usr/bin/git pull origin main
    ```
 
-4. **Cara Penggunaan**:  
+4. **Cara Penggunaan**:
+
    Kapan saja Anda ingin mengupdate website, cukup buka URL ini di browser Anda:
+
    ```text
    https://karanganyarkab.bps.go.id/deploy-webhook.php?token=bps-karanganyar-secret-deploy-2026
    ```
-   Halaman browser akan menampilkan riwayat proses update (*git pull, build asset, refresh cache*) secara langsung hingga status sukses!
+
+   Halaman browser akan menampilkan riwayat proses update (*git pull, build asset, refresh cache*) secara langsung hingga status sukses.
 
 ---
 
 ### Opsi B: Auto-Deploy Otomatis via GitHub Webhook (Rekomendasi)
+
 Setiap kali Anda melakukan `git push` dari komputer lokal ke GitHub, server VPS akan otomatis ter-update sendiri tanpa perlu membuka terminal sama sekali.
 
 1. Buka Repositori GitHub Anda → Masuk ke tab **Settings** → **Webhooks** → Klik **Add webhook**.
@@ -521,11 +561,12 @@ Setiap kali Anda melakukan `git push` dari komputer lokal ke GitHub, server VPS 
 3. **Content type**: `application/json`
 4. **Events**: Pilih `Just the push event`.
 5. Klik **Add webhook**.
-6. *Selesai!* Sekarang setiap kali Anda `git push`, VPS otomatis terdeploy dalam hitungan detik.
+6. Selesai. Sekarang setiap kali Anda `git push`, VPS otomatis terdeploy dalam hitungan detik.
 
 ---
 
 ### Opsi C: CI/CD Pipeline via GitHub Actions
+
 Jika Anda ingin menggunakan alur kerja GitHub Actions, buat berkas `.github/workflows/deploy.yml` di repositori Anda:
 
 ```yaml
@@ -556,6 +597,7 @@ nano deploy.sh
 ```
 
 Isi skrip:
+
 ```bash
 #!/bin/bash
 set -e
@@ -587,10 +629,13 @@ echo "✅ Pembaruan Berhasil! Portal BPS aktif kembali."
 ```
 
 Beri izin eksekusi:
+
 ```bash
 chmod +x deploy.sh
 ```
+
 Jalankan perintah ini kapan saja:
+
 ```bash
 ./deploy.sh
 ```
@@ -600,11 +645,13 @@ Jalankan perintah ini kapan saja:
 ## 13. Panduan Pemeliharaan & Troubleshooting
 
 ### A. Memantau Log Error Laravel
+
 ```bash
 tail -n 100 -f /var/www/chatbot-bps/storage/logs/laravel.log
 ```
 
 ### B. Reset Total Cache Laravel Production
+
 ```bash
 cd /var/www/chatbot-bps
 php artisan optimize:clear
@@ -614,17 +661,20 @@ php artisan view:cache
 ```
 
 ### C. Memperbaiki Izin Folder Storage yang Terkunci
+
 ```bash
 sudo chown -R www-data:www-data /var/www/chatbot-bps/storage /var/www/chatbot-bps/bootstrap/cache
 sudo chmod -R 775 /var/www/chatbot-bps/storage /var/www/chatbot-bps/bootstrap/cache
 ```
 
 ### D. Backup Database MySQL Cepat
+
 ```bash
 mysqldump -u bps_user -p bps_karanganyar > backup_bps_$(date +%Y%m%d_%H%M%S).sql
 ```
 
 ### E. Memeriksa Status Antrean Worker
+
 ```bash
 sudo supervisorctl status
 ```
@@ -633,4 +683,4 @@ sudo supervisorctl status
 
 ## 🏛️ Penutup
 
-Dengan mengikuti panduan di atas, sistem **Portal Pelayanan Statistik Terpadu (PST) & Chatbot AI BPS Kabupaten Karanganyar** telah terpasang dengan konfigurasi aman, cepat, handal, dan mendukung otomasi deployment penuh tanpa memerlukan akses terminal berulang kali! 🚀
+Dengan mengikuti panduan di atas, sistem **Portal Pelayanan Statistik Terpadu (PST) & Chatbot AI BPS Kabupaten Karanganyar** telah terpasang dengan konfigurasi aman, cepat, handal, dan mendukung otomasi deployment penuh tanpa memerlukan akses terminal berulang kali. 🚀

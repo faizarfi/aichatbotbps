@@ -5,7 +5,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-Portal resmi pelayanan publik digital dan kecerdasan buatan (AI) **Badan Pusat Statistik (BPS) Kabupaten Karanganyar**. Aplikasi ini dirancang untuk mempermudah masyarakat, peneliti, akademisi, dan instansi daerah dalam mengakses data statistik resmi, konsultasi online/offline, pengajuan data mikro & ROMANTIK, survei kepuasan, hingga pengaduan layanan secara terpadu dan transparan.
+Portal resmi pelayanan publik digital dan kecerdasan buatan (AI) \ Aplikasi ini dirancang untuk mempermudah masyarakat, peneliti, akademisi, dan instansi daerah dalam mengakses data statistik resmi, konsultasi online/offline, pengajuan data mikro & ROMANTIK, survei kepuasan, hingga pengaduan layanan secara terpadu dan transparan.
 
 ---
 
@@ -42,7 +42,6 @@ Portal resmi pelayanan publik digital dan kecerdasan buatan (AI) **Badan Pusat S
 
 ```bash
 git clone https://github.com/faizarfi/aichatbotbps.git
-cd chatbot-bps-karanganyar
 ```
 
 ### 2. Instal Dependensi
@@ -84,4 +83,3 @@ Untuk panduan lengkap langkah demi langkah mengenai cara memasang website ini di
 ## 👤 Pengembang
 
 Dikembangkan oleh **Faiz Arfian Ilhami**
- 
