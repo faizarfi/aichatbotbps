@@ -48,6 +48,11 @@
                     <span>(0271) 495035</span>
                 </span>
                 <span class="text-slate-500">•</span>
+                <button type="button" onclick="openLanguageModal()" class="hover:text-white text-emerald-300 transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Pilih Bahasa / Select Language">
+                    <span class="iconify text-xs" data-icon="lucide:globe"></span>
+                    <span id="current-lang-topbar">Bahasa Indonesia</span>
+                </button>
+                <span class="text-slate-500">•</span>
                 <button type="button" onclick="toggleA11yMenu()" class="hover:text-white text-[#f7941d] transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Buka Menu Aksesibilitas">
                     <span class="iconify text-xs" data-icon="lucide:accessibility"></span>
                     <span>Aksesibilitas</span>
@@ -139,6 +144,16 @@
                         </a>
                     @endauth
 
+                    {{-- Global Language Selector Button (Desktop) --}}
+                    <button type="button" 
+                            onclick="openLanguageModal()" 
+                            class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#005b9f] text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95" 
+                            title="Pilih Bahasa / Select Language">
+                        <span class="iconify text-base text-[#005b9f]" data-icon="lucide:globe"></span>
+                        <span id="current-lang-code" class="font-black text-xs uppercase text-slate-900">ID</span>
+                        <span class="iconify text-xs text-slate-400" data-icon="lucide:chevron-down"></span>
+                    </button>
+
                     <button type="button" onclick="toggleA11yMenu()" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-[#005b9f] transition-all border border-slate-200 cursor-pointer" title="Menu Aksesibilitas Web" aria-label="Buka Menu Aksesibilitas">
                         <span class="iconify text-lg" data-icon="lucide:accessibility"></span>
                     </button>
@@ -151,6 +166,15 @@
 
                 {{-- Mobile Menu Button --}}
                 <div class="flex items-center md:hidden gap-1.5 shrink-0">
+                    {{-- Global Language Button (Mobile) --}}
+                    <button type="button" 
+                            onclick="openLanguageModal()" 
+                            class="p-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 border border-slate-200 cursor-pointer active:scale-95" 
+                            title="Pilih Bahasa / Select Language">
+                        <span class="iconify text-base text-[#005b9f]" data-icon="lucide:globe"></span>
+                        <span id="current-lang-code-mobile" class="font-black text-[11px] uppercase">ID</span>
+                    </button>
+
                     <button type="button" onclick="toggleA11yMenu()" class="p-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 border border-slate-200" title="Menu Aksesibilitas">
                         <span class="iconify text-lg text-[#005b9f]" data-icon="lucide:accessibility"></span>
                     </button>
@@ -348,6 +372,9 @@
 
     {{-- Accessibility Menu Component --}}
     <x-accessibility-menu />
+
+    {{-- Global Language Selector Modal (80+ Bahasa Google Translate) --}}
+    <x-language-modal />
 
     @stack('scripts')
 </body>

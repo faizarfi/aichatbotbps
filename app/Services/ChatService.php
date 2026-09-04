@@ -46,7 +46,7 @@ class ChatService
     /**
      * Proses pesan masuk dari pengunjung.
      */
-    public function processVisitorMessage(Conversation $conversation, string $rawMessage): array
+    public function processVisitorMessage(Conversation $conversation, string $rawMessage, ?string $language = 'id'): array
     {
         $messageText = trim($rawMessage);
 
@@ -76,7 +76,7 @@ class ChatService
         }
 
         // 3. Deteksi Intent & Generate Jawaban Cerdas
-        $replyData = $this->generateBotReply($conversation, $messageText);
+        $replyData = $this->generateBotReply($conversation, $messageText, $language);
         $chart = $this->resolveChartForMessage($messageText, $replyData['reply']);
 
         // Jika ada grafik data riil dan belum tersemat di reply, sematkan format blok kode ```chart
@@ -210,7 +210,7 @@ class ChatService
     /**
      * Logika respon bot dengan AI LLM Gateway (9router / OpenRouter) & Basis Pengetahuan RAG.
      */
-    protected function generateBotReply(Conversation $conversation, string $message): array
+    protected function generateBotReply(Conversation $conversation, string $message, ?string $language = 'id'): array
     {
         $lower = Str::lower($message);
 
@@ -259,10 +259,10 @@ class ChatService
                 ->values()
                 ->all();
 
-            $aiAnswer = $this->aiService->generateAnswer($message, $articles, $history);
+            $aiAnswer = $this->aiService->generateAnswer($message, $articles, $history, $language);
 
             if (!empty($aiAnswer)) {
-                $smartSources = $this->resolveSmartSources($message, $aiAnswer, $sources);
+                $smartSources = $this->resolveSmartSources($message, $aiAnswer, $sources, $language);
 
                 return [
                     'reply' => $aiAnswer,
@@ -276,7 +276,7 @@ class ChatService
 
         // E. Fallback 1: Jika AI tidak merespon, gunakan artikel dari pencarian lokal HANYA jika confidence cukup tinggi (>= 0.4)
         if ($searchResult['bestMatch'] && ($searchResult['confidence'] ?? 0) >= 0.40) {
-            $smartSources = $this->resolveSmartSources($message, $searchResult['bestMatch']->answer, $sources);
+            $smartSources = $this->resolveSmartSources($message, $searchResult['bestMatch']->answer, $sources, $language);
 
             return [
                 'reply' => $searchResult['bestMatch']->answer,
@@ -288,7 +288,7 @@ class ChatService
         }
 
         // F. Fallback 2: Pesan informatif jika AI tidak merespon dan tidak ada artikel yang relevan
-        $smartSources = $this->resolveSmartSources($message, '', $sources);
+        $smartSources = $this->resolveSmartSources($message, '', $sources, $language);
 
         return [
             'reply' => "Mohon maaf, saat ini saya belum menemukan data yang persis sesuai untuk pertanyaan tersebut dalam basis data lokal.\n\n[icon:info] Topik Data Resmi BPS Karanganyar yang Tersedia:\n- Panjang jalan rusak dan kondisi jalan Karanganyar\n- Jumlah penduduk dan populasi 17 kecamatan\n- Angka kemiskinan dan Indeks Pembangunan Manusia (IPM)\n- Data pertanian, produksi beras/padi, dan industri\n- Jadwal dan tata cara permintaan data di kantor PST BPS\n\nSilakan ajukan pertanyaan dengan topik di atas atau klik Hubungi Petugas untuk terhubung langsung dengan petugas kami.",
@@ -303,7 +303,7 @@ class ChatService
      * Pastikan semua tautan rujukan dokumen resmi mengarah langsung ke halaman subjek/tabel/publikasi spesifik
      * dan tidak pernah hanya mengarah ke beranda umum (homepage).
      */
-    protected function resolveSmartSources(string $userMessage, string $aiReply, array $initialSources = []): array
+    protected function resolveSmartSources(string $userMessage, string $aiReply, array $initialSources = [], ?string $language = 'id'): array
     {
         $haystack = mb_strtolower($userMessage . ' ' . $aiReply);
         $topicSources = [];
@@ -423,12 +423,52 @@ class ChatService
             ];
         }
 
-        // Bersihkan initial sources dari URL non-karanganyarkab.bps.go.id
+        // 12. Tabel Dinamis & Query Builder BPS
+        if (str_contains($haystack, 'query builder') || str_contains($haystack, 'tabel dinamis') || str_contains($haystack, 'custom tabel') || str_contains($haystack, 'kustomisasi tabel')) {
+            $topicSources[] = [
+                'title' => 'Tabel Dinamis / Query Builder Data BPS Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/statistics-table',
+            ];
+        }
+
+        // 13. Berita Resmi Statistik (BRS)
+        if (str_contains($haystack, 'brs') || str_contains($haystack, 'berita resmi statistik') || str_contains($haystack, 'press release') || str_contains($haystack, 'siaran pers')) {
+            $topicSources[] = [
+                'title' => 'Berita Resmi Statistik (BRS) BPS Kabupaten Karanganyar',
+                'url' => 'https://karanganyarkab.bps.go.id/id/pressrelease',
+            ];
+        }
+
+        // 14. Survei Kebutuhan Data (SKD)
+        if (str_contains($haystack, 'skd') || str_contains($haystack, 'survei kebutuhan data') || str_contains($haystack, 'kepuasan konsumen')) {
+            $topicSources[] = [
+                'title' => 'Survei Kebutuhan Data (SKD) BPS Kabupaten Karanganyar',
+                'url' => 'http://s.bps.go.id/skd3313',
+            ];
+        }
+
+        // 15. PPID & Keterbukaan Informasi Publik
+        if (str_contains($haystack, 'ppid') || str_contains($haystack, 'informasi publik') || str_contains($haystack, 'keterbukaan informasi')) {
+            $topicSources[] = [
+                'title' => 'Portal PPID BPS Kabupaten Karanganyar',
+                'url' => 'https://ppid.bps.go.id/?mfd=3313',
+            ];
+        }
+
+        // 16. Pengaduan Layanan Resmi
+        if (str_contains($haystack, 'pengaduan') || str_contains($haystack, 'aduan') || str_contains($haystack, 'keluhan') || str_contains($haystack, 'lapor')) {
+            $topicSources[] = [
+                'title' => 'Saluran Pengaduan Resmi BPS Kabupaten Karanganyar',
+                'url' => 'http://s.bps.go.id/pengaduan3313',
+            ];
+        }
+
+        // Bersihkan initial sources dari URL di luar ekosistem resmi bps.go.id
         $cleanedInitial = [];
         foreach ($initialSources as $s) {
             $url = $s['url'] ?? '';
             $title = $s['title'] ?? '';
-            if (empty($url) || !str_contains($url, 'karanganyarkab.bps.go.id') || in_array(rtrim($url, '/'), ['https://karanganyarkab.bps.go.id', 'http://karanganyarkab.bps.go.id', ''])) {
+            if (empty($url) || (!str_contains($url, 'bps.go.id') && !str_starts_with($url, '/')) || in_array(rtrim($url, '/'), ['https://karanganyarkab.bps.go.id', 'http://karanganyarkab.bps.go.id', ''])) {
                 $url = 'https://karanganyarkab.bps.go.id/id/publication';
             }
             $cleanedInitial[] = ['title' => $title, 'url' => $url];
@@ -453,6 +493,10 @@ class ChatService
         $result = [];
         foreach ($merged as $item) {
             $url = $item['url'];
+            if ($language === 'en') {
+                $url = str_replace('/id/', '/en/', $url);
+                $item['url'] = $url;
+            }
             if (!isset($unique[$url])) {
                 $unique[$url] = true;
                 $result[] = $item;

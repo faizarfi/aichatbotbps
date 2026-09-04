@@ -85,17 +85,19 @@ class PublicChatController extends Controller
             'message' => ['required', 'string', 'max:1000'],
             'session' => ['nullable', 'string', 'max:100'],
             'visitor_name' => ['nullable', 'string', 'max:100'],
+            'language' => ['nullable', 'string', 'max:15'],
         ]);
 
         $user = $request->user();
         $visitorName = $validated['visitor_name'] ?? $user?->name;
+        $language = $validated['language'] ?? 'id';
 
         $conversation = $this->chatService->getOrCreateConversation(
             $validated['session'] ?? null,
             $visitorName
         );
 
-        $result = $this->chatService->processVisitorMessage($conversation, $validated['message']);
+        $result = $this->chatService->processVisitorMessage($conversation, $validated['message'], $language);
 
         return response()->json([
             'conversation_id' => $conversation->public_id,

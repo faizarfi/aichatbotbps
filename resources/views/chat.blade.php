@@ -31,6 +31,13 @@
 
             {{-- Actions --}}
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                {{-- Language Selector in Chat Header --}}
+                <button type="button" onclick="openLanguageModal()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer shadow-xs" title="Pilih Bahasa / Select Language">
+                    <span class="iconify text-base text-[#f7941d]" data-icon="lucide:globe"></span>
+                    <span id="chat-lang-label" class="font-black text-xs uppercase text-white">ID</span>
+                    <span class="iconify text-xs text-blue-200" data-icon="lucide:chevron-down"></span>
+                </button>
+
                 <button onclick="downloadConsultationPdf()" class="p-2 sm:px-3 sm:py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer shadow-xs" title="Unduh Lembar Rekapitulasi Konsultasi PDF">
                     <span class="iconify text-base text-[#f7941d]" data-icon="lucide:file-down"></span>
                     <span class="hidden sm:inline">Unduh PDF</span>
@@ -185,10 +192,19 @@
             </form>
 
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mt-2 pt-2 text-[10px] sm:text-[11px] text-slate-400 border-t border-slate-100">
-                <span class="flex items-center gap-1">
-                    <span class="iconify text-emerald-600 text-xs sm:text-sm shrink-0" data-icon="lucide:shield-check"></span>
-                    <span class="truncate">Jawaban dari data resmi BPS Karanganyar.</span>
-                </span>
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center gap-1">
+                        <span class="iconify text-emerald-600 text-xs sm:text-sm shrink-0" data-icon="lucide:shield-check"></span>
+                        <span class="truncate">Data resmi BPS Karanganyar.</span>
+                    </span>
+                    <span class="text-slate-300">•</span>
+                    <button type="button" onclick="openLanguageModal()" class="text-slate-600 hover:text-[#005b9f] font-bold flex items-center gap-1 bg-slate-100 hover:bg-blue-50 px-2 py-0.5 rounded-lg border border-slate-200 transition-colors cursor-pointer shadow-2xs active:scale-95" title="Ubah Bahasa AI & Halaman">
+                        <span class="iconify text-xs text-[#005b9f]" data-icon="lucide:globe"></span>
+                        <span class="text-[10px] text-slate-400">Bahasa:</span>
+                        <span id="chat-input-lang-badge" class="font-black text-[10px] uppercase text-slate-800">ID</span>
+                        <span class="iconify text-[10px] text-slate-400" data-icon="lucide:chevron-down"></span>
+                    </button>
+                </div>
                 <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                     <a href="{{ route('aduan.create') }}" class="text-blue-600 font-bold hover:underline flex items-center gap-1">
                         <span class="iconify" data-icon="lucide:ticket"></span> Buat Aduan
@@ -532,13 +548,85 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
 // -------------------------------------------------------------
 // VOICE INPUT (SPEECH-TO-TEXT) USING WEB SPEECH API
 // -------------------------------------------------------------
+// MULTI-LANGUAGE HELPER & SPEECH MAPPING
+// -------------------------------------------------------------
+function getActiveLanguage() {
+    return localStorage.getItem('bps_selected_lang') || 'id';
+}
+
+const speechLangMap = {
+    'id': 'id-ID',
+    'en': 'en-US',
+    'ar': 'ar-SA',
+    'ja': 'ja-JP',
+    'zh-CN': 'zh-CN',
+    'zh-TW': 'zh-TW',
+    'de': 'de-DE',
+    'fr': 'fr-FR',
+    'es': 'es-ES',
+    'ko': 'ko-KR',
+    'ru': 'ru-RU',
+    'nl': 'nl-NL',
+    'tr': 'tr-TR',
+    'pt': 'pt-PT',
+    'it': 'it-IT',
+    'vi': 'vi-VN',
+    'th': 'th-TH',
+    'ms': 'ms-MY',
+    'jw': 'jv-ID',
+    'su': 'su-ID',
+    'hi': 'hi-IN',
+    'sv': 'sv-SE',
+    'cs': 'cs-CZ',
+    'el': 'el-GR',
+    'hu': 'hu-HU',
+    'ro': 'ro-RO',
+    'da': 'da-DK',
+    'fi': 'fi-FI',
+    'no': 'nb-NO',
+    'he': 'he-IL',
+    'fa': 'fa-IR',
+    'ur': 'ur-PK',
+    'bn': 'bn-BD',
+    'ta': 'ta-IN',
+    'te': 'te-IN',
+    'my': 'my-MM',
+    'km': 'km-KH',
+    'lo': 'lo-LA',
+    'ne': 'ne-NP',
+    'si': 'si-LK',
+    'sw': 'sw-KE',
+    'af': 'af-ZA',
+    'hr': 'hr-HR',
+    'sk': 'sk-SK',
+    'bg': 'bg-BG',
+    'sr': 'sr-RS'
+};
+
+function getSpeechLang() {
+    const lang = getActiveLanguage();
+    return speechLangMap[lang] || (lang.includes('-') ? lang : `${lang}-${lang.toUpperCase()}`);
+}
+
+window.addEventListener('bps-language-changed', function(e) {
+    const lang = e.detail?.lang || 'id';
+    const badge = lang.toUpperCase();
+    const chatBadge = document.getElementById('chat-lang-label');
+    if (chatBadge) chatBadge.textContent = badge;
+    const inputBadge = document.getElementById('chat-input-lang-badge');
+    if (inputBadge) inputBadge.textContent = badge;
+});
+
+// -------------------------------------------------------------
+// VOICE INPUT (SPEECH-TO-TEXT)
+// -------------------------------------------------------------
 let recognition = null;
 let isRecording = false;
 
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
-    recognition.lang = 'id-ID'; // Bahasa Indonesia
+    recognition.lang = getSpeechLang();
     recognition.continuous = false;
     recognition.interimResults = true;
 
@@ -587,6 +675,7 @@ function toggleVoiceRecording() {
         recognition.stop();
     } else {
         try {
+            recognition.lang = getSpeechLang();
             recognition.start();
         } catch (e) {
             console.warn(e);
@@ -645,7 +734,7 @@ function speakText(rawText, btnElement) {
         .trim();
 
     currentUtterance = new SpeechSynthesisUtterance(cleanText);
-    currentUtterance.lang = 'id-ID';
+    currentUtterance.lang = getSpeechLang();
     currentUtterance.rate = 1.0;
     currentUtterance.pitch = 1.0;
 
@@ -703,7 +792,8 @@ chatForm.addEventListener('submit', function(e) {
         },
         body: JSON.stringify({
             message: text,
-            session: visitorSession
+            session: visitorSession,
+            language: getActiveLanguage()
         })
     })
     .then(r => r.json())

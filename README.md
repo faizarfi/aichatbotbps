@@ -24,6 +24,7 @@ Portal resmi pelayanan publik digital dan kecerdasan buatan (AI) **Badan Pusat S
 ## 🌟 Fitur Utama Sistem
 
 ### 1. 🤖 Chatbot Asisten Statistik 24 Jam (AI-Powered)
+
 - **Konsultasi Interaktif**: Menjawab pertanyaan seputar indikator makro (IPM, Kemiskinan, Pertumbuhan Ekonomi/PDRB, Ketenagakerjaan, Inflasi, Pertanian) bersumber dari publikasi resmi seperti *Karanganyar Dalam Angka (KDA)*.
 - **Voice-to-Text (Speech Recognition)**: Pengguna dapat berbicara langsung melalui mikrofon tanpa perlu mengetik panjang.
 - **Text-to-Speech (Sintesis Suara)**: Fitur pembacaan audio otomatis untuk mendengarkan jawaban asisten AI (ramah disabilitas/aksesibilitas).
@@ -31,38 +32,46 @@ Portal resmi pelayanan publik digital dan kecerdasan buatan (AI) **Badan Pusat S
 - **Live Handoff ke Petugas**: Jika AI belum mencukupi atau pengguna memerlukan konsultasi mendalam, percakapan dapat dialihkan langsung ke antrean petugas PST pada jam kerja.
 
 ### 2. 📅 Reservasi Konsultasi Tatap Muka PST Offline
+
 - **Booking Jadwal Fleksibel**: Pengguna dapat memilih tanggal dan slot sesi layanan tatap muka di Ruang Pelayanan Statistik Terpadu (PST) Kantor BPS Kabupaten Karanganyar (Jl. Lawu No. 202B).
 - **Tiket Digital QR Code**: Menghasilkan nomor registrasi resmi (misal: `PST-BKG-202608-001`) dan tiket digital ber-QR Code untuk verifikasi kehadiran.
 - **Pelacakan Status Mandiri**: Fitur lacak status persetujuan tanpa perlu login ulang.
 
 ### 3. 📊 Layanan Permohonan Data Mikro & ROMANTIK
+
 - **Pengajuan Data Sektoral & Mikro**: Khusus untuk mahasiswa (skripsi/tesis), instansi OPD Pemda, dan peneliti.
 - **Unggah Dokumen Proposal**: Dukungan upload surat pengantar atau proposal penelitian resmi (PDF, JPG, PNG).
 - **Unduh Hasil Olahan Data**: Petugas dapat mengunggah berkas data hasil pengolahan yang siap diunduh oleh pemohon.
 
 ### 4. ⭐ Survei Kepuasan Masyarakat (SKM / IKPS)
+
 - **Standar Evaluasi KemenPAN-RB**: Evaluasi 4 unsur mutu pelayanan (Kualitas Data, Kecepatan Respon, Keramahan Petugas, Fasilitas Sarana).
 - **Kalkulasi Otomatis Skor IKM**: Penghitungan otomatis Indeks Kepuasan Masyarakat (skala 25–100) dan predikat mutu (A/B/C/D).
 
 ### 5. 🛡️ Saluran Pengaduan Layanan Resmi
+
 - **Penyampaian Keluhan & Masukan**: Saluran whistleblowing resmi masyarakat terkait mutu pelayanan, website, data, dan SDM.
 - **Enkripsi Kontak Pelapor**: Nomor telepon/email pelapor dienkripsi secara aman di database untuk menjaga privasi.
 - **Nomor Tiket Pelacakan**: Log histori tahapan tindak lanjut laporan (*Diterima*, *Diproses*, *Selesai*).
 
 ### 6. 🗺️ Peta Tematik 17 Kecamatan Karanganyar
+
 - Visualisasi data statistik spasial interaktif untuk 17 kecamatan di wilayah Kabupaten Karanganyar (populasi, kepadatan, fasilitas).
 
 ### 7. 🧮 Kalkulator Statistik Interaktif
+
 - **Kalkulator Inflasi**: Menghitung perubahan daya beli dan nilai riil uang berdasarkan indeks harga konsumen.
 - **Proyeksi Pertumbuhan Penduduk**: Menghitung estimasi jumlah penduduk di masa depan dengan metode geometrik/eksponensial.
 - **Kalkulator Sampel Slovin**: Menghitung ukuran sampel minimum penelitian dengan tingkat presisi/margin of error yang ditentukan.
 
 ### 8. 👤 Akun & Profil Pengguna Masyarakat (`/profil-saya`)
+
 - **Login Fleksibel**: Mendukung login konvensional (Email + Password) dan **Google OAuth 2.0 Single Sign-On (SSO)**.
 - **Dashboard Profil**: Melihat riwayat pengajuan reservasi, permohonan data, aduan, dan survei yang pernah diajukan.
 - **Edit Profil & Hapus Akun**: Pengguna memiliki kendali penuh untuk memperbarui profil atau menghapus akun secara permanen.
 
 ### 9. 🎛️ Panel Manajemen Admin & Petugas BPS (`/admin`)
+
 - **Live Statistik Dashboard**: Monitor metrik kunjungan, antrean chat aktif, reservasi harian, aduan baru, dan skor SKM.
 - **Live Chat Takeover & Respon**: Petugas dapat mengambil alih percakapan bot secara real-time.
 - **Basis Pengetahuan (Knowledge Base)**: Pengelolaan artikel dan dataset referensi chatbot AI.
@@ -126,33 +135,38 @@ chatbot-bps-karanganyar/
 
 ## 💻 Instalasi di Lingkungan Lokal (Localhost)
 
-### Prasyarat:
+### Prasyarat
+
 - PHP >= 8.2 (dengan ekstensi: `bcmath`, `ctype`, `curl`, `dom`, `fileinfo`, `mbstring`, `openssl`, `pdo`, `tokenizer`, `xml`)
 - Composer >= 2.x
 - Node.js >= 18.x & NPM
 - Database MySQL atau SQLite
 
-### Langkah-langkah:
+### Langkah-langkah
 
 1. **Clone repositori**:
+
    ```bash
    git clone https://github.com/faizarfi/aichatbotbps.git
    cd chatbot-bps-karanganyar
    ```
 
 2. **Instal dependensi Composer & Node.js**:
+
    ```bash
    composer install
    npm install
    ```
 
 3. **Setup Berkas Konfigurasi `.env`**:
+
    ```bash
    cp .env.example .env
    php artisan key:generate
    ```
 
 4. **Konfigurasi Database & API AI 9router di `.env`**:
+
    ```ini
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
@@ -189,7 +203,7 @@ chatbot-bps-karanganyar/
 
 Aplikasi ini menggunakan modul `App\Services\AiLlmService` yang terhubung melalui standar **OpenAI Chat Completions API** (`/v1/chat/completions`). Hal ini memungkinkan pergantian provider AI secara fleksibel hanya dengan mengubah konfigurasi di `.env` tanpa mengubah kode program.
 
-### Cara Menghubungkan 9router ke Aplikasi:
+### Cara Menghubungkan 9router ke Aplikasi
 
 1. **Dapatkan API Key dari 9router**:
    - Masuk ke dashboard akun 9router Anda.
@@ -197,6 +211,7 @@ Aplikasi ini menggunakan modul `App\Services\AiLlmService` yang terhubung melalu
    - Pastikan saldo/kredit token tersedia dan model yang diinginkan telah diaktifkan.
 
 2. **Atur 4 Variabel Environment di `.env`**:
+
    | Variabel `.env` | Nilai Rekomendasi | Penjelasan |
    | :--- | :--- | :--- |
    | `AI_BASE_URL` | `https://api.9router.com/v1` | Endpoint URL API 9router (atau port proxy lokal jika menggunakan desktop client) |
@@ -212,21 +227,26 @@ Aplikasi ini menggunakan modul `App\Services\AiLlmService` yang terhubung melalu
 
 4. **Uji Coba Respon AI**:
    Setelah mengisi `.env`, lakukan clear config agar konfigurasi terbaca:
+
    ```bash
    php artisan config:clear
    ```
+
    Buka menu **Chatbot** di browser dan ketik pertanyaan (contoh: *"Berapa persentase penduduk miskin di Kabupaten Karanganyar tahun terakhir?"*). Bot akan langsung menjawab menggunakan inteligensi 9router!
 
 5. **Jalankan Migrasi & Seeder Database**:
+
    ```bash
    php artisan migrate --seed
    php artisan storage:link
    ```
 
 6. **Jalankan Server Development**:
+
    ```bash
    composer run dev
    ```
+
    Aplikasi akan berjalan di `http://127.0.0.1:8000`.
 
 ---
@@ -253,4 +273,4 @@ Untuk menjaga kualitas data pelayanan publik dan mencegah serangan spam bot atau
 
 ## 📄 Lisensi
 
-Aplikasi ini dikembangkan untuk Badan Pusat Statistik Kabupaten Karanganyar di bawah lisensi [MIT License](LICENSE).
+di kembangkan oleh faiz arfian ilhami
