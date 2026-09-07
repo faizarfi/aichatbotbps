@@ -131,6 +131,114 @@ class PublicChatController extends Controller
     }
 
     /**
+     * Kirim pesan baru dari pengunjung dengan respon streaming token real-time (Server-Sent Events).
+     */
+    public function stream(Request $request)
+    {
+        @set_time_limit(120);
+
+        $validated = $request->validate([
+            'message' => ['required', 'string', 'max:1000'],
+            'session' => ['nullable', 'string', 'max:100'],
+            'visitor_name' => ['nullable', 'string', 'max:100'],
+            'language' => ['nullable', 'string', 'max:15'],
+        ]);
+
+        $user = $request->user();
+        $visitorName = $validated['visitor_name'] ?? $user?->name;
+        $language = $validated['language'] ?? 'id';
+
+        $conversation = $this->chatService->getOrCreateConversation(
+            $validated['session'] ?? null,
+            $visitorName
+        );
+
+        $messageText = $validated['message'];
+
+        return response()->stream(function () use ($conversation, $messageText, $language) {
+            // Matikan output buffering agar data terkirim instan
+            while (ob_get_level() > 0) {
+                ob_end_flush();
+            }
+            flush();
+
+            $sendEvent = function (string $event, array|string $data) {
+                echo "event: {$event}\n";
+                echo "data: " . (is_array($data) ? json_encode($data, JSON_UNESCAPED_UNICODE) : $data) . "\n\n";
+                if (ob_get_level() > 0) {
+                    ob_flush();
+                }
+                flush();
+            };
+
+            try {
+                // 1. Kirim event init
+                $sendEvent('init', [
+                    'conversation_id' => $conversation->public_id,
+                    'session' => $conversation->visitor_session,
+                ]);
+
+                // 2. Stream chunk balasan
+                $result = $this->chatService->processVisitorMessageStream(
+                    $conversation,
+                    $messageText,
+                    $language,
+                    function (string $chunk) use ($sendEvent) {
+                        $sendEvent('chunk', [
+                            'text' => $chunk,
+                        ]);
+                    },
+                    function () use ($sendEvent) {
+                        $sendEvent('reset', []);
+                    }
+                );
+
+                // 3. Kirim event done dengan metadata lengkap
+                $sendEvent('done', [
+                    'conversation_id' => $conversation->public_id,
+                    'session' => $conversation->visitor_session,
+                    'status' => $result['status'],
+                    'chart' => $result['chart'] ?? null,
+                    'visitor_message' => [
+                        'id' => $result['visitor_message']->id,
+                        'content' => $result['visitor_message']->content,
+                        'created_at' => $result['visitor_message']->created_at->format('H:i'),
+                    ],
+                    'bot_message' => $result['bot_message'] ? [
+                        'id' => $result['bot_message']->id,
+                        'content' => $result['bot_message']->content,
+                        'sources' => $result['sources'],
+                        'chart' => $result['chart'] ?? null,
+                        'is_fallback' => $result['is_fallback'],
+                        'created_at' => $result['bot_message']->created_at->format('H:i'),
+                    ] : null,
+                    'reply' => [
+                        'id' => $result['bot_message']?->id,
+                        'content' => $result['reply'] ?? ($result['bot_message']?->content ?? ''),
+                        'chart' => $result['chart'] ?? null,
+                        'sources' => $result['sources'] ?? [],
+                        'is_fallback' => $result['is_fallback'] ?? false,
+                    ],
+                    'sources' => $result['sources'],
+                    'quick_options' => $result['quick_options'],
+                    'is_fallback' => $result['is_fallback'],
+                ]);
+
+            } catch (\Throwable $e) {
+                $sendEvent('error', [
+                    'message' => 'Terjadi kesalahan sistem saat mengalirkan jawaban.',
+                    'detail' => config('app.debug') ? $e->getMessage() : null,
+                ]);
+            }
+        }, 200, [
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache, no-transform',
+            'Connection' => 'keep-alive',
+            'X-Accel-Buffering' => 'no',
+        ]);
+    }
+
+    /**
      * Unduh lembar bukti konsultasi statistik resmi format PDF ber-KOP & QR Code.
      */
     public function downloadPdf(Request $request)

@@ -15,6 +15,7 @@ class KnowledgeArticle extends Model
         'keywords',
         'source_title',
         'source_url',
+        'embedding',
         'published_at',
         'is_active',
         'created_by',
@@ -24,6 +25,7 @@ class KnowledgeArticle extends Model
     {
         return [
             'keywords' => 'array',
+            'embedding' => 'array',
             'published_at' => 'datetime',
             'is_active' => 'boolean',
         ];

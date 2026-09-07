@@ -234,6 +234,9 @@
 .chat-content-body tr:nth-child(even) td {
     background-color: #f8fafc;
 }
+.chat-content-body tr:hover td {
+    background-color: #f1f5f9;
+}
 
 .chat-content-body code {
     background-color: #f1f5f9;

@@ -23,36 +23,36 @@
 
     {{-- Official BPS Top Bar --}}
     <div class="bg-[#002b6a] text-slate-200 text-[11px] py-1.5 border-b border-blue-900/60 hidden md:block">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="flex items-center gap-1 font-semibold text-slate-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div class="flex items-center gap-2.5 whitespace-nowrap overflow-hidden">
+                <span class="flex items-center gap-1.5 font-semibold text-slate-300 shrink-0">
                     <span class="iconify text-xs text-[#f7941d]" data-icon="lucide:calendar"></span>
                     <span>{{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM Y') }}</span>
                 </span>
-                <span class="text-blue-400/60">•</span>
-                <span class="font-medium text-slate-300">Badan Pusat Statistik Kabupaten Karanganyar (MFD 3313)</span>
+                <span class="text-blue-400/50 hidden lg:inline">•</span>
+                <span class="font-medium text-slate-300 hidden lg:inline truncate">Badan Pusat Statistik Kabupaten Karanganyar (MFD 3313)</span>
             </div>
-            <div class="flex items-center gap-4">
-                <a href="https://karanganyarkab.bps.go.id" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1 font-semibold">
+            <div class="flex items-center gap-3.5 shrink-0 whitespace-nowrap text-[11px]">
+                <a href="https://karanganyarkab.bps.go.id" target="_blank" rel="noopener" class="hover:text-white text-slate-300 transition-colors flex items-center gap-1 font-semibold">
                     <span class="iconify text-xs text-[#f7941d]" data-icon="lucide:globe"></span>
                     <span>Portal BPS Karanganyar</span>
                 </a>
-                <span class="text-blue-400/60">•</span>
-                <a href="https://pst.bps.go.id" target="_blank" rel="noopener" class="hover:text-white transition-colors flex items-center gap-1 font-semibold">
+                <span class="text-blue-400/50">•</span>
+                <a href="https://pst.bps.go.id" target="_blank" rel="noopener" class="hover:text-white text-slate-300 transition-colors flex items-center gap-1 font-semibold">
                     <span class="iconify text-xs text-[#00a651]" data-icon="lucide:external-link"></span>
                     <span>PST BPS RI</span>
                 </a>
-                <span class="text-blue-400/60">•</span>
-                <span class="flex items-center gap-1 text-slate-300">
+                <span class="text-blue-400/50 hidden xl:inline">•</span>
+                <span class="hidden xl:flex items-center gap-1 text-slate-300">
                     <span class="iconify text-xs text-sky-300" data-icon="lucide:phone"></span>
                     <span>(0271) 495047</span>
                 </span>
-                <span class="text-blue-400/60">•</span>
+                <span class="text-blue-400/50">•</span>
                 <button type="button" onclick="openLanguageModal()" class="hover:text-white text-emerald-300 transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Pilih Bahasa / Select Language">
                     <span class="iconify text-xs" data-icon="lucide:globe"></span>
-                    <span id="current-lang-topbar">Bahasa Indonesia</span>
+                    <span id="current-lang-topbar">Indonesia</span>
                 </button>
-                <span class="text-blue-400/60">•</span>
+                <span class="text-blue-400/50">•</span>
                 <button type="button" onclick="toggleA11yMenu()" class="hover:text-white text-[#f7941d] transition-colors flex items-center gap-1 font-bold cursor-pointer" title="Buka Menu Aksesibilitas">
                     <span class="iconify text-xs" data-icon="lucide:accessibility"></span>
                     <span>Aksesibilitas</span>
@@ -63,22 +63,22 @@
 
     {{-- Main Navbar (BPS Official Style) --}}
     <nav class="sticky top-0 z-40 bg-white border-b-2 border-[#003c80] shadow-sm transition-all">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6">
-            <div class="flex items-center justify-between h-16 sm:h-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20 gap-3">
                 {{-- Brand Identity --}}
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5 sm:gap-3.5 group min-w-0 flex-1 sm:flex-initial mr-2 sm:mr-0">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0 group">
                     <div class="relative shrink-0">
-                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS Karanganyar" class="w-9 h-9 sm:w-12 sm:h-12 object-contain group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS Karanganyar" class="w-9 h-9 sm:w-11 sm:h-11 object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
-                    <div class="min-w-0">
-                        <span class="text-xs sm:text-base font-black text-slate-900 tracking-tight block leading-tight group-hover:text-[#005b9f] transition-colors truncate">
+                    <div class="shrink-0 whitespace-nowrap">
+                        <span class="text-xs sm:text-sm md:text-[15px] font-black text-slate-900 tracking-tight block leading-tight group-hover:text-[#003c80] transition-colors">
                             BADAN PUSAT STATISTIK
                         </span>
                         <div class="flex items-center gap-1.5 mt-0.5">
-                            <span class="text-[10px] sm:text-xs font-extrabold text-[#005b9f] tracking-wide uppercase truncate">
+                            <span class="text-[10px] sm:text-[11px] font-extrabold text-[#003c80] tracking-wide uppercase">
                                 KABUPATEN KARANGANYAR
                             </span>
-                            <span class="hidden sm:inline px-1.5 py-0.2 rounded bg-amber-50 text-[#f7941d] border border-amber-200 text-[9px] font-bold">
+                            <span class="px-1.5 py-0.2 rounded bg-amber-50 text-[#f7941d] border border-amber-200 text-[9px] font-bold">
                                 PST
                             </span>
                         </div>
@@ -86,101 +86,97 @@
                 </a>
 
                 {{-- Desktop Nav Menu --}}
-                <div class="hidden md:flex items-center gap-1">
-                    <a href="{{ route('home') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('home') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
+                <div class="hidden lg:flex items-center gap-1 xl:gap-1.5">
+                    <a href="{{ route('home') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('home') ? 'bg-[#003c80] text-white shadow-xs' : 'text-slate-700 hover:text-[#003c80] hover:bg-slate-100' }} transition-all">
                         Beranda
                     </a>
-                    <a href="{{ route('chat.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('chat.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all flex items-center gap-1.5">
-                        <span class="iconify text-sm" data-icon="lucide:message-square-text"></span>
+                    <a href="{{ route('chat.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('chat.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-[#003c80] bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200/60' }} transition-all flex items-center gap-1.5">
+                        <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
                         <span>Konsultasi PST</span>
                     </a>
-                    <a href="{{ route('districts.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('districts.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
+                    <a href="{{ route('districts.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('districts.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-slate-700 hover:text-[#003c80] hover:bg-slate-100' }} transition-all">
                         17 Kecamatan
                     </a>
-                    <a href="{{ route('calculators.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('calculators.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
+                    <a href="{{ route('calculators.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('calculators.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-slate-700 hover:text-[#003c80] hover:bg-slate-100' }} transition-all">
                         Kalkulator
                     </a>
-                    <a href="{{ route('aduan.create') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg {{ request()->routeIs('aduan.*') ? 'bg-[#005b9f] text-white shadow-xs' : 'text-slate-700 hover:text-[#005b9f] hover:bg-slate-100' }} transition-all">
+                    <a href="{{ route('aduan.create') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('aduan.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-slate-700 hover:text-[#003c80] hover:bg-slate-100' }} transition-all">
                         Aduan
                     </a>
                 </div>
 
                 {{-- Quick Action CTA & Auth Buttons --}}
-                <div class="hidden lg:flex items-center gap-2.5">
+                <div class="hidden lg:flex items-center gap-2 shrink-0">
                     @auth
                         @if(auth()->user()->isStaff())
-                            <a href="{{ route('admin.dashboard') }}" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-[#005b9f] text-xs font-bold rounded-xl border border-blue-200 transition-all flex items-center gap-1.5 shadow-xs">
-                                <span class="iconify text-base" data-icon="lucide:shield-check"></span>
-                                <span>Dashboard Petugas</span>
+                            <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-[#003c80] text-xs font-extrabold rounded-xl border border-blue-200 transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap">
+                                <span class="iconify text-base text-[#f7941d]" data-icon="lucide:shield-check"></span>
+                                <span>Panel Petugas</span>
                             </a>
                         @else
-                            <a href="{{ route('my-profile.show') }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 flex items-center gap-2 transition-all">
+                            <a href="{{ route('my-profile.show') }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 flex items-center gap-2 transition-all shrink-0">
                                 @if(auth()->user()->avatar)
-                                    <img src="{{ auth()->user()->avatar }}" alt="" class="w-6 h-6 rounded-full object-cover" referrerpolicy="no-referrer">
+                                    <img src="{{ auth()->user()->avatar }}" alt="" class="w-6 h-6 rounded-full object-cover shrink-0" referrerpolicy="no-referrer">
                                 @else
-                                    <div class="w-6 h-6 rounded-full bg-[#005b9f] text-white flex items-center justify-center text-xs font-bold">
+                                    <div class="w-6 h-6 rounded-full bg-[#003c80] text-white flex items-center justify-center text-xs font-bold shrink-0">
                                         {{ substr(auth()->user()->name, 0, 1) }}
                                     </div>
                                 @endif
-                                <span class="text-xs font-bold text-slate-800 max-w-[120px] truncate">{{ auth()->user()->name }}</span>
+                                <span class="text-xs font-bold text-slate-800 max-w-[110px] truncate">{{ auth()->user()->name }}</span>
                             </a>
                         @endif
 
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                        <form method="POST" action="{{ route('logout') }}" class="inline shrink-0">
                             @csrf
-                            <button type="submit" class="px-3 py-2 text-rose-600 hover:bg-rose-50 text-xs font-bold rounded-xl border border-rose-200 transition-all flex items-center gap-1 cursor-pointer" title="Keluar">
+                            <button type="submit" class="p-2 text-rose-600 hover:bg-rose-50 text-xs font-bold rounded-xl border border-rose-200 transition-all flex items-center justify-center cursor-pointer" title="Keluar">
                                 <span class="iconify text-base" data-icon="lucide:log-out"></span>
-                                <span>Keluar</span>
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="px-3.5 py-2 text-slate-700 hover:text-[#005b9f] font-bold text-xs rounded-xl border border-slate-300 hover:border-[#005b9f] hover:bg-slate-50 transition-all flex items-center gap-1.5 shadow-xs">
-                            <span class="iconify text-base text-slate-500" data-icon="lucide:log-in"></span>
+                        <a href="{{ route('login') }}" class="px-3 py-2 text-slate-700 hover:text-[#003c80] font-bold text-xs rounded-xl border border-slate-300 hover:border-[#003c80] hover:bg-slate-50 transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap">
+                            <span class="iconify text-sm text-slate-500" data-icon="lucide:log-in"></span>
                             <span>Masuk</span>
                         </a>
-                        <a href="{{ route('register') }}" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-all flex items-center gap-1.5 shadow-xs">
-                            <span class="iconify text-base text-slate-600" data-icon="lucide:user-plus"></span>
+                        <a href="{{ route('register') }}" class="px-3 py-2 bg-[#003c80] hover:bg-[#002b6a] text-white font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-xs whitespace-nowrap">
+                            <span class="iconify text-sm" data-icon="lucide:user-plus"></span>
                             <span>Daftar</span>
                         </a>
                     @endauth
 
+                    <div class="h-5 w-px bg-slate-200 mx-0.5 shrink-0"></div>
+
                     {{-- Global Language Selector Button (Desktop) --}}
                     <button type="button" 
                             onclick="openLanguageModal()" 
-                            class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#005b9f] text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95" 
+                            class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#003c80] text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 whitespace-nowrap shrink-0" 
                             title="Pilih Bahasa / Select Language">
-                        <span class="iconify text-base text-[#005b9f]" data-icon="lucide:globe"></span>
+                        <span class="iconify text-base text-[#003c80]" data-icon="lucide:globe"></span>
                         <span id="current-lang-code" class="font-black text-xs uppercase text-slate-900">ID</span>
                         <span class="iconify text-xs text-slate-400" data-icon="lucide:chevron-down"></span>
                     </button>
 
-                    <button type="button" onclick="toggleA11yMenu()" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-[#005b9f] transition-all border border-slate-200 cursor-pointer" title="Menu Aksesibilitas Web" aria-label="Buka Menu Aksesibilitas">
-                        <span class="iconify text-lg" data-icon="lucide:accessibility"></span>
+                    <button type="button" onclick="toggleA11yMenu()" class="p-2 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-[#003c80] transition-all border border-slate-200 cursor-pointer shrink-0" title="Menu Aksesibilitas Web" aria-label="Buka Menu Aksesibilitas">
+                        <span class="iconify text-base" data-icon="lucide:accessibility"></span>
                     </button>
-
-                    <a href="{{ route('chat.index') }}" class="px-4 py-2.5 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs font-extrabold rounded-xl transition-all shadow-md shadow-orange-500/20 flex items-center gap-1.5 ml-1">
-                        <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
-                        <span>Konsultasi Data</span>
-                    </a>
                 </div>
 
                 {{-- Mobile Menu Button --}}
-                <div class="flex items-center md:hidden gap-1.5 shrink-0">
+                <div class="flex items-center lg:hidden gap-1.5 shrink-0">
                     {{-- Global Language Button (Mobile) --}}
                     <button type="button" 
                             onclick="openLanguageModal()" 
                             class="p-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 border border-slate-200 cursor-pointer active:scale-95" 
                             title="Pilih Bahasa / Select Language">
-                        <span class="iconify text-base text-[#005b9f]" data-icon="lucide:globe"></span>
+                        <span class="iconify text-base text-[#003c80]" data-icon="lucide:globe"></span>
                         <span id="current-lang-code-mobile" class="font-black text-[11px] uppercase">ID</span>
                     </button>
 
                     <button type="button" onclick="toggleA11yMenu()" class="p-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 border border-slate-200" title="Menu Aksesibilitas">
-                        <span class="iconify text-lg text-[#005b9f]" data-icon="lucide:accessibility"></span>
+                        <span class="iconify text-lg text-[#003c80]" data-icon="lucide:accessibility"></span>
                     </button>
                     @if(!request()->routeIs('chat.*'))
-                    <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-[#f7941d] text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Buka Konsultasi Data">
-                        <span class="iconify text-lg" data-icon="lucide:message-square-text"></span>
+                    <a href="{{ route('chat.index') }}" class="p-2 rounded-xl bg-[#003c80] text-white text-xs font-bold flex items-center gap-1 shadow-sm transition-all" title="Buka Konsultasi PST">
+                        <span class="iconify text-lg text-[#f7941d]" data-icon="lucide:bot"></span>
                     </a>
                     @endif
                     <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer" aria-label="Menu">
@@ -191,39 +187,39 @@
         </div>
 
         {{-- Mobile Dropdown Menu --}}
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b-2 border-[#005b9f] px-4 pt-3 pb-5 space-y-2 shadow-lg">
-            <a href="{{ route('home') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('home') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b-2 border-[#003c80] px-4 pt-3 pb-5 space-y-2 shadow-lg">
+            <a href="{{ route('home') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('home') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Beranda Utama
             </a>
-            <a href="{{ route('chat.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('chat.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }} flex items-center gap-2">
-                <span class="iconify text-base text-[#f7941d]" data-icon="lucide:message-square-text"></span>
+            <a href="{{ route('chat.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('chat.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }} flex items-center gap-2">
+                <span class="iconify text-base text-[#f7941d]" data-icon="lucide:bot"></span>
                 <span>Konsultasi Data PST</span>
             </a>
-            <a href="{{ route('districts.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('districts.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('districts.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('districts.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Peta 17 Kecamatan
             </a>
-            <a href="{{ route('calculators.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('calculators.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('calculators.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('calculators.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Kalkulator Statistik Interaktif
             </a>
-            <a href="{{ route('aduan.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('aduan.*') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('aduan.create') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('aduan.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Pengaduan Layanan
             </a>
-            <a href="{{ route('status-aduan') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('status-aduan') ? 'bg-[#005b9f] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('status-aduan') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('status-aduan') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Lacak Status Tiket Aduan
             </a>
             <button type="button" onclick="toggleA11yMenu()" class="w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-between border border-slate-200">
                 <div class="flex items-center gap-2">
-                    <span class="iconify text-base text-[#005b9f]" data-icon="lucide:accessibility"></span>
+                    <span class="iconify text-base text-[#003c80]" data-icon="lucide:accessibility"></span>
                     <span>Menu Aksesibilitas Web</span>
                 </div>
-                <span class="px-1.5 py-0.5 rounded text-[10px] bg-blue-50 text-[#005b9f] font-bold">A11y</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] bg-blue-50 text-[#003c80] font-bold">A11y</span>
             </button>
 
             <div class="pt-3 border-t border-slate-100 space-y-2">
                 @auth
                     @if(auth()->user()->isStaff())
-                        <a href="{{ route('admin.dashboard') }}" class="w-full py-2.5 px-4 bg-blue-50 text-[#005b9f] text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-blue-200">
-                            <span class="iconify text-base" data-icon="lucide:shield-check"></span>
+                        <a href="{{ route('admin.dashboard') }}" class="w-full py-2.5 px-4 bg-blue-50 text-[#003c80] text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-blue-200">
+                            <span class="iconify text-base text-[#f7941d]" data-icon="lucide:shield-check"></span>
                             <span>Panel Petugas ({{ auth()->user()->name }})</span>
                         </a>
                     @else
@@ -244,7 +240,7 @@
                         <a href="{{ route('login') }}" class="py-2.5 px-4 text-center rounded-xl border border-slate-300 font-bold text-xs text-slate-700 hover:bg-slate-50">
                             Masuk
                         </a>
-                        <a href="{{ route('register') }}" class="py-2.5 px-4 text-center rounded-xl bg-[#005b9f] text-white font-bold text-xs hover:bg-[#004b87]">
+                        <a href="{{ route('register') }}" class="py-2.5 px-4 text-center rounded-xl bg-[#003c80] text-white font-bold text-xs hover:bg-[#002b6a]">
                             Daftar
                         </a>
                     </div>
@@ -260,7 +256,7 @@
 
     {{-- Official BPS Footer (Deep Navy Corporate & Orange Accent) --}}
     <footer class="bg-[#002b6a] text-slate-200 border-t-4 border-[#f7941d] mt-auto">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
                 {{-- Col 1: Brand & Bio --}}
                 <div class="md:col-span-5 space-y-4">

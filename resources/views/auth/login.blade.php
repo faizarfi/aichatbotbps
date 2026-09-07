@@ -16,8 +16,8 @@
 
     <!-- Google One-Click Login Button -->
     <div class="mb-5">
-        <a href="{{ route('auth.google') }}" 
-           class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 active:scale-[0.98] border border-slate-300/90 text-slate-700 text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-3 group">
+        <a href="{{ route('auth.google') }}"
+            class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 active:scale-[0.98] border border-slate-300/90 text-slate-700 text-xs sm:text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-3 group">
             <span class="iconify text-lg shrink-0" data-icon="logos:google-icon"></span>
             <span>Masuk dengan Akun Google</span>
         </a>
@@ -49,15 +49,15 @@
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <span class="iconify text-base" data-icon="lucide:mail"></span>
                 </div>
-                <input id="email" 
-                       class="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none" 
-                       type="email" 
-                       name="email" 
-                       value="{{ old('email') }}" 
-                       required 
-                       autofocus 
-                       autocomplete="username" 
-                       placeholder="nama@email.com atau akun BPS" />
+                <input id="email"
+                    class="block w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    required
+                    autofocus
+                    autocomplete="username"
+                    placeholder="nama@email.com atau akun BPS" />
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
@@ -67,26 +67,26 @@
             <div class="flex items-center justify-between mb-1.5">
                 <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Kata Sandi</label>
                 @if (Route::has('password.request'))
-                    <a class="text-xs text-blue-600 hover:text-blue-800 transition-colors font-bold" href="{{ route('password.request') }}">
-                        Lupa kata sandi?
-                    </a>
+                <a class="text-xs text-blue-600 hover:text-blue-800 transition-colors font-bold" href="{{ route('password.request') }}">
+                    Lupa kata sandi?
+                </a>
                 @endif
             </div>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <span class="iconify text-base" data-icon="lucide:lock"></span>
                 </div>
-                <input id="password" 
-                       class="block w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
-                       type="password"
-                       name="password"
-                       required 
-                       autocomplete="current-password" 
-                       placeholder="••••••••" />
-                <button type="button" 
-                        onclick="togglePassword('password', this)" 
-                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
-                        title="Tampilkan/Sembunyikan Kata Sandi">
+                <input id="password"
+                    class="block w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                    type="password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                    placeholder="••••••••" />
+                <button type="button"
+                    onclick="togglePassword('password', this)"
+                    class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+                    title="Tampilkan/Sembunyikan Kata Sandi">
                     <span class="iconify text-lg" data-icon="lucide:eye"></span>
                 </button>
             </div>

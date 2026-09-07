@@ -4,9 +4,9 @@
 @section('meta_description', 'Layanan resmi konsultasi data statistik, publikasi berkala, jadwal PST, dan pengaduan BPS Kabupaten Karanganyar.')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-1.5 sm:px-6 py-2 sm:py-6">
+<div class="max-w-6xl mx-auto px-2 sm:px-6 py-2 sm:py-4">
     {{-- Chat Box Card --}}
-    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col h-[calc(100dvh-5rem)] sm:h-[calc(100vh-160px)] min-h-[480px]">
+    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 overflow-hidden flex flex-col h-[calc(100dvh-4.5rem)] sm:h-[calc(100vh-120px)] min-h-[580px]">
 
         {{-- Chat Header (Official BPS Navy & Orange) --}}
         <div class="px-3 sm:px-6 py-3 sm:py-4 border-b-2 border-[#f7941d] bg-[#002b6a] flex items-center justify-between text-white shadow-md gap-2">
@@ -78,7 +78,7 @@
         <div id="chat-messages" class="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3.5 sm:space-y-5 bg-slate-50/70">
 
             {{-- Official Welcome Bubble --}}
-            <div class="flex gap-2 sm:gap-3 max-w-2xl">
+            <div class="flex gap-2 sm:gap-3 w-full max-w-4xl">
                 <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
                     <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                 </div>
@@ -233,6 +233,7 @@ const statusPill = document.getElementById('chat-status-pill');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 const seenMessageIds = new Set();
 let isPollingHistory = false;
+let isStreamingActive = false;
 
 // Retrieve or generate visitor session token
 let visitorSession = localStorage.getItem('bps_chat_session');
@@ -329,6 +330,8 @@ function formatBotContent(raw) {
             });
             let html = marked.parse(cleaned);
             html = html.replace(/<a /g, '<a target="_blank" rel="noopener" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1" ');
+            html = html.replace(/<table/g, '<div class="overflow-x-auto my-2.5 rounded-xl border border-slate-200/90 shadow-2xs"><table class="w-full text-xs"');
+            html = html.replace(/<\/table>/g, '</table></div>');
             return html;
         } catch (e) {
             console.warn('Marked parser warning:', e);
@@ -387,7 +390,7 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
 
     if (isVisitor) {
         wrapper.innerHTML = `
-            <div class="max-w-[88%] sm:max-w-lg">
+            <div class="max-w-[88%] sm:max-w-2xl">
                 <div class="bg-[#005b9f] text-white rounded-2xl sm:rounded-3xl rounded-tr-sm px-4 sm:px-5 py-3 sm:py-3.5 shadow-sm">
                     <p class="text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium break-words">${escapeHtml(content)}</p>
                 </div>
@@ -396,7 +399,7 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         `;
     } else if (isOfficer) {
         wrapper.innerHTML = `
-            <div class="flex gap-2 sm:gap-3 max-w-[92%] sm:max-w-xl">
+            <div class="flex gap-2 sm:gap-3 w-full max-w-[92%] sm:max-w-4xl">
                 <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl sm:rounded-2xl bg-blue-700 text-white flex items-center justify-center shrink-0 font-black text-xs shadow-sm">
                     ${escapeHtml((senderName || 'P').substring(0, 1))}
                 </div>
@@ -436,18 +439,27 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         let chartBoxHtml = '';
         if (chartData && chartData.labels && chartData.data) {
             canvasId = 'chart-box-' + Math.random().toString(36).substring(2, 9);
+            const isLineType = chartData.type === 'line';
             chartBoxHtml = `
                 <div class="mt-3 p-3 sm:p-4 bg-slate-50 border border-slate-200/90 rounded-2xl shadow-xs">
-                    <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-200">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-                            <span class="iconify text-base text-blue-600" data-icon="${chartData.type === 'line' ? 'lucide:trending-up' : 'lucide:bar-chart-2'}"></span>
+                    <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-200 flex-wrap">
+                        <div class="flex items-center gap-1.5 text-xs font-bold text-slate-800 min-w-0">
+                            <span class="iconify text-base text-blue-600 shrink-0" data-icon="${isLineType ? 'lucide:trending-up' : 'lucide:bar-chart-2'}"></span>
                             <span class="truncate">${escapeHtml(chartData.title || 'Visualisasi Data BPS Karanganyar')}</span>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 shrink-0">
-                            Data BPS
-                        </span>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" id="${canvasId}-type-btn" onclick="toggleChartType('${canvasId}')" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200 hover:border-blue-300 transition-all flex items-center gap-1 cursor-pointer shadow-2xs active:scale-95" title="Ganti tampilan antara Diagram Batang dan Garis">
+                                <span class="iconify text-xs text-blue-600" data-icon="lucide:arrow-left-right"></span>
+                                <span>Mode: ${isLineType ? 'Garis' : 'Batang'}</span>
+                            </button>
+                            <button type="button" onclick="downloadChartPng('${canvasId}', '${escapeHtml(chartData.title || 'grafik-bps')}')" class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all flex items-center gap-1 cursor-pointer shadow-2xs active:scale-95" title="Unduh gambar grafik format PNG">
+                                <span class="iconify text-xs text-emerald-600" data-icon="lucide:download"></span>
+                                <span class="hidden sm:inline">Unduh PNG</span>
+                            </button>
+                            <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800">Data BPS</span>
+                        </div>
                     </div>
-                    <div class="relative h-52 sm:h-60 w-full">
+                    <div class="relative h-52 sm:h-60 w-full bg-white rounded-xl p-2 border border-slate-100">
                         <canvas id="${canvasId}"></canvas>
                     </div>
                     ${chartData.description ? `<p class="mt-2 text-[10px] text-slate-500 font-medium italic text-right">${escapeHtml(chartData.description)}</p>` : ''}
@@ -495,7 +507,7 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         const rawContentSafe = displayContent.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '');
 
         wrapper.innerHTML = `
-            <div class="flex gap-2 sm:gap-3 max-w-2xl">
+            <div class="flex gap-2 sm:gap-3 w-full max-w-4xl lg:max-w-5xl">
                 <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
                     <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
                 </div>
@@ -764,6 +776,48 @@ function sendQuickMessage(text) {
     chatForm.dispatchEvent(new Event('submit'));
 }
 
+function createStreamingBotElement(elementId) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex justify-start chat-msg-wrapper';
+    wrapper.id = elementId;
+
+    const formattedTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+
+    wrapper.innerHTML = `
+        <div class="flex gap-2 sm:gap-3 w-full max-w-4xl lg:max-w-5xl">
+            <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
+                <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+            </div>
+            <div class="min-w-0 flex-1">
+                <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs">
+                    <div class="flex items-center justify-between gap-1.5 mb-2 pb-2 border-b border-slate-100">
+                        <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider truncate flex items-center gap-1.5">
+                            <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
+                            Layanan PST BPS Karanganyar
+                        </span>
+                        <span class="text-[9px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+                            <span>Menjawab langsung...</span>
+                        </span>
+                    </div>
+                    <div class="chat-content-body text-xs sm:text-sm break-words text-slate-800 leading-relaxed font-normal">
+                        <span class="streaming-text whitespace-pre-line"></span><span class="inline-block w-1.5 h-4 bg-blue-600 animate-pulse ml-0.5 align-middle"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 ml-1.5">
+                    <span class="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-semibold">
+                        <span class="iconify text-xs text-blue-600" data-icon="lucide:shield-check"></span> Layanan BPS
+                    </span>
+                    <span>•</span>
+                    <span>${formattedTime}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return wrapper;
+}
+
 chatForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const text = chatInput.value.trim();
@@ -783,6 +837,173 @@ chatForm.addEventListener('submit', function(e) {
     typingIndicator.classList.remove('hidden');
     scrollToBottom();
 
+    // Panggil Streaming Response secara real-time via Server-Sent Events
+    sendStreamingMessage(text, tempMsgId);
+});
+
+function sendStreamingMessage(text, tempMsgId) {
+    const streamingBotId = 'streaming-msg-' + Date.now();
+    let streamingEl = null;
+    let accumulatedText = '';
+    let isStreamDone = false;
+
+    isStreamingActive = true;
+
+    fetch('{{ route("chat.stream") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'text/event-stream',
+        },
+        body: JSON.stringify({
+            message: text,
+            session: visitorSession,
+            language: getActiveLanguage()
+        })
+    })
+    .then(response => {
+        if (!response.ok || !response.body) {
+            throw new Error('Streaming tidak didukung atau terjadi kesalahan respons.');
+        }
+
+        typingIndicator.classList.add('hidden');
+        streamingEl = createStreamingBotElement(streamingBotId);
+        messagesArea.appendChild(streamingEl);
+        if (window.Iconify && typeof window.Iconify.scan === 'function') {
+            window.Iconify.scan(streamingEl);
+        }
+        scrollToBottom();
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let streamBuffer = '';
+
+        function readChunk() {
+            return reader.read().then(({ done, value }) => {
+                if (done) {
+                    isStreamingActive = false;
+                    if (!isStreamDone && streamingEl) {
+                        const bodyEl = streamingEl.querySelector('.chat-content-body');
+                        if (bodyEl) {
+                            bodyEl.innerHTML = formatBotContent(accumulatedText);
+                        }
+                    }
+                    return;
+                }
+
+                streamBuffer += decoder.decode(value, { stream: true });
+                const lines = streamBuffer.split('\n');
+                streamBuffer = lines.pop();
+
+                let currentEvent = 'message';
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line.startsWith('event:')) {
+                        currentEvent = line.substring(6).trim();
+                    } else if (line.startsWith('data:')) {
+                        const rawData = line.substring(5).trim();
+                        try {
+                            const data = JSON.parse(rawData);
+
+                            if (currentEvent === 'init') {
+                                if (data.session) {
+                                    visitorSession = data.session;
+                                    localStorage.setItem('bps_chat_session', visitorSession);
+                                }
+                            } else if (currentEvent === 'reset') {
+                                accumulatedText = '';
+                                if (streamingEl) {
+                                    const textEl = streamingEl.querySelector('.streaming-text');
+                                    if (textEl) {
+                                        textEl.textContent = '';
+                                    }
+                                }
+                            } else if (currentEvent === 'chunk') {
+                                if (data.text) {
+                                    accumulatedText += data.text;
+                                    if (streamingEl) {
+                                        const textEl = streamingEl.querySelector('.streaming-text');
+                                        if (textEl) {
+                                            textEl.textContent = accumulatedText;
+                                        }
+                                        scrollToBottom();
+                                    }
+                                }
+                            } else if (currentEvent === 'done') {
+                                isStreamDone = true;
+                                isStreamingActive = false;
+                                if (data.session) {
+                                    visitorSession = data.session;
+                                    localStorage.setItem('bps_chat_session', visitorSession);
+                                }
+                                if (data.status) {
+                                    updateStatusBadge(data.status, data.officer_name);
+                                }
+                                if (data.visitor_message && data.visitor_message.id) {
+                                    seenMessageIds.add(data.visitor_message.id);
+                                    const tempEl = document.getElementById('msg-box-' + tempMsgId);
+                                    if (tempEl) {
+                                        tempEl.id = 'msg-box-' + data.visitor_message.id;
+                                    }
+                                }
+
+                                if (streamingEl) {
+                                    streamingEl.remove();
+                                    streamingEl = null;
+                                }
+
+                                const botMsg = data.bot_message || data.reply || {};
+                                const replyContent = data.reply?.content || botMsg.content || accumulatedText;
+                                const replySources = data.sources || botMsg.sources || [];
+                                const replyId = botMsg.id || null;
+                                const replyTime = botMsg.created_at || null;
+
+                                if (replyId) {
+                                    seenMessageIds.add(replyId);
+                                }
+
+                                appendMessageElement(
+                                    'bot',
+                                    replyContent,
+                                    replySources,
+                                    replyId,
+                                    replyTime,
+                                    null,
+                                    null,
+                                    data.quick_options || [],
+                                    data.chart || null
+                                );
+                            } else if (currentEvent === 'error') {
+                                isStreamDone = true;
+                                isStreamingActive = false;
+                                if (streamingEl) streamingEl.remove();
+                                appendMessageElement('bot', data.message || 'Maaf, terjadi kendala saat memproses.');
+                            }
+                        } catch (parseErr) {
+                            // Non-json chunk
+                        }
+                    }
+                }
+
+                return readChunk();
+            });
+        }
+
+        return readChunk();
+    })
+    .catch(err => {
+        isStreamingActive = false;
+        console.warn('Streaming tidak tersedia atau terjadi gangguan, beralih ke panggilan standar:', err);
+        if (streamingEl) {
+            streamingEl.remove();
+        }
+        fallbackStandardSend(text, tempMsgId);
+    });
+}
+
+function fallbackStandardSend(text, tempMsgId) {
+    typingIndicator.classList.remove('hidden');
     fetch('{{ route("chat.message") }}', {
         method: 'POST',
         headers: {
@@ -808,7 +1029,6 @@ chatForm.addEventListener('submit', function(e) {
             updateStatusBadge(data.status, data.officer_name);
         }
 
-        // Tautkan id visitor asli dari database agar polling tidak menduplikasinya
         if (data.visitor_message && data.visitor_message.id) {
             seenMessageIds.add(data.visitor_message.id);
             const tempEl = document.getElementById('msg-box-' + tempMsgId);
@@ -835,7 +1055,7 @@ chatForm.addEventListener('submit', function(e) {
         typingIndicator.classList.add('hidden');
         appendMessageElement('bot', 'Maaf, terjadi gangguan jaringan saat memproses pertanyaan Anda. Silakan coba kirim ulang pertanyaan.');
     });
-});
+}
 
 function updateStatusBadge(status, officerName = null) {
     const pill = document.getElementById('chat-status-pill');
@@ -1031,15 +1251,25 @@ function resetConversation() {
     });
 }
 
+window.activeCharts = window.activeCharts || {};
+window.activeChartMetadata = window.activeChartMetadata || {};
+
 function renderMessageChart(canvasId, chartData) {
     setTimeout(() => {
         const ctx = document.getElementById(canvasId);
         if (!ctx || typeof Chart === 'undefined') return;
 
+        // Destroy previous chart on this canvas if any
+        if (window.activeCharts[canvasId]) {
+            try {
+                window.activeCharts[canvasId].destroy();
+            } catch (e) {}
+        }
+
         const isLine = chartData.type === 'line';
         const colorPalette = ['#0284c7', '#0369a1', '#0ea5e9', '#059669', '#10b981', '#f59e0b', '#6366f1'];
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: chartData.type || 'bar',
             data: {
                 labels: chartData.labels || [],
@@ -1047,7 +1277,7 @@ function renderMessageChart(canvasId, chartData) {
                     label: chartData.title || 'Nilai',
                     data: chartData.data || [],
                     borderColor: '#0284c7',
-                    backgroundColor: isLine ? 'rgba(2, 132, 199, 0.12)' : (chartData.labels.length > 1 ? chartData.labels.map((_, i) => colorPalette[i % colorPalette.length]) : '#0284c7'),
+                    backgroundColor: isLine ? 'rgba(2, 132, 199, 0.15)' : (chartData.labels.length > 1 ? chartData.labels.map((_, i) => colorPalette[i % colorPalette.length]) : '#0284c7'),
                     borderWidth: isLine ? 3 : 1,
                     fill: isLine,
                     tension: 0.35,
@@ -1095,7 +1325,68 @@ function renderMessageChart(canvasId, chartData) {
                 }
             }
         });
+
+        window.activeCharts[canvasId] = chart;
+        window.activeChartMetadata[canvasId] = chartData;
     }, 80);
+}
+
+function toggleChartType(canvasId) {
+    const chart = window.activeCharts ? window.activeCharts[canvasId] : null;
+    if (!chart) return;
+
+    const currentType = chart.config.type;
+    const newType = currentType === 'line' ? 'bar' : 'line';
+    chart.config.type = newType;
+
+    const ds = chart.data.datasets[0];
+    const colorPalette = ['#0284c7', '#0369a1', '#0ea5e9', '#059669', '#10b981', '#f59e0b', '#6366f1'];
+
+    if (newType === 'line') {
+        ds.fill = true;
+        ds.backgroundColor = 'rgba(2, 132, 199, 0.15)';
+        ds.borderWidth = 3;
+        ds.borderRadius = 0;
+    } else {
+        ds.fill = false;
+        ds.backgroundColor = chart.data.labels.length > 1 ? chart.data.labels.map((_, i) => colorPalette[i % colorPalette.length]) : '#0284c7';
+        ds.borderWidth = 1;
+        ds.borderRadius = 8;
+    }
+
+    chart.update();
+
+    const labelBtn = document.getElementById(canvasId + '-type-btn');
+    if (labelBtn) {
+        labelBtn.innerHTML = `<span class="iconify text-xs text-blue-600" data-icon="lucide:arrow-left-right"></span><span>Mode: ${newType === 'line' ? 'Garis' : 'Batang'}</span>`;
+        if (window.Iconify && typeof window.Iconify.scan === 'function') {
+            window.Iconify.scan(labelBtn);
+        }
+    }
+
+    Toast.fire({
+        icon: 'info',
+        title: 'Beralih ke Diagram ' + (newType === 'line' ? 'Garis' : 'Batang')
+    });
+}
+
+function downloadChartPng(canvasId, title) {
+    const chart = window.activeCharts ? window.activeCharts[canvasId] : null;
+    if (!chart) return;
+
+    const imgUrl = chart.toBase64Image('image/png', 1.0);
+    const link = document.createElement('a');
+    link.href = imgUrl;
+    const cleanTitle = (title || 'grafik-bps-karanganyar').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    link.download = cleanTitle + '.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    Toast.fire({
+        icon: 'success',
+        title: 'Gambar grafik berhasil diunduh!'
+    });
 }
 
 function downloadConsultationPdf() {
@@ -1175,7 +1466,7 @@ function fallbackCopy(text, callback) {
 }
 
 function pollHistory() {
-    if (isPollingHistory) return;
+    if (isPollingHistory || isStreamingActive) return;
     const session = localStorage.getItem('bps_chat_session') || visitorSession;
     if (!session) return;
 

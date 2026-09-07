@@ -30,6 +30,9 @@ Route::get('/chat/messages', [PublicChatController::class, 'messages'])->name('c
 Route::post('/chat/message', [PublicChatController::class, 'store'])
     ->middleware('throttle:60,1')
     ->name('chat.message');
+Route::post('/chat/stream', [PublicChatController::class, 'stream'])
+    ->middleware('throttle:60,1')
+    ->name('chat.stream');
 Route::post('/chat/request-officer', [PublicChatController::class, 'requestOfficer'])
     ->middleware('throttle:15,1')
     ->name('chat.request-officer');

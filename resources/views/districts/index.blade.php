@@ -4,7 +4,7 @@
 @section('meta_description', 'Profil demografi, luas wilayah, kepadatan penduduk, dan potensi unggulan 17 kecamatan di Kabupaten Karanganyar resmi BPS.')
 
 @section('content')
-<div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
     {{-- Header Banner (BPS Corporate Navy) --}}
     <div class="bg-gradient-to-br from-[#002b6a] via-[#003c80] to-[#043277] text-white rounded-3xl p-6 sm:p-10 border-b-4 border-[#f7941d] shadow-md relative overflow-hidden">
         <div class="max-w-3xl relative z-10">
@@ -151,11 +151,11 @@
             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <span class="iconify text-base" data-icon="lucide:search"></span>
             </div>
-            <input type="text" 
-                   id="search-input" 
-                   oninput="filterDistricts(this.value)" 
-                   placeholder="Cari kecamatan (cth: Tawangmangu)..." 
-                   class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#005b9f] outline-none transition-all">
+            <input type="text"
+                id="search-input"
+                oninput="filterDistricts(this.value)"
+                placeholder="Cari kecamatan (cth: Tawangmangu)..."
+                class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#005b9f] outline-none transition-all">
         </div>
     </div>
 
@@ -163,10 +163,10 @@
     <div id="districts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         @foreach($districts as $d)
         <div class="district-card bg-white rounded-2xl border border-slate-200 hover:border-[#005b9f] shadow-sm hover:shadow-md transition-all p-5 flex flex-col justify-between group"
-             data-name="{{ strtolower($d->name) }}"
-             data-population="{{ $d->population }}"
-             data-density="{{ $d->density }}"
-             data-area="{{ $d->area_sqkm }}">
+            data-name="{{ strtolower($d->name) }}"
+            data-population="{{ $d->population }}"
+            data-density="{{ $d->density }}"
+            data-area="{{ $d->area_sqkm }}">
             <div>
                 <div class="flex items-start justify-between gap-3 mb-3">
                     <div>
@@ -224,33 +224,39 @@
 </div>
 
 @push('scripts')
+{{-- Data Kecamatan dalam format JSON Script tag agar tidak memicu error linter/decorator JS --}}
+<script id="districts-data" type="application/json">
+@json($districts)
+</script>
+
 <script>
-const districtsData = @json($districts);
+    const rawDistricts = document.getElementById('districts-data');
+    const districtsData = rawDistricts ? JSON.parse(rawDistricts.textContent) : [];
 
-function updateComparison() {
-    const selA = document.getElementById('compare-select-a');
-    const selB = document.getElementById('compare-select-b');
-    const container = document.getElementById('comparison-result');
-    if (!selA || !selB || !container) return;
+    function updateComparison() {
+        const selA = document.getElementById('compare-select-a');
+        const selB = document.getElementById('compare-select-b');
+        const container = document.getElementById('comparison-result');
+        if (!selA || !selB || !container) return;
 
-    const idA = parseInt(selA.value);
-    const idB = parseInt(selB.value);
+        const idA = parseInt(selA.value);
+        const idB = parseInt(selB.value);
 
-    const distA = districtsData.find(d => d.id === idA) || districtsData[0];
-    const distB = districtsData.find(d => d.id === idB) || districtsData[1];
+        const distA = districtsData.find(d => d.id === idA) || districtsData[0];
+        const distB = districtsData.find(d => d.id === idB) || districtsData[1];
 
-    const popDiff = distA.population - distB.population;
-    const popLeader = popDiff >= 0 ? distA.name : distB.name;
-    const popPctA = Math.round((distA.population / (distA.population + distB.population)) * 100);
-    const popPctB = 100 - popPctA;
+        const popDiff = distA.population - distB.population;
+        const popLeader = popDiff >= 0 ? distA.name : distB.name;
+        const popPctA = Math.round((distA.population / (distA.population + distB.population)) * 100);
+        const popPctB = 100 - popPctA;
 
-    const areaDiff = (distA.area_sqkm - distB.area_sqkm).toFixed(2);
-    const areaLeader = distA.area_sqkm >= distB.area_sqkm ? distA.name : distB.name;
+        const areaDiff = (distA.area_sqkm - distB.area_sqkm).toFixed(2);
+        const areaLeader = distA.area_sqkm >= distB.area_sqkm ? distA.name : distB.name;
 
-    const densityDiff = distA.density - distB.density;
-    const densityLeader = distA.density >= distB.density ? distA.name : distB.name;
+        const densityDiff = distA.density - distB.density;
+        const densityLeader = distA.density >= distB.density ? distA.name : distB.name;
 
-    container.innerHTML = `
+        container.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {{-- Card Kecamatan A (BPS Blue) --}}
             <div class="p-5 rounded-2xl bg-blue-50/60 border-2 border-[#005b9f]/40 shadow-xs space-y-4">
@@ -356,68 +362,68 @@ function updateComparison() {
             </div>
         </div>
     `;
-}
-
-function randomCompare() {
-    if (!districtsData || districtsData.length < 2) return;
-    const selA = document.getElementById('compare-select-a');
-    const selB = document.getElementById('compare-select-b');
-    
-    let idxA = Math.floor(Math.random() * districtsData.length);
-    let idxB = Math.floor(Math.random() * districtsData.length);
-    while (idxB === idxA) {
-        idxB = Math.floor(Math.random() * districtsData.length);
     }
-    
-    selA.value = districtsData[idxA].id;
-    selB.value = districtsData[idxB].id;
-    updateComparison();
-}
 
-document.addEventListener('DOMContentLoaded', function() {
-    updateComparison();
-});
+    function randomCompare() {
+        if (!districtsData || districtsData.length < 2) return;
+        const selA = document.getElementById('compare-select-a');
+        const selB = document.getElementById('compare-select-b');
 
-function filterDistricts(query) {
-    const q = query.toLowerCase().trim();
-    const cards = document.querySelectorAll('.district-card');
-    cards.forEach(c => {
-        const name = c.dataset.name;
-        if (!q || name.includes(q)) {
-            c.style.display = 'flex';
-        } else {
-            c.style.display = 'none';
+        let idxA = Math.floor(Math.random() * districtsData.length);
+        let idxB = Math.floor(Math.random() * districtsData.length);
+        while (idxB === idxA) {
+            idxB = Math.floor(Math.random() * districtsData.length);
         }
-    });
-}
 
-function sortDistricts(by) {
-    const container = document.getElementById('districts-container');
-    const cards = Array.from(document.querySelectorAll('.district-card'));
-    
-    document.querySelectorAll('.btn-sort').forEach(btn => {
-        if (btn.dataset.sort === by) {
-            btn.className = 'btn-sort px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#005b9f] text-white shadow-xs';
-        } else {
-            btn.className = 'btn-sort px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
-        }
+        selA.value = districtsData[idxA].id;
+        selB.value = districtsData[idxB].id;
+        updateComparison();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateComparison();
     });
 
-    cards.sort((a, b) => {
-        if (by === 'name') {
-            return a.dataset.name.localeCompare(b.dataset.name);
-        } else if (by === 'population') {
-            return parseInt(b.dataset.population) - parseInt(a.dataset.population);
-        } else if (by === 'density') {
-            return parseInt(b.dataset.density) - parseInt(a.dataset.density);
-        } else if (by === 'area') {
-            return parseFloat(b.dataset.area) - parseFloat(a.dataset.area);
-        }
-        return 0;
-    });
+    function filterDistricts(query) {
+        const q = query.toLowerCase().trim();
+        const cards = document.querySelectorAll('.district-card');
+        cards.forEach(c => {
+            const name = c.dataset.name;
+            if (!q || name.includes(q)) {
+                c.style.display = 'flex';
+            } else {
+                c.style.display = 'none';
+            }
+        });
+    }
 
-    cards.forEach(c => container.appendChild(c));
-}
+    function sortDistricts(by) {
+        const container = document.getElementById('districts-container');
+        const cards = Array.from(document.querySelectorAll('.district-card'));
+
+        document.querySelectorAll('.btn-sort').forEach(btn => {
+            if (btn.dataset.sort === by) {
+                btn.className = 'btn-sort px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#005b9f] text-white shadow-xs';
+            } else {
+                btn.className = 'btn-sort px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
+            }
+        });
+
+        cards.sort((a, b) => {
+            if (by === 'name') {
+                return a.dataset.name.localeCompare(b.dataset.name);
+            } else if (by === 'population') {
+                return parseInt(b.dataset.population) - parseInt(a.dataset.population);
+            } else if (by === 'density') {
+                return parseInt(b.dataset.density) - parseInt(a.dataset.density);
+            } else if (by === 'area') {
+                return parseFloat(b.dataset.area) - parseFloat(a.dataset.area);
+            }
+            return 0;
+        });
+
+        cards.forEach(c => container.appendChild(c));
+    }
 </script>
 @endpush
 @endsection
