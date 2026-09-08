@@ -316,4 +316,4 @@ Proyek ini dirilis di bawah lisensi terbuka **[MIT License](LICENSE)**.
 
 Dikembangkan dan dikelola untuk mendukung transformasi digital pelayanan statistik:
 - **Pengembang**: [Faiz Arfian Ilhami](https://github.com/faizarfi)
-- **Instansi**: Badan Pusat Statistik (BPS) Kabupaten Karanganyar
+
