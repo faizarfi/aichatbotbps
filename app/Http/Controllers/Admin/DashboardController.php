@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\BotFeedback;
 use App\Models\Complaint;
 use App\Models\Conversation;
+use App\Models\DistrictStatistic;
 use App\Models\KnowledgeArticle;
 use App\Models\Message;
+use App\Models\Publication;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
 {
     /**
-     * Tampilkan dashboard admin dengan statistik lengkap, grafik analitik, dan aktivitas terkini.
+     * Tampilkan dashboard admin dengan statistik lengkap, peta 3D 17 kecamatan, grafik analitik, dan aktivitas terkini.
      */
     public function index()
     {
@@ -61,6 +63,14 @@ class DashboardController extends Controller
         $feedbackTotal = BotFeedback::count();
         $satisfactionRate = $feedbackTotal > 0 ? round(($feedbackHelpful / $feedbackTotal) * 100) : 100;
 
+        // Data 17 Kecamatan Kabupaten Karanganyar untuk Peta 3D Animasi
+        $districts = DistrictStatistic::orderBy('name', 'asc')->get();
+        $totalPopulation = $districts->sum('population');
+        $totalArea = $districts->sum('area_sqkm');
+        $totalVillages = $districts->sum('villages_count');
+        $avgDensity = $totalArea > 0 ? round($totalPopulation / $totalArea) : 0;
+        $totalPublications = Publication::count();
+
         return view('admin.dashboard', compact(
             'stats',
             'chartLabels',
@@ -71,7 +81,13 @@ class DashboardController extends Controller
             'recentComplaints',
             'feedbackHelpful',
             'feedbackTotal',
-            'satisfactionRate'
+            'satisfactionRate',
+            'districts',
+            'totalPopulation',
+            'totalArea',
+            'totalVillages',
+            'avgDensity',
+            'totalPublications'
         ));
     }
 
@@ -97,6 +113,9 @@ class DashboardController extends Controller
             'complaints_resolved' => Complaint::where('status', 'resolved')->count(),
             'total_articles' => KnowledgeArticle::where('is_active', true)->count(),
             'total_messages' => Message::count(),
+            'total_publications' => Publication::count(),
+            'total_districts' => DistrictStatistic::count(),
         ];
     }
 }
+

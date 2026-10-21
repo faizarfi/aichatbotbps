@@ -22,8 +22,15 @@
                 Pelayanan Statistik Terpadu
             </h1>
 
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30 text-xs font-bold">
+                <div class="w-5 h-5 rounded-full overflow-hidden border border-amber-300 shrink-0">
+                    <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top">
+                </div>
+                <span>Didukung KARTA: Konsultan AI Riset & Terpadu Angka BPS Karanganyar</span>
+            </div>
+
             <p class="text-xs sm:text-sm lg:text-base text-blue-100 leading-relaxed font-normal max-w-2xl mx-auto">
-                Layanan satu pintu penyediaan data statistik berkualitas, konsultasi statistik, permohonan data mikro (PP 86/2021), rekomendasi survei (ROMANTIK), dan integrasi Satu Data Indonesia.
+                Layanan satu pintu penyediaan data statistik berkualitas, konsultasi statistik cerdas, permohonan data mikro (PP 86/2021), rekomendasi survei (ROMANTIK), dan katalog 460+ publikasi resmi.
             </p>
 
             <div class="inline-flex items-center gap-2 text-xs font-bold text-amber-300">
@@ -39,11 +46,11 @@
                     </div>
                     <input type="text"
                            name="q"
-                           placeholder="Cari data jalan, kemiskinan, IPM, data mikro, ROMANTIK..."
+                           placeholder="Tanyakan ke KARTA: data jalan, kemiskinan, IPM, data mikro, publikasi..."
                            class="w-full py-2.5 px-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium">
                     <button type="submit"
                             class="px-5 sm:px-7 py-2.5 sm:py-3 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl transition-all shadow-md shadow-orange-500/20 shrink-0 flex items-center gap-1.5 cursor-pointer">
-                        <span>Cari Data</span>
+                        <span>Tanya KARTA</span>
                         <span class="iconify text-base" data-icon="lucide:arrow-right"></span>
                     </button>
                 </form>
@@ -255,6 +262,168 @@
                     <span class="iconify" data-icon="lucide:arrow-right"></span>
                 </a>
             </div>
+        </div>
+    </div>
+</section>
+
+{{-- PUBLIKASI RESMI BPS KABUPATEN KARANGANYAR (DOMAIN 3313) --}}
+<section class="py-14 bg-gradient-to-b from-slate-50 to-white border-b border-slate-200" id="publikasi-resmi">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Section Header --}}
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#003c80] text-xs font-black mb-3">
+                    <span class="iconify text-base text-[#00a651]" data-icon="lucide:book-check"></span>
+                    <span>Katalog Publikasi Resmi BPS (Domain 3313)</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                    Publikasi Statistik Resmi Karanganyar
+                </h2>
+                <p class="mt-2 text-slate-600 text-xs sm:text-sm max-w-2xl">
+                    Koleksi lengkap buku publikasi tahunan, seri 17 Kecamatan Dalam Angka, dan statistik tematik resmi BPS Kabupaten Karanganyar. Unduh berkas PDF asli bebas tarif Rp0,-.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="{{ route('publications.index') }}" class="px-5 py-2.5 rounded-xl bg-[#003c80] hover:bg-[#002b6a] text-white text-xs font-black shadow-md transition-all flex items-center gap-2">
+                    <span class="iconify text-base text-[#f7941d]" data-icon="lucide:library"></span>
+                    <span>Katalog Lengkap ({{ $publicationStats['total'] ?? 464 }} Buku)</span>
+                    <span class="iconify text-sm" data-icon="lucide:arrow-right"></span>
+                </a>
+            </div>
+        </div>
+
+        {{-- Featured Highlights Row (KDA & Sektoral Utama) --}}
+        @if(isset($featuredPublications) && $featuredPublications->count() > 0)
+        <div class="mb-8">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="w-2 h-2 rounded-full bg-[#f7941d]"></span>
+                <span class="text-xs font-black uppercase text-slate-700 tracking-wider">Publikasi Kompendium Unggulan:</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                @foreach($featuredPublications->take(3) as $fPub)
+                <div class="bg-gradient-to-br from-[#002b6a] to-[#003c80] rounded-2xl p-5 text-white flex flex-col justify-between shadow-md hover:shadow-xl transition-all border-l-4 border-[#f7941d] group">
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-3">
+                            <span class="px-2 py-0.5 rounded bg-white/20 text-blue-100 text-[10px] font-bold">
+                                {{ $fPub->rl_date ? $fPub->rl_date->translatedFormat('d F Y') : 'Terbit Resmi' }}
+                            </span>
+                            @if($fPub->size)
+                            <span class="px-2 py-0.5 rounded bg-amber-400 text-slate-900 text-[10px] font-black">
+                                {{ $fPub->size }}
+                            </span>
+                            @endif
+                        </div>
+                        <h3 class="font-extrabold text-white text-sm sm:text-base leading-snug group-hover:text-amber-300 transition-colors line-clamp-2">
+                            {{ $fPub->title }}
+                        </h3>
+                        @if($fPub->issn)
+                        <p class="text-[11px] text-blue-200 mt-1 font-mono">ISSN: {{ $fPub->issn }}</p>
+                        @endif
+                        @if($fPub->abstract)
+                        <p class="text-xs text-blue-100/90 mt-2 line-clamp-2 leading-relaxed">
+                            {{ Str::limit($fPub->abstract, 110) }}
+                        </p>
+                        @endif
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-2">
+                        @if($fPub->pdf_url)
+                        <a href="{{ $fPub->pdf_url }}" target="_blank" rel="noopener" class="flex-1 py-2 px-3 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs font-black rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5">
+                            <span class="iconify text-base" data-icon="lucide:download"></span>
+                            <span>Unduh PDF</span>
+                        </a>
+                        @endif
+                        <a href="{{ route('chat.index', ['q' => 'Jelaskan isi pokok data dari publikasi ' . $fPub->title]) }}" class="py-2 px-3 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1">
+                            <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
+                            <span>Tanya AI</span>
+                        </a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        {{-- Grid Publikasi Terbaru --}}
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            @foreach($latestPublications ?? [] as $pub)
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg hover:border-[#003c80] transition-all flex flex-col justify-between overflow-hidden group">
+                {{-- Cover Image --}}
+                <div class="relative bg-slate-100 aspect-[3/4] overflow-hidden flex items-center justify-center p-3 border-b border-slate-100">
+                    @if($pub->cover_url)
+                        <img src="{{ $pub->cover_url }}"
+                             alt="Cover {{ $pub->title }}"
+                             loading="lazy"
+                             class="max-h-full max-w-full object-contain rounded-md shadow-xs group-hover:scale-105 transition-transform duration-300"
+                             onerror="this.onerror=null; this.src='https://web-api.bps.go.id/images/default.png';">
+                    @else
+                        <div class="w-full h-full flex flex-col items-center justify-center bg-blue-50/50 text-[#003c80] p-4 text-center">
+                            <span class="iconify text-3xl mb-1 text-[#003c80]/40" data-icon="lucide:book-open"></span>
+                            <span class="text-[10px] font-bold">BPS Karanganyar</span>
+                        </div>
+                    @endif
+
+                    <div class="absolute top-2 left-2">
+                        <span class="px-2 py-0.5 rounded-md bg-[#003c80]/90 text-white text-[9px] font-black shadow-xs">
+                            {{ $pub->rl_date ? $pub->rl_date->translatedFormat('d M Y') : 'Terbit' }}
+                        </span>
+                    </div>
+
+                    @if($pub->size)
+                    <div class="absolute top-2 right-2">
+                        <span class="px-1.5 py-0.5 rounded bg-white text-slate-700 text-[9px] font-extrabold border border-slate-200 shadow-xs">
+                            {{ $pub->size }}
+                        </span>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Content & Actions --}}
+                <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-2.5">
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug group-hover:text-[#003c80] transition-colors line-clamp-2" title="{{ $pub->title }}">
+                            {{ $pub->title }}
+                        </h4>
+                        @if($pub->issn)
+                        <p class="text-[10px] text-slate-500 mt-1">ISSN: <span class="font-mono">{{ $pub->issn }}</span></p>
+                        @endif
+                    </div>
+
+                    <div class="pt-2.5 border-t border-slate-100 flex items-center gap-1.5">
+                        @if($pub->pdf_url)
+                        <a href="{{ $pub->pdf_url }}"
+                           target="_blank"
+                           rel="noopener"
+                           class="flex-1 py-1.5 px-2.5 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-[11px] font-black rounded-xl transition-all shadow-xs flex items-center justify-center gap-1">
+                            <span class="iconify text-sm" data-icon="lucide:download"></span>
+                            <span>Unduh</span>
+                        </a>
+                        @endif
+                        <a href="{{ route('chat.index', ['q' => 'Apa isi data penting dari publikasi ' . $pub->title . '?']) }}"
+                           class="p-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#003c80] border border-blue-200 transition-colors"
+                           title="Konsultasikan ke Bot AI">
+                            <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        {{-- Bottom CTA Strip --}}
+        <div class="mt-8 p-4 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#00a651] border border-emerald-200 flex items-center justify-center shrink-0">
+                    <span class="iconify text-xl" data-icon="lucide:database"></span>
+                </div>
+                <div>
+                    <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Mencari Publikasi Kecamatan Tertentu atau Arsip Lama?</h4>
+                    <p class="text-[11px] text-slate-500">Tersedia {{ $publicationStats['total'] ?? 464 }} judul buku statistik resmi mulai tahun 2016 hingga 2026.</p>
+                </div>
+            </div>
+            <a href="{{ route('publications.index') }}" class="w-full sm:w-auto px-5 py-2 bg-[#003c80] hover:bg-[#002b6a] text-white text-xs font-black rounded-xl transition-all shadow-xs shrink-0 text-center">
+                Buka Seluruh Katalog Publikasi →
+            </a>
         </div>
     </div>
 </section>
@@ -560,21 +729,29 @@
 {{-- CTA KONSULTASI RESMI --}}
 <section class="py-14 lg:py-16 bg-slate-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="bg-gradient-to-r from-[#002b6a] to-[#003c80] text-white rounded-3xl p-8 sm:p-10 text-center space-y-5 shadow-lg border border-blue-900/50">
+        <div class="bg-gradient-to-r from-[#002b6a] to-[#003c80] text-white rounded-3xl p-8 sm:p-10 text-center space-y-5 shadow-lg border border-blue-900/50 relative overflow-hidden">
+            <div class="flex justify-center">
+                <div class="relative">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white p-1 shadow-xl overflow-hidden border-2 border-[#f7941d]">
+                        <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top rounded-full">
+                    </div>
+                    <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#002b6a] animate-pulse"></span>
+                </div>
+            </div>
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-slate-200 text-xs font-bold border border-white/20">
                 <span class="iconify text-base text-[#00a651]" data-icon="lucide:check-circle-2"></span>
                 <span>PST Daring BPS Kabupaten Karanganyar</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-black text-white max-w-2xl mx-auto leading-tight">
-                Butuh Data Statistik Spesifik atau Bantuan Penelitian?
+                Konsultasikan Riset & Data Anda dengan KARTA AI
             </h2>
             <p class="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto leading-relaxed">
-                Asisten AI PST dan petugas resmi BPS Kabupaten Karanganyar siap membantu konsultasi metodologi, permohonan data mikro, dan kebutuhan statistik Anda.
+                <strong>KARTA</strong> (Konsultan AI Riset & Terpadu Angka) dan petugas resmi BPS Kabupaten Karanganyar siap membantu kebutuhan data mikro tarif Rp0, metodologi, dan publikasi Anda secara cepat & akurat.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                 <a href="{{ route('chat.index') }}" class="w-full sm:w-auto px-7 py-3 bg-[#f7941d] hover:bg-[#e07e0c] text-white font-black text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-                    <span class="iconify text-base" data-icon="lucide:message-square-text"></span>
-                    <span>Buka Konsultasi Data PST</span>
+                    <span class="iconify text-base" data-icon="lucide:bot"></span>
+                    <span>Tanya KARTA Sekarang</span>
                 </a>
                 <a href="https://wa.me/6289605933133" target="_blank" rel="noopener" class="w-full sm:w-auto px-7 py-3 bg-white hover:bg-slate-100 text-[#003c80] font-extrabold text-xs sm:text-sm rounded-xl transition-all flex items-center justify-center gap-2">
                     <span class="iconify text-base text-[#00a651]" data-icon="lucide:message-circle"></span>

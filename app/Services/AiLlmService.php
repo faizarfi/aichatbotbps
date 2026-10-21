@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -43,9 +44,9 @@ class AiLlmService
     }
 
     /**
-     * Generate jawaban cerdas menggunakan LLM dengan teknik RAG (Retrieval-Augmented Generation).
+     * Generate jawaban cerdas menggunakan LLM dengan teknik RAG (Retrieval-Augmented Generation) & Deep Research Publikasi.
      */
-    public function generateAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id'): ?string
+    public function generateAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', $publications = []): ?string
     {
         if (!$this->isConfigured()) {
             return null;
@@ -55,11 +56,13 @@ class AiLlmService
             // 1. Sensor data sensitif (NIK, Telepon, Email)
             $cleanUserMessage = PersonalDataRedactor::redact($userMessage);
 
-            // 2. Susun konteks data resmi dari basis pengetahuan BPS
+            // 2. Susun konteks data resmi dari basis pengetahuan BPS & Deep Research Publikasi
             $contextText = $this->buildContextFromArticles($knowledgeArticles);
+            $pubContext = $this->buildPublicationContext($publications);
+            $fullContext = trim($contextText . "\n\n" . $pubContext);
 
             // 3. Susun system prompt resmi
-            $systemPrompt = $this->buildSystemPrompt($contextText, $targetLanguage);
+            $systemPrompt = $this->buildSystemPrompt($fullContext, $targetLanguage);
 
             // Mode A: Google AI Studio (Gemini Direct REST API)
             if ($this->isGeminiDirect()) {
@@ -76,22 +79,24 @@ class AiLlmService
     }
 
     /**
-     * Generate balasan cerdas dengan streaming token real-time (Server-Sent Events).
+     * Generate balasan cerdas dengan streaming token real-time (Server-Sent Events) & Deep Research Publikasi.
      */
-    public function streamAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', ?callable $onChunk = null, ?callable $onReset = null): ?string
+    public function streamAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', ?callable $onChunk = null, ?callable $onReset = null, $publications = []): ?string
     {
         if (!$this->isConfigured()) {
             return null;
         }
 
         if ($onChunk === null) {
-            return $this->generateAnswer($userMessage, $knowledgeArticles, $chatHistory, $targetLanguage);
+            return $this->generateAnswer($userMessage, $knowledgeArticles, $chatHistory, $targetLanguage, $publications);
         }
 
         try {
             $cleanUserMessage = PersonalDataRedactor::redact($userMessage);
             $contextText = $this->buildContextFromArticles($knowledgeArticles);
-            $systemPrompt = $this->buildSystemPrompt($contextText, $targetLanguage);
+            $pubContext = $this->buildPublicationContext($publications);
+            $fullContext = trim($contextText . "\n\n" . $pubContext);
+            $systemPrompt = $this->buildSystemPrompt($fullContext, $targetLanguage);
 
             if ($this->isGeminiDirect()) {
                 return $this->callGeminiStream($cleanUserMessage, $systemPrompt, $chatHistory, $onChunk, $onReset);
@@ -627,6 +632,55 @@ class AiLlmService
     }
 
     /**
+     * Format publikasi resmi BPS Karanganyar hasil Deep Research menjadi grounding context.
+     */
+    protected function buildPublicationContext($publications): string
+    {
+        if (empty($publications)) {
+            return '';
+        }
+
+        $lines = [
+            "=======================================================",
+            "HASIL DEEP RESEARCH DOKUMEN PUBLIKASI RESMI BPS KABUPATEN KARANGANYAR (DOMAIN 3313):",
+            "=======================================================",
+        ];
+
+        foreach ($publications as $pub) {
+            $title = $pub->title ?? ($pub['title'] ?? '');
+            $rlDate = $pub->rl_date ? Carbon::parse($pub->rl_date)->translatedFormat('d F Y') : ($pub['rl_date'] ?? 'Resmi');
+            $issn = $pub->issn ?? ($pub['issn'] ?? null);
+            $size = $pub->size ?? ($pub['size'] ?? null);
+            $pdf = $pub->pdf_url ?? ($pub['pdf_url'] ?? null);
+            $abstract = $pub->abstract ?? ($pub['abstract'] ?? null);
+
+            $lines[] = "• JUDUL DOKUMEN PUBLIKASI: {$title}";
+            $lines[] = "  - Tanggal Rilis Resmi: {$rlDate}";
+            if ($issn && $issn !== '-') {
+                $lines[] = "  - No. ISSN/ISBN: {$issn}";
+            }
+            if ($size) {
+                $lines[] = "  - Ukuran Berkas: {$size}";
+            }
+            if ($pdf) {
+                $lines[] = "  - Tautan Berkas PDF Asli: {$pdf}";
+            }
+            if ($abstract) {
+                $lines[] = "  - Abstrak/Ringkasan Buku: {$abstract}";
+            }
+            $lines[] = "";
+        }
+
+        $lines[] = "PETUNJUK DEEP RESEARCH DOKUMEN PUBLIKASI:";
+        $lines[] = "1. Jika relevan dengan pertanyaan pengunjung, prioritaskan mengutip judul publikasi resmi BPS Kabupaten Karanganyar di atas.";
+        $lines[] = "2. Sebutkan judul buku publikasi, tahun rilisnya, dan jelaskan isi pentingnya secara jelas dan mendalam.";
+        $lines[] = "3. Berikan informasi kepada pengunjung bahwa berkas naskah buku publikasi resmi tersebut dapat langsung diunduh secara gratis (tarif Rp0,-) melalui portal PST BPS Kabupaten Karanganyar.";
+        $lines[] = "=======================================================";
+
+        return implode("\n", $lines);
+    }
+
+    /**
      * Susun instruksi persona asisten resmi BPS Karanganyar dengan data 2026 lengkap, cerdas, berpikir mendalam, dan multi-bahasa.
      */
     protected function buildSystemPrompt(string $context, ?string $targetLanguage = 'id'): string
@@ -731,8 +785,17 @@ Instruksi Bahasa:
 LANG;
 
         return <<<PROMPT
-Kamu adalah "Asisten Virtual AI Cerdas Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar, Jawa Tengah (Rilis Data Resmi: 2026)".
+Kamu adalah "KARTA" (Konsultan AI Riset & Terpadu Angka) — Asisten Virtual Cerdas Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar, Jawa Tengah (Rilis Data Resmi: 2026).
+Nama kamu adalah "KARTA", sebuah akronim resmi berakar dari kata Karanganyar dan bahasa Jawa/Sansekerta yang bermakna aman, tertib, sejahtera, dan teratur.
+Kepanjangan nama KARTA adalah:
+- K: Konsultan (Memberikan konsultasi statistik, metodologi, dan data resmi)
+- A: AI (Kecerdasan buatan berbasis Deep Research RAG publikasi resmi BPS)
+- R: Riset (Mendukung penelitian mahasiswa skripsi tarif Rp0, akademisi, instansi OPD, dan masyarakat)
+- T: Terpadu (Pintu layanan Pelayanan Statistik Terpadu BPS Kabupaten Karanganyar)
+- A: Angka (Fokus pada data angka akurat, indikator makro, dan statistik resmi)
+
 Kamu bertindak sebagai representasi pakar statistik senior, analis data, dan konsultan humas resmi Badan Pusat Statistik (BPS) Kabupaten Karanganyar (Kode Wilayah BPS / MFD: 3313).
+Jika pengguna menanyakan siapa namamu, apa kepanjangan KARTA, atau arti namamu, perkenalkan dirimu sebagai KARTA dengan kepanjangan dan filosofi di atas dengan santun dan bangga.
 
 {$langDirective}
 

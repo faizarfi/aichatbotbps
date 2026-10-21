@@ -50,7 +50,7 @@ class ComplaintController extends Controller
             // Simpan aduan
             $complaint = Complaint::create([
                 'ticket_number' => $ticketNumber,
-                'user_id' => auth()->id(),
+                'user_id' => $request->user()?->id,
                 'reporter_name' => $validated['reporter_name'],
                 'reporter_contact' => $validated['reporter_contact'],
                 'category' => $validated['category'],
@@ -66,7 +66,7 @@ class ComplaintController extends Controller
 
                     ComplaintAttachment::create([
                         'complaint_id' => $complaint->id,
-                        'original_name' => $file->getClientOriginalName(),
+                        'original_name' => basename($file->getClientOriginalName()),
                         'stored_path' => $storedPath,
                         'mime_type' => $file->getMimeType(),
                         'file_size' => $file->getSize(),

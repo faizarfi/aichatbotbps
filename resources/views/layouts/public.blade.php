@@ -92,7 +92,11 @@
                     </a>
                     <a href="{{ route('chat.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('chat.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-[#003c80] bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200/60' }} transition-all flex items-center gap-1.5">
                         <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
-                        <span>Konsultasi PST</span>
+                        <span>KARTA AI</span>
+                    </a>
+                    <a href="{{ route('publications.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('publications.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-slate-700 hover:text-[#003c80] hover:bg-slate-100' }} transition-all flex items-center gap-1.5">
+                        <span class="iconify text-sm {{ request()->routeIs('publications.*') ? 'text-white' : 'text-[#00a651]' }}" data-icon="lucide:book-open"></span>
+                        <span>Publikasi</span>
                     </a>
                     <a href="{{ route('districts.index') }}" class="px-3 py-2 text-xs font-extrabold rounded-lg whitespace-nowrap {{ request()->routeIs('districts.*') ? 'bg-[#003c80] text-white shadow-xs' : 'text-slate-700 hover:text-[#003c80] hover:bg-slate-100' }} transition-all">
                         17 Kecamatan
@@ -193,7 +197,11 @@
             </a>
             <a href="{{ route('chat.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('chat.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }} flex items-center gap-2">
                 <span class="iconify text-base text-[#f7941d]" data-icon="lucide:bot"></span>
-                <span>Konsultasi Data PST</span>
+                <span>KARTA (Chat AI PST)</span>
+            </a>
+            <a href="{{ route('publications.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('publications.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }} flex items-center gap-2">
+                <span class="iconify text-base text-[#00a651]" data-icon="lucide:book-open"></span>
+                <span>Katalog Publikasi Resmi BPS</span>
             </a>
             <a href="{{ route('districts.index') }}" class="block px-3 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('districts.*') ? 'bg-[#003c80] text-white' : 'text-slate-700 hover:bg-slate-50' }}">
                 Peta 17 Kecamatan

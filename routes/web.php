@@ -14,6 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicChatController;
+use App\Http\Controllers\PublicationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Publikasi Resmi BPS Karanganyar
+Route::get('/publikasi', [PublicationController::class, 'index'])->name('publications.index');
+Route::get('/publikasi/{slug}', [PublicationController::class, 'show'])->name('publications.show');
 
 // Chatbot Publik
 Route::get('/chat', [PublicChatController::class, 'index'])->name('chat.index');

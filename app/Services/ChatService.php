@@ -10,7 +10,8 @@ class ChatService
 {
     public function __construct(
         protected KnowledgeSearchService $searchService,
-        protected AiLlmService $aiService
+        protected AiLlmService $aiService,
+        protected BpsPublicationService $publicationService
     ) {}
 
     /**
@@ -209,24 +210,33 @@ class ChatService
             ];
         }
 
-        // C. Cari data relevan di Basis Pengetahuan (Knowledge Search)
+        // C1. Cari data relevan di Basis Pengetahuan (Knowledge Search)
         $searchResult = $this->searchService->search($message);
         $articles = $searchResult['candidates']->all();
         if (empty($articles) && $searchResult['bestMatch']) {
             $articles = [$searchResult['bestMatch']];
         }
 
-        $sources = collect($articles)
+        // C2. Deep Research Dokumen Publikasi Resmi BPS Karanganyar (Domain 3313)
+        $publications = $this->publicationService->searchForDeepResearch($message, 4);
+
+        $sourcesCollection = collect($articles)
             ->filter(fn($a) => !empty($a->source_title))
             ->map(fn($a) => [
                 'title' => $a->source_title,
                 'url' => $a->source_url ?: 'https://karanganyarkab.bps.go.id',
-            ])
-            ->unique('title')
-            ->values()
-            ->all();
+            ]);
 
-        // D. Panggil AI LLM dengan streaming
+        foreach ($publications as $pub) {
+            $sourcesCollection->push([
+                'title' => 'Publikasi BPS: ' . $pub->title . ($pub->size ? " ({$pub->size})" : ''),
+                'url' => $pub->pdf_url ?: 'https://karanganyarkab.bps.go.id/id/publication',
+            ]);
+        }
+
+        $sources = $sourcesCollection->unique('title')->values()->all();
+
+        // D. Panggil AI LLM dengan streaming dan Deep Research Publikasi
         if ($this->aiService->isConfigured()) {
             $history = $conversation->messages()
                 ->latest()
@@ -237,7 +247,7 @@ class ChatService
                 ->values()
                 ->all();
 
-            $aiAnswer = $this->aiService->streamAnswer($message, $articles, $history, $language, $onChunk, $onReset);
+            $aiAnswer = $this->aiService->streamAnswer($message, $articles, $history, $language, $onChunk, $onReset, $publications);
 
             if (!empty($aiAnswer)) {
                 $smartSources = $this->resolveSmartSources($message, $aiAnswer, $sources, $language);
@@ -404,24 +414,33 @@ class ChatService
             ];
         }
 
-        // C. Cari data relevan di Basis Pengetahuan (Knowledge Search)
+        // C1. Cari data relevan di Basis Pengetahuan (Knowledge Search)
         $searchResult = $this->searchService->search($message);
         $articles = $searchResult['candidates']->all();
         if (empty($articles) && $searchResult['bestMatch']) {
             $articles = [$searchResult['bestMatch']];
         }
 
-        $sources = collect($articles)
+        // C2. Deep Research Dokumen Publikasi Resmi BPS Karanganyar (Domain 3313)
+        $publications = $this->publicationService->searchForDeepResearch($message, 4);
+
+        $sourcesCollection = collect($articles)
             ->filter(fn($a) => !empty($a->source_title))
             ->map(fn($a) => [
                 'title' => $a->source_title,
                 'url' => $a->source_url ?: 'https://karanganyarkab.bps.go.id',
-            ])
-            ->unique('title')
-            ->values()
-            ->all();
+            ]);
 
-        // D. Coba panggil AI LLM Gateway (Google AI Studio Gemini) dengan RAG & Reasoning
+        foreach ($publications as $pub) {
+            $sourcesCollection->push([
+                'title' => 'Publikasi BPS: ' . $pub->title . ($pub->size ? " ({$pub->size})" : ''),
+                'url' => $pub->pdf_url ?: 'https://karanganyarkab.bps.go.id/id/publication',
+            ]);
+        }
+
+        $sources = $sourcesCollection->unique('title')->values()->all();
+
+        // D. Coba panggil AI LLM Gateway (Google AI Studio Gemini) dengan RAG & Deep Research Publikasi
         if ($this->aiService->isConfigured()) {
             $history = $conversation->messages()
                 ->latest()
@@ -432,7 +451,7 @@ class ChatService
                 ->values()
                 ->all();
 
-            $aiAnswer = $this->aiService->generateAnswer($message, $articles, $history, $language);
+            $aiAnswer = $this->aiService->generateAnswer($message, $articles, $history, $language, $publications);
 
             if (!empty($aiAnswer)) {
                 $smartSources = $this->resolveSmartSources($message, $aiAnswer, $sources, $language);
@@ -691,13 +710,14 @@ class ChatService
             $cleanedInitial[] = ['title' => $title, 'url' => $url];
         }
 
-        $merged = array_merge($topicSources, $cleanedInitial);
+        // Pastikan sumber publikasi hasil Deep Research diposisikan di awal atau setelah topic
+        $merged = array_merge($cleanedInitial, $topicSources);
 
         if (empty($merged)) {
             $merged = [
                 [
                     'title' => 'Buku Publikasi: Kabupaten Karanganyar Dalam Angka 2026',
-                    'url' => 'https://karanganyarkab.bps.go.id/id/publication/2024/02/28/3a6e4e056b8467959c174645/kabupaten-karanganyar-dalam-angka-2024.html',
+                    'url' => 'https://karanganyarkab.bps.go.id/id/publication',
                 ],
                 [
                     'title' => 'Portal Tabel Statistik BPS Kabupaten Karanganyar',
@@ -710,7 +730,7 @@ class ChatService
         $result = [];
         foreach ($merged as $item) {
             $url = $item['url'];
-            if ($language === 'en') {
+            if ($language === 'en' && str_contains($url, '/id/')) {
                 $url = str_replace('/id/', '/en/', $url);
                 $item['url'] = $url;
             }
@@ -718,7 +738,7 @@ class ChatService
                 $unique[$url] = true;
                 $result[] = $item;
             }
-            if (count($result) >= 2) {
+            if (count($result) >= 4) {
                 break;
             }
         }

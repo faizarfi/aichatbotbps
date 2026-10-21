@@ -12,20 +12,23 @@
         <div class="px-3 sm:px-6 py-3 sm:py-4 border-b-2 border-[#f7941d] bg-[#002b6a] flex items-center justify-between text-white shadow-md gap-2">
             <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
                 <div class="relative shrink-0">
-                    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white p-1 sm:p-1.5 flex items-center justify-center shadow-xs">
-                        <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+                    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-white/20 p-0.5 flex items-center justify-center shadow-xs overflow-hidden border-2 border-[#f7941d]">
+                        <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top rounded-lg sm:rounded-xl">
                     </div>
                     <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-400 border-2 border-[#002b6a]"></span>
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                        <h2 class="text-xs sm:text-base font-black text-white tracking-tight leading-tight">Pelayanan Statistik Terpadu (PST)</h2>
+                        <h2 class="text-xs sm:text-base font-black text-white tracking-tight leading-tight flex items-center gap-1.5">
+                            <span>KARTA</span>
+                            <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-[#f7941d] text-white">AI BPS</span>
+                        </h2>
                         <span id="chat-status-pill" class="shrink-0 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span>Layanan Terhubung</span>
+                            <span>KARTA Siap Melayani</span>
                         </span>
                     </div>
-                    <p class="text-[10px] sm:text-xs text-blue-200 truncate mt-0.5 font-medium">BPS Kabupaten Karanganyar • Konsultasi Data & Rujukan Resmi</p>
+                    <p class="text-[10px] sm:text-xs text-blue-200 truncate mt-0.5 font-medium"><strong>KARTA</strong>: Konsultan AI Riset & Terpadu Angka • BPS Karanganyar (3313)</p>
                 </div>
             </div>
 
@@ -79,25 +82,26 @@
 
             {{-- Official Welcome Bubble --}}
             <div class="flex gap-2 sm:gap-3 w-full max-w-4xl">
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
-                    <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top">
                 </div>
                 <div class="min-w-0 space-y-1">
                     <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs text-slate-800 space-y-2.5 sm:space-y-3">
                         <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                             <span class="text-[10px] sm:text-xs font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
-                                <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
-                                Layanan PST BPS Karanganyar
+                                <span class="iconify text-sm" data-icon="lucide:bot"></span>
+                                KARTA (Konsultan AI Riset & Terpadu Angka)
                             </span>
-                            <span class="text-[10px] text-slate-400 font-medium">BPS Karanganyar</span>
+                            <span class="text-[10px] text-slate-400 font-medium">BPS Karanganyar (3313)</span>
                         </div>
                         <p class="text-xs sm:text-sm leading-relaxed">
-                            Selamat datang di <strong>Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar</strong>.
+                            Halo! Saya <strong>KARTA</strong> (<strong>K</strong>onsultan <strong>A</strong>I <strong>R</strong>iset & <strong>T</strong>erpadu <strong>A</strong>ngka), asisten virtual cerdas Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar.
                         </p>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                            Silakan ketik pertanyaan atau data statistik yang Anda cari (seperti <em>publikasi Karanganyar Dalam Angka</em>, jumlah penduduk, angka kemiskinan, PDRB, jadwal layanan, hingga pengaduan masyarakat).
+                            Saya siap membantu Anda melakukan riset dan menemukan data statistik resmi (seperti <em>publikasi Karanganyar Dalam Angka</em>, kemiskinan 7,92%, IPM 78,15, panjang jalan, PDRB, data mikro tarif Rp0, hingga rekomendasi ROMANTIK).
                         </p>
                     </div>
+
                     <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-slate-400 font-semibold mt-1 ml-1.5">
                         <span class="inline-flex items-center gap-1 text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 font-semibold">
                             <span class="iconify text-xs text-blue-600" data-icon="lucide:shield-check"></span> Layanan Resmi BPS
@@ -171,7 +175,7 @@
                     <textarea id="public-chat-input"
                               rows="1"
                               maxlength="1000"
-                              placeholder="Ketik permintaan data atau pertanyaan statistik di sini..."
+                              placeholder="Tanyakan data atau konsultasikan riset ke KARTA (cth: kemiskinan, PDRB, data mikro)..."
                               class="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-12 rounded-xl sm:rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-all shadow-xs leading-relaxed"
                               style="max-height: 100px;"></textarea>
                     <span id="chat-char-counter" class="absolute bottom-2.5 right-2.5 text-[9px] sm:text-[10px] text-slate-400 font-mono">0/1000</span>
@@ -317,6 +321,20 @@ function formatBotContent(raw) {
     if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
         try {
             const renderer = new marked.Renderer();
+            // Hindari eksekusi tag HTML sembarang dari output AI/markdown
+            renderer.html = function(html) {
+                return escapeHtml(typeof html === 'object' ? (html.text || '') : html);
+            };
+            // Validasi link protokol untuk mencegah javascript: atau data: URL injection
+            renderer.link = function(tokenOrHref, title, linkText) {
+                let href = typeof tokenOrHref === 'object' ? tokenOrHref.href : tokenOrHref;
+                let label = typeof tokenOrHref === 'object' ? tokenOrHref.text : linkText;
+                let cleanHref = (href || '').trim();
+                if (!/^(https?:\/\/|\/|#|mailto:|tel:)/i.test(cleanHref) || cleanHref.toLowerCase().startsWith('javascript:') || cleanHref.toLowerCase().startsWith('data:')) {
+                    return label;
+                }
+                return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">${label} <span class="iconify" data-icon="lucide:external-link"></span></a>`;
+            };
             // Hindari teks bold hitam yang kaku, ganti dengan tipografi natural dan nyaman dibaca
             renderer.strong = function(token) {
                 const text = typeof token === 'object' ? token.text : token;
@@ -329,7 +347,6 @@ function formatBotContent(raw) {
                 smartypants: false
             });
             let html = marked.parse(cleaned);
-            html = html.replace(/<a /g, '<a target="_blank" rel="noopener" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1" ');
             html = html.replace(/<table/g, '<div class="overflow-x-auto my-2.5 rounded-xl border border-slate-200/90 shadow-2xs"><table class="w-full text-xs"');
             html = html.replace(/<\/table>/g, '</table></div>');
             return html;
@@ -365,7 +382,13 @@ function formatBotContent(raw) {
         return '<ul class="list-disc pl-5 my-2 space-y-1">' + match + '</ul>';
     });
 
-    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">$1 <span class="iconify" data-icon="lucide:external-link"></span></a>');
+    text = text.replace(/\[(.*?)\]\((.*?)\)/g, function(match, label, href) {
+        const cleanHref = (href || '').trim();
+        if (/^(https?:\/\/|\/|#|mailto:|tel:)/i.test(cleanHref) && !cleanHref.toLowerCase().startsWith('javascript:') && !cleanHref.toLowerCase().startsWith('data:')) {
+            return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">${label} <span class="iconify" data-icon="lucide:external-link"></span></a>`;
+        }
+        return label;
+    });
     text = text.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded text-xs font-mono border border-slate-200">$1</code>');
     text = text.replace(/\n\n/g, '<div class="h-2"></div>');
     text = text.replace(/\n/g, '<br>');
@@ -470,9 +493,29 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
         let sourcesHtml = '';
         if (sources && sources.length > 0) {
             sourcesHtml = `
-                <div class="mt-3 pt-2.5 border-t border-slate-100 text-[11px] text-slate-500">
-                    <span class="font-bold text-slate-700 block mb-1">Rujukan Dokumen Resmi:</span>
-                    ${sources.map(s => `<a href="${s.url || '#'}" target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 mt-1 font-medium"><span class="iconify text-xs" data-icon="lucide:file-text"></span> ${escapeHtml(s.title)}</a>`).join('')}
+                <div class="mt-3 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600">
+                    <span class="font-bold text-slate-800 flex items-center gap-1 mb-1.5">
+                        <span class="iconify text-xs text-[#003c80]" data-icon="lucide:book-check"></span>
+                        Rujukan & Dokumen Publikasi Resmi BPS:
+                    </span>
+                    <div class="flex flex-col gap-1.5 mt-1">
+                    ${sources.map(s => {
+                        const isPub = (s.url && (s.url.includes('download.php') || s.url.includes('publication'))) || (s.title && s.title.includes('Publikasi'));
+                        if (isPub) {
+                            return `<a href="${s.url || '#'}" target="_blank" rel="noopener" class="inline-flex items-center justify-between p-2 rounded-xl bg-emerald-50/80 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 transition-all font-semibold group shadow-2xs">
+                                <span class="flex items-center gap-1.5 truncate">
+                                    <span class="iconify text-sm text-emerald-700 shrink-0" data-icon="lucide:file-down"></span>
+                                    <span class="truncate">${escapeHtml(s.title)}</span>
+                                </span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-600 text-white shrink-0 ml-2 group-hover:bg-emerald-700 flex items-center gap-1">
+                                    <span>Unduh PDF</span>
+                                    <span class="iconify text-xs" data-icon="lucide:download"></span>
+                                </span>
+                            </a>`;
+                        }
+                        return `<a href="${s.url || '#'}" target="_blank" rel="noopener" class="text-blue-700 hover:text-blue-900 hover:underline flex items-center gap-1 font-medium"><span class="iconify text-xs text-blue-600 shrink-0" data-icon="lucide:external-link"></span> ${escapeHtml(s.title)}</a>`;
+                    }).join('')}
+                    </div>
                 </div>
             `;
         }
@@ -508,15 +551,15 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
 
         wrapper.innerHTML = `
             <div class="flex gap-2 sm:gap-3 w-full max-w-4xl lg:max-w-5xl">
-                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
-                    <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+                <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top">
                 </div>
                 <div class="min-w-0 flex-1">
                     <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs">
                         <div class="flex items-center justify-between gap-1.5 mb-2 pb-2 border-b border-slate-100">
                             <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider truncate flex items-center gap-1.5">
-                                <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
-                                Layanan PST BPS Karanganyar
+                                <span class="iconify text-sm" data-icon="lucide:bot"></span>
+                                KARTA (AI BPS Karanganyar)
                             </span>
                             <div class="flex items-center gap-1.5 shrink-0">
                                 <button type="button" onclick="copyMessageText(this)" data-content="${escapeHtml(rawContentSafe)}" title="Salin Teks Jawaban" class="btn-copy px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 transition-all flex items-center gap-1 cursor-pointer shadow-xs">
@@ -785,15 +828,15 @@ function createStreamingBotElement(elementId) {
 
     wrapper.innerHTML = `
         <div class="flex gap-2 sm:gap-3 w-full max-w-4xl lg:max-w-5xl">
-            <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs p-1 mt-0.5">
-                <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+            <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top">
             </div>
             <div class="min-w-0 flex-1">
                 <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl rounded-tl-sm p-3.5 sm:p-5 shadow-xs">
                     <div class="flex items-center justify-between gap-1.5 mb-2 pb-2 border-b border-slate-100">
                         <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider truncate flex items-center gap-1.5">
-                            <span class="iconify text-sm" data-icon="lucide:check-circle-2"></span>
-                            Layanan PST BPS Karanganyar
+                            <span class="iconify text-sm" data-icon="lucide:bot"></span>
+                            KARTA (AI BPS Karanganyar)
                         </span>
                         <span class="text-[9px] font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>

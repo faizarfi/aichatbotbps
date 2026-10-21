@@ -90,10 +90,30 @@
                     </div>
                 </div>
 
+                @php
+                    $isAuthorizedViewer = auth()->check() && (
+                        auth()->id() === $complaint->user_id ||
+                        auth()->user()->isStaff()
+                    );
+                @endphp
                 <div>
                     <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Uraian Pengaduan:</span>
                     <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
-                        {{ $complaint->description }}
+                        @if($isAuthorizedViewer)
+                            {{ $complaint->description }}
+                        @else
+                            <div class="flex items-start gap-3 py-1">
+                                <span class="w-8 h-8 rounded-full bg-blue-50 border border-blue-200 text-[#005b9f] flex items-center justify-center shrink-0">
+                                    <span class="iconify text-base" data-icon="lucide:shield-check"></span>
+                                </span>
+                                <div>
+                                    <p class="font-bold text-slate-800 text-xs">Uraian aduan disamarkan demi privasi pelapor.</p>
+                                    <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                                        Untuk melihat isi lengkap aduan, silakan <a href="{{ route('login') }}" class="text-[#005b9f] font-semibold hover:underline">masuk ke akun pelapor</a>. Status verifikasi dan progres tindak lanjut oleh BPS tetap dapat dipantau di bawah.
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
 

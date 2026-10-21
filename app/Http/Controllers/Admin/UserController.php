@@ -57,6 +57,14 @@ class UserController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
+        // Cegah lockout jika mengubah peran/status administrator terakhir
+        if ($user->isAdmin() && ($validated['role'] !== 'admin' || !$request->has('is_active'))) {
+            $otherAdmins = User::where('role', 'admin')->where('is_active', true)->where('id', '!=', $user->id)->count();
+            if ($otherAdmins === 0) {
+                return back()->with('error', 'Perubahan ditolak: Sistem harus memiliki minimal satu akun Administrator yang aktif.');
+            }
+        }
+
         $updateData = [
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -79,6 +87,13 @@ class UserController extends Controller
             return back()->with('error', 'Anda tidak dapat menonaktifkan akun sendiri.');
         }
 
+        if ($user->isAdmin() && $user->is_active) {
+            $otherAdmins = User::where('role', 'admin')->where('is_active', true)->where('id', '!=', $user->id)->count();
+            if ($otherAdmins === 0) {
+                return back()->with('error', 'Tidak dapat menonaktifkan: Ini adalah satu-satunya akun Administrator yang aktif.');
+            }
+        }
+
         $user->update(['is_active' => !$user->is_active]);
         $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
         return back()->with('success', "Akun pengguna berhasil {$status}.");
@@ -88,6 +103,13 @@ class UserController extends Controller
     {
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun sendiri.');
+        }
+
+        if ($user->isAdmin()) {
+            $otherAdmins = User::where('role', 'admin')->where('is_active', true)->where('id', '!=', $user->id)->count();
+            if ($otherAdmins === 0) {
+                return back()->with('error', 'Tidak dapat menghapus: Ini adalah satu-satunya akun Administrator yang aktif.');
+            }
         }
 
         $user->delete();

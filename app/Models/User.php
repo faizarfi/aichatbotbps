@@ -73,6 +73,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Alias untuk isStaff() - apakah pengguna petugas atau admin.
+     */
+    public function isOfficer(): bool
+    {
+        return $this->isStaff();
+    }
+
+    /**
      * Periksa apakah pengguna adalah masyarakat umum.
      */
     public function isGeneralUser(): bool

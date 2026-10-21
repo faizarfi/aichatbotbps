@@ -108,7 +108,7 @@
                                 @endif
                             </div>
                             <div class="chat-content-body text-xs sm:text-sm text-slate-700 leading-relaxed">
-                                {!! Str::markdown($msg->content) !!}
+                                {!! Str::markdown($msg->content, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
                             </div>
                             @if(!empty($msg->knowledge_sources))
                             <div class="mt-2 pt-2 border-t border-slate-200 text-[11px] text-[#005b9f]">
@@ -262,7 +262,20 @@ function formatAdminContent(text) {
     if (!text) return '';
     if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
         try {
-            return marked.parse(text, { breaks: true, gfm: true });
+            const renderer = new marked.Renderer();
+            renderer.html = function(html) {
+                return escapeHtml(typeof html === 'object' ? (html.text || '') : html);
+            };
+            renderer.link = function(tokenOrHref, title, linkText) {
+                let href = typeof tokenOrHref === 'object' ? tokenOrHref.href : tokenOrHref;
+                let label = typeof tokenOrHref === 'object' ? tokenOrHref.text : linkText;
+                let cleanHref = (href || '').trim();
+                if (!/^(https?:\/\/|\/|#|mailto:|tel:)/i.test(cleanHref) || cleanHref.toLowerCase().startsWith('javascript:') || cleanHref.toLowerCase().startsWith('data:')) {
+                    return label;
+                }
+                return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">${label}</a>`;
+            };
+            return marked.parse(text, { renderer, breaks: true, gfm: true });
         } catch (e) {
             console.warn(e);
         }

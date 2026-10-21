@@ -115,6 +115,6 @@ class ComplaintController extends Controller
             return back()->with('error', 'File lampiran tidak ditemukan di penyimpanan server.');
         }
 
-        return Storage::disk('local')->download($attachment->stored_path, $attachment->original_name);
+        return Storage::disk('local')->download($attachment->stored_path, basename($attachment->original_name));
     }
 }

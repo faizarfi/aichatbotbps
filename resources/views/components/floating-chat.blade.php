@@ -5,20 +5,23 @@
     <button id="floating-chat-trigger"
             type="button"
             onclick="toggleFloatingChat()"
-            aria-label="Buka Layanan PST BPS"
+            aria-label="Buka Layanan KARTA AI BPS"
             class="flex items-center gap-2.5 px-4 py-3 bg-[#002b6a] hover:bg-[#003c80] text-white rounded-full shadow-xl shadow-blue-950/30 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-[#f7941d] group cursor-pointer">
         <div class="relative shrink-0">
-            <div class="w-8 h-8 rounded-full bg-white p-1 flex items-center justify-center shadow-sm">
-                <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+            <div class="w-8 h-8 rounded-full bg-white/20 p-0.5 flex items-center justify-center shadow-sm overflow-hidden border border-[#f7941d]">
+                <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top rounded-full">
             </div>
             <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#002b6a] animate-pulse"></span>
         </div>
         <div class="text-left pr-1 hidden sm:block">
-            <span class="text-[9.5px] text-[#f7941d] block uppercase font-black tracking-wider leading-none">BPS Karanganyar</span>
-            <span class="text-xs font-black tracking-tight leading-tight text-white">Konsultasi PST</span>
+            <span class="text-[9.5px] text-[#f7941d] block uppercase font-black tracking-wider leading-none">AI BPS KARANGANYAR</span>
+            <span class="text-xs font-black tracking-tight leading-tight text-white flex items-center gap-1">
+                <span>KARTA</span>
+                <span class="px-1 py-0.2 rounded text-[8px] font-bold bg-[#f7941d] text-white">AI</span>
+            </span>
         </div>
-        <span class="sm:hidden text-xs font-bold pr-0.5">PST BPS</span>
-        <span class="iconify text-base text-[#f7941d] group-hover:scale-110 transition-transform" data-icon="lucide:message-square-text"></span>
+        <span class="sm:hidden text-xs font-black pr-0.5">KARTA</span>
+        <span class="iconify text-base text-[#f7941d] group-hover:scale-110 transition-transform" data-icon="lucide:bot"></span>
     </button>
 
     {{-- Floating Chat Modal Window --}}
@@ -28,15 +31,16 @@
         {{-- Header (BPS Corporate Navy) --}}
         <div class="px-4 py-3.5 bg-[#002b6a] text-white flex items-center justify-between border-b-2 border-[#f7941d] shrink-0">
             <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-xs">
-                    <img src="{{ asset('images/logo-bps.svg') }}" alt="Logo BPS" class="w-full h-full object-contain">
+                <div class="w-8 h-8 rounded-xl bg-white/20 p-0.5 flex items-center justify-center shrink-0 shadow-xs overflow-hidden border border-[#f7941d]">
+                    <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top rounded-lg">
                 </div>
                 <div class="min-w-0">
                     <h3 class="text-xs font-bold text-white truncate flex items-center gap-1.5">
-                        <span>Pelayanan Statistik Terpadu (PST)</span>
+                        <span class="font-black text-[#f7941d]">KARTA</span>
+                        <span class="text-blue-100 font-semibold">• AI PST BPS</span>
                         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     </h3>
-                    <p class="text-[10px] text-blue-200 truncate">BPS Kabupaten Karanganyar</p>
+                    <p class="text-[10px] text-blue-200 truncate">Konsultan AI Riset & Terpadu Angka</p>
                 </div>
             </div>
 
@@ -61,16 +65,16 @@
         <div id="floating-chat-messages" class="flex-1 overflow-y-auto p-3.5 space-y-3 bg-slate-50 text-xs">
             {{-- Welcome bubble --}}
             <div class="flex gap-2 max-w-[90%]">
-                <div class="w-6 h-6 rounded-lg bg-white border border-slate-200 p-0.5 flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                    <img src="{{ asset('images/logo-bps.svg') }}" alt="BPS" class="w-full h-full object-contain">
+                <div class="w-6 h-6 rounded-lg bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top">
                 </div>
                 <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tl-sm p-3 shadow-xs text-slate-800 space-y-1.5">
                     <p class="leading-relaxed">
-                        Selamat datang di <strong>Layanan Konsultasi Data BPS Kabupaten Karanganyar</strong>. Silakan ketik data yang Anda butuhkan.
+                        Halo! Saya <strong>KARTA</strong> (Konsultan AI Riset & Terpadu Angka) BPS Kabupaten Karanganyar. Silakan ketik data atau publikasi yang ingin Anda cari.
                     </p>
                     <div class="pt-1.5 border-t border-slate-100 flex items-center gap-1 text-[9.5px] text-slate-500 font-semibold">
                         <span class="iconify text-xs text-blue-600" data-icon="lucide:check-circle-2"></span>
-                        <span>Rujukan Resmi BPS Karanganyar</span>
+                        <span>Rujukan Resmi BPS Karanganyar 3313</span>
                     </div>
                 </div>
             </div>
@@ -279,6 +283,18 @@ function appendFloatingMessage(sender, text) {
         if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
             try {
                 const renderer = new marked.Renderer();
+                renderer.html = function(html) {
+                    return escapeHtmlMini(typeof html === 'object' ? (html.text || '') : html);
+                };
+                renderer.link = function(tokenOrHref, title, linkText) {
+                    let href = typeof tokenOrHref === 'object' ? tokenOrHref.href : tokenOrHref;
+                    let label = typeof tokenOrHref === 'object' ? tokenOrHref.text : linkText;
+                    let cleanHref = (href || '').trim();
+                    if (!/^(https?:\/\/|\/|#|mailto:|tel:)/i.test(cleanHref) || cleanHref.toLowerCase().startsWith('javascript:') || cleanHref.toLowerCase().startsWith('data:')) {
+                        return label;
+                    }
+                    return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">${label}</a>`;
+                };
                 renderer.strong = function(token) {
                     const t = typeof token === 'object' ? token.text : token;
                     return '<span class="font-medium text-slate-800">' + t + '</span>';
@@ -289,8 +305,9 @@ function appendFloatingMessage(sender, text) {
                 formattedText = escapeHtmlMini(cleanedText).replace(/\n/g, '<br>');
             }
         } else {
-            // Simple robust fallback
-            formattedText = cleanedText
+            // Simple robust fallback with sanitization
+            let safeText = escapeHtmlMini(cleanedText);
+            formattedText = safeText
                 .replace(/^###[ \t]+(.*)$/gim, '<h3 class="font-semibold text-blue-800 text-xs mt-2 mb-1">$1</h3>')
                 .replace(/^####[ \t]+(.*)$/gim, '<h4 class="font-semibold text-slate-800 text-xs mt-1.5 mb-0.5">$1</h4>')
                 .replace(/\*\*(.*?)\*\*/g, '<span class="font-medium text-slate-800">$1</span>')
@@ -299,13 +316,13 @@ function appendFloatingMessage(sender, text) {
         }
 
         div.innerHTML = `
-            <div class="w-6 h-6 rounded-lg bg-white border border-slate-200 p-0.5 flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                <img src="{{ asset('images/logo-bps.svg') }}" alt="BPS" class="w-full h-full object-contain">
+            <div class="w-6 h-6 rounded-lg bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                <img src="{{ asset('images/karta-avatar.jpg') }}" alt="KARTA AI" class="w-full h-full object-cover object-top">
             </div>
             <div class="bg-white border border-slate-200/90 rounded-2xl rounded-tl-sm p-3 text-xs text-slate-800 shadow-xs space-y-1 leading-relaxed break-words">
                 <div class="chat-content-body text-xs">${formattedText}</div>
                 <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px] text-slate-400">
-                    <span class="text-blue-600 font-bold">Layanan BPS</span>
+                    <span class="text-blue-600 font-bold">KARTA (AI BPS)</span>
                     <div class="flex items-center gap-2">
                         <button type="button" onclick="copyFloatingText(this)" data-content="${escapeHtmlMini(text)}" class="text-slate-500 hover:text-emerald-700 font-semibold flex items-center gap-0.5 cursor-pointer">
                             <span class="iconify text-xs" data-icon="lucide:copy"></span>

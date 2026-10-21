@@ -56,7 +56,7 @@ class PublicChatController extends Controller
             return [
                 'id' => $msg->id,
                 'sender_type' => $msg->sender_type,
-                'sender_name' => $msg->sender_type === 'officer' ? ($msg->sender?->name ?? 'Petugas BPS') : ($msg->sender_type === 'bot' ? 'Asisten BPS' : 'Anda'),
+                'sender_name' => $msg->sender_type === 'officer' ? ($msg->sender?->name ?? 'Petugas BPS') : ($msg->sender_type === 'bot' ? 'KARTA (AI BPS)' : 'Anda'),
                 'content' => $content,
                 'chart' => $chart,
                 'sources' => $msg->knowledge_sources ?? [],

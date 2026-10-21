@@ -62,6 +62,11 @@ class MyProfileController extends Controller
     {
         $user = $request->user();
 
+        // Akun staf/admin BPS dilindungi dari penghapusan mandiri via profil publik
+        if ($user->isStaff()) {
+            return back()->with('error', 'Akun Administrator / Petugas BPS tidak dapat dihapus melalui formulir profil publik demi keamanan sistem.');
+        }
+
         // User Google OAuth tidak punya password, skip validasi password
         if ($user->password) {
             $request->validate([
