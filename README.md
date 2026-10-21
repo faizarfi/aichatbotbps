@@ -1,4 +1,4 @@
-# 🏛️ Portal Layanan Statistik Terpadu (PST) & KARTA AI
+# Portal Layanan Statistik Terpadu (PST) & KARTA AI
 
 ## Badan Pusat Statistik Kabupaten Karanganyar
 
@@ -15,7 +15,7 @@
 
 ## Ringkasan Eksekutif
 
-**Portal Layanan Statistik Terpadu (PST) & KARTA AI BPS Kabupaten Karanganyar** adalah platform pelayanan publik digital generasi baru yang mengintegrasikan:
+**Portal Layanan Statistik Terpadu (PST) & KARTA AI BPS Kabupaten Karanganyar** adalah platform pelayanan publik digital modern yang mengintegrasikan:
 
 1. **KARTA AI (*Konsultan AI Riset & Terpadu Angka*)**: Asisten virtual cerdas berbasis *Retrieval-Augmented Generation* (RAG) dan penalaran *Deep Research*.
 2. **Katalog 464 Publikasi Resmi BPS**: Integrasi data publikasi statistik berkala Kabupaten Karanganyar (MFD: 3313) yang tersinkronisasi otomatis via BPS Web API.
@@ -85,7 +85,7 @@ flowchart TD
 
 ## Fitur Utama
 
-### 1. 🤖 KARTA AI: Konsultan Statistik RAG & Deep Research
+### 1. KARTA AI: Konsultan Statistik RAG & Deep Research
 
 - **Grounding Data Resmi BPS**: Jawaban dipandu langsung oleh 464 publikasi resmi BPS Kabupaten Karanganyar dan basis pengetahuan statistik (IPM, PDRB, Kemiskinan, Inflasi, Tenaga Kerja, Pertanian, dan Kependudukan).
 - **Streaming Token Real-Time**: Respons percakapan dialirkan kata-demi-kata menggunakan teknologi *Server-Sent Events* (SSE) untuk pengalaman interaktif latensi rendah.
@@ -93,29 +93,29 @@ flowchart TD
 - **Sensor Data Sensitif Otomatis (PII Redaction)**: Setiap input disaring sebelum dikirim ke API eksternal guna melindungi NIK (16 digit), nomor telepon, dan email pemohon.
 - **Ekspor Bukti Konsultasi PDF**: Pemohon dapat mengunduh lembar rangkuman hasil konsultasi ber-KOP resmi BPS Karanganyar lengkap dengan rujukan data.
 
-### 2. 👥 Human-in-the-Loop & Live Agent Handoff
+### 2. Human-in-the-Loop & Live Agent Handoff
 
 - **Alih Kelola Petugas Real-Time**: Pemohon dapat meminta bantuan petugas resmi PST secara langsung jika pertanyaan memerlukan konfirmasi atau data khusus.
 - **Dasbor Konsol Antrean Petugas**: Petugas dapat memantau antrean percakapan, mengambil alih sesi (*take over*), membalas secara langsung, dan menutup sesi saat selesai.
 
-### 3. 🗺️ Peta Spasial 3D 17 Kecamatan Karanganyar
+### 3. Peta Spasial 3D 17 Kecamatan Karanganyar
 
 - **Visualisasi 3D Isometrik**: Mode visualisasi spasial 3D berputar interaktif dan mode 2D peta datar.
 - **17 Node Tower Kecamatan**: Visualisasi data wilayah 17 kecamatan se-Kabupaten Karanganyar dengan indikator statistik utama dan drawer profil wilayah.
 
-### 4. 🧮 Kalkulator Statistik Terapan
+### 4. Kalkulator Statistik Terapan
 
 - **Kalkulator Sampel Slovin**: Menghitung jumlah sampel representatif untuk penelitian dengan batas ketelitian (*margin of error*) yang dapat disesuaikan.
 - **Kalkulator Proyeksi Penduduk**: Estimasi pertumbuhan penduduk dengan metode geometrik dan eksponensial.
 - **Kalkulator Laju Inflasi**: Perhitungan perubahan Indeks Harga Konsumen (IHK) antar periode waktu.
 
-### 5. 🛡️ Kanal Layanan Aduan & Aspirasi Publik
+### 5. Kanal Layanan Aduan & Aspirasi Publik
 
 - **Penomoran Tiket Otomatis**: Setiap pengaduan publik memperoleh kode unik (`ADU-YYYY-XXXXXX`) untuk memantau proses verifikasi secara transparan.
 - **Pelacakan Status Terlindungi**: Status dan timeline aduan dapat dipantau publik dengan deskripsi yang disamarkan (*masked*) guna menjamin kerahasiaan identitas pelapor.
 - **Unggah Lampiran Aman**: Penyimpanan berkas pendukung di direktori privat terisolasi dengan validasi ekstensi ketat (PDF, JPG, PNG).
 
-### 6. 🌐 Inklusivitas & Aksesibilitas
+### 6. Inklusivitas & Aksesibilitas
 
 - **Penerjemahan Multibahasa Dinamis**: Terintegrasi dengan Google Translation Engine untuk menyajikan antarmuka dalam berbagai bahasa daerah dan internasional (termasuk Basa Jawa).
 - **Dukungan Web Speech**: Dilengkapi fitur *Speech-to-Text* (input suara mikrofon) dan *Text-to-Speech* (suara audio).
@@ -249,7 +249,7 @@ composer run dev
 ```
 
 Aplikasi siap diakses melalui peramban web pada alamat:
-👉 **`http://127.0.0.1:8000`**
+**`http://127.0.0.1:8000`**
 
 ---
 
@@ -282,7 +282,7 @@ Saat menjalankan `php artisan db:seed`, sistem membuat akun administrator defaul
 - **Password**: `password`
 - **Role**: `admin` *(Memiliki hak akses penuh ke seluruh manajemen data & konfigurasi)*
 
-> ⚠️ **Penting untuk Lingkungan Production**: Segera ubah kata sandi default ini melalui panel admin setelah proses deployment selesai.
+> **Penting untuk Lingkungan Production**: Segera ubah kata sandi default ini melalui panel admin setelah proses deployment selesai.
 
 ---
 
@@ -328,7 +328,7 @@ Aplikasi ini menerapkan prinsip *Defense in Depth* berlapis untuk menjamin keama
 
 Untuk panduan komprehensif mengenai pemasangan di **Virtual Private Server (VPS)** berbasis Linux Ubuntu (konfigurasi Nginx, Let's Encrypt SSL, Supervisor Queue Worker, Cron Scheduler, serta CI/CD Webhook otomatis), silakan merujuk pada dokumentasi operasional:
 
-👉 **[BACA PANDUAN LENGKAP DEPLOYMENT VPS (DEPLOYMENT_VPS.md)](./DEPLOYMENT_VPS.md)**
+**[Panduan Lengkap Deployment VPS (DEPLOYMENT_VPS.md)](./DEPLOYMENT_VPS.md)**
 
 ---
 
