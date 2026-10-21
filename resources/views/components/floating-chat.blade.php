@@ -232,7 +232,8 @@ floatingForm?.addEventListener('submit', function(e) {
 
 function replaceIconsAndFilterEmojisMini(text) {
     if (!text) return '';
-    let res = text.replace(/\[icon:([a-z0-9\-]+)\]/gi, '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:$1"></span>');
+    let res = text.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
+    res = res.replace(/\[icon:([a-z0-9\-]+)\]/gi, '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:$1"></span>');
     const emojiMap = {
         '📊': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:bar-chart-2"></span>',
         '📈': '<span class="iconify text-blue-600 inline-block align-middle mr-1" data-icon="lucide:trending-up"></span>',
@@ -284,7 +285,11 @@ function appendFloatingMessage(sender, text) {
             try {
                 const renderer = new marked.Renderer();
                 renderer.html = function(html) {
-                    return escapeHtmlMini(typeof html === 'object' ? (html.text || '') : html);
+                    const rawHtml = typeof html === 'object' ? (html.text || '') : (html || '');
+                    if (/^<span class="iconify[^"]*" data-icon="[^"]*"><\/span>$/i.test(rawHtml.trim())) {
+                        return rawHtml.trim();
+                    }
+                    return escapeHtmlMini(rawHtml);
                 };
                 renderer.link = function(tokenOrHref, title, linkText) {
                     let href = typeof tokenOrHref === 'object' ? tokenOrHref.href : tokenOrHref;
@@ -301,6 +306,12 @@ function appendFloatingMessage(sender, text) {
                 };
                 marked.use({ renderer });
                 formattedText = marked.parse(cleanedText, { breaks: true, gfm: true });
+                formattedText = formattedText.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
+                setTimeout(function() {
+                    if (window.Iconify && typeof window.Iconify.scan === 'function') {
+                        window.Iconify.scan();
+                    }
+                }, 50);
             } catch (e) {
                 formattedText = escapeHtmlMini(cleanedText).replace(/\n/g, '<br>');
             }

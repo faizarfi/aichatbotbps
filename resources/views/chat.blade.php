@@ -273,8 +273,11 @@ function scrollToBottom() {
 function replaceIconsAndFilterEmojis(text) {
     if (!text) return '';
 
+    // 0. Pulihkan jika ada tag iconify yang pernah ter-escape secara keliru
+    let res = text.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
+
     // 1. Ubah tag [icon:name] menjadi elemen icon Lucide
-    let res = text.replace(/\[icon:([a-z0-9\-]+)\]/gi, '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:$1"></span>');
+    res = res.replace(/\[icon:([a-z0-9\-]+)\]/gi, '<span class="iconify text-blue-600 inline-block align-middle mr-1.5" data-icon="lucide:$1"></span>');
 
     // 2. Konversi emoji yang sering muncul menjadi Lucide Icons
     const emojiMap = {
@@ -321,9 +324,14 @@ function formatBotContent(raw) {
     if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
         try {
             const renderer = new marked.Renderer();
-            // Hindari eksekusi tag HTML sembarang dari output AI/markdown
+            // Hindari eksekusi tag HTML sembarang dari output AI/markdown, namun izinkan tag iconify resmi
             renderer.html = function(html) {
-                return escapeHtml(typeof html === 'object' ? (html.text || '') : html);
+                const rawHtml = typeof html === 'object' ? (html.text || '') : (html || '');
+                // Izinkan tag iconify span resmi BPS agar ter-render sebagai ikon visual tanpa bocor kode
+                if (/^<span class="iconify[^"]*" data-icon="[^"]*"><\/span>$/i.test(rawHtml.trim())) {
+                    return rawHtml.trim();
+                }
+                return escapeHtml(rawHtml);
             };
             // Validasi link protokol untuk mencegah javascript: atau data: URL injection
             renderer.link = function(tokenOrHref, title, linkText) {
@@ -347,8 +355,15 @@ function formatBotContent(raw) {
                 smartypants: false
             });
             let html = marked.parse(cleaned);
+            // Kembalikan tag iconify jika sempat ter-escape entitas HTML-nya oleh parser
+            html = html.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
             html = html.replace(/<table/g, '<div class="overflow-x-auto my-2.5 rounded-xl border border-slate-200/90 shadow-2xs"><table class="w-full text-xs"');
             html = html.replace(/<\/table>/g, '</table></div>');
+            setTimeout(function() {
+                if (window.Iconify && typeof window.Iconify.scan === 'function') {
+                    window.Iconify.scan();
+                }
+            }, 50);
             return html;
         } catch (e) {
             console.warn('Marked parser warning:', e);

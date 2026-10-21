@@ -264,7 +264,11 @@ function formatAdminContent(text) {
         try {
             const renderer = new marked.Renderer();
             renderer.html = function(html) {
-                return escapeHtml(typeof html === 'object' ? (html.text || '') : html);
+                const rawHtml = typeof html === 'object' ? (html.text || '') : (html || '');
+                if (/^<span class="iconify[^"]*" data-icon="[^"]*"><\/span>$/i.test(rawHtml.trim())) {
+                    return rawHtml.trim();
+                }
+                return escapeHtml(rawHtml);
             };
             renderer.link = function(tokenOrHref, title, linkText) {
                 let href = typeof tokenOrHref === 'object' ? tokenOrHref.href : tokenOrHref;
@@ -275,7 +279,9 @@ function formatAdminContent(text) {
                 }
                 return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-medium hover:underline inline-flex items-center gap-1">${label}</a>`;
             };
-            return marked.parse(text, { renderer, breaks: true, gfm: true });
+            let res = marked.parse(text, { renderer, breaks: true, gfm: true });
+            res = res.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
+            return res;
         } catch (e) {
             console.warn(e);
         }
