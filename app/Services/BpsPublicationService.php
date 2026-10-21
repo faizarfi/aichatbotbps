@@ -186,25 +186,42 @@ class BpsPublicationService
     }
 
     /**
-     * Deep Research: Cari publikasi relevan untuk grounding LLM / Chatbot.
+     * Deep Research: Cari publikasi relevan untuk grounding LLM / Chatbot secara hemat token.
      */
-    public function searchForDeepResearch(string $query, int $limit = 6): Collection
+    public function searchForDeepResearch(string $query, int $limit = 2): Collection
     {
-        $terms = preg_split('/[\s,\.\?\!\-\_]+/', Str::lower($query));
-        $terms = array_filter($terms, fn($t) => strlen($t) > 2 && !in_array($t, ['dan', 'yang', 'dari', 'pada', 'untuk', 'dengan', 'dalam', 'angka', 'data', 'bps', 'kabupaten', 'karanganyar']));
+        $cleanQuery = Str::lower(trim($query));
+
+        // 1. Filter pertanyaan non-data (sapaan, jam kerja, ucapan) agar TIDAK membuang token publikasi
+        $isCasual = preg_match('/^(halo|hai|pagi|siang|sore|malam|terima kasih|makasih|suwun|matur nuwun|assalamualaikum|tes|test|menu|siapa kamu|apa kabar)\b/i', $cleanQuery);
+        $hasDataIntent = Str::contains($cleanQuery, [
+            'data', 'publikasi', 'buku', 'angka', 'statistik', 'dokumen', 'kda', 'tabel', 'jumlah',
+            'penduduk', 'kemiskinan', 'jalan', 'ipm', 'pdrb', 'inflasi', 'pertanian', 'padi', 'kecamatan',
+            'pengangguran', 'tenaga kerja', 'sensus', 'ekonomi', 'luas', 'panen'
+        ]);
+
+        if ($isCasual && !$hasDataIntent) {
+            return collect();
+        }
+
+        $terms = preg_split('/[\s,\.\?\!\-\_]+/', $cleanQuery);
+        $stopWords = ['dan', 'yang', 'dari', 'pada', 'untuk', 'dengan', 'dalam', 'angka', 'data', 'bps', 'kabupaten', 'karanganyar', 'apakah', 'bagaimana', 'berapa', 'tolong', 'jelaskan', 'saya', 'ingin', 'tahu', 'tentang', 'ringkasan', 'dokumen', 'resmi'];
+        $filteredTerms = array_values(array_filter($terms, fn($t) => strlen($t) > 2 && !in_array($t, $stopWords)));
 
         $dbQuery = Publication::query();
+        $hasSpecificFilter = false;
 
-        // 1. Ekstrak tahun jika disebutkan
-        if (preg_match('/\b(20[12]\d)\b/', $query, $matches)) {
+        // 2. Ekstrak tahun jika disebutkan
+        if (preg_match('/\b(20[12]\d)\b/', $cleanQuery, $matches)) {
             $year = $matches[1];
             $dbQuery->where(function ($q) use ($year) {
                 $q->whereYear('rl_date', $year)
                   ->orWhere('title', 'like', "%{$year}%");
             });
+            $hasSpecificFilter = true;
         }
 
-        // 2. Ekstrak nama kecamatan jika ada
+        // 3. Ekstrak nama kecamatan jika ada
         $districts = [
             'jatipuro', 'jatiyoso', 'jumapolo', 'jumantono', 'matesih',
             'tawangmangu', 'ngargoyoso', 'karangpandan', 'karanganyar',
@@ -212,40 +229,37 @@ class BpsPublicationService
             'mojogedang', 'kerjo', 'jenawi'
         ];
 
-        $matchedDistrict = null;
         foreach ($districts as $d) {
-            if (Str::contains(Str::lower($query), $d)) {
-                $matchedDistrict = $d;
+            if (Str::contains($cleanQuery, $d)) {
+                $dbQuery->where('title', 'like', "%{$d}%");
+                $hasSpecificFilter = true;
                 break;
             }
         }
 
-        if ($matchedDistrict) {
-            $dbQuery->where('title', 'like', "%{$matchedDistrict}%");
-        }
-
-        // 3. Pencarian kata kunci pada judul & abstrak
-        if (!empty($terms)) {
-            $dbQuery->where(function ($sub) use ($terms) {
-                foreach (array_slice($terms, 0, 4) as $term) {
+        // 4. Pencarian kata kunci pada judul & subjek CSA
+        if (!empty($filteredTerms)) {
+            $dbQuery->where(function ($sub) use ($filteredTerms) {
+                foreach (array_slice($filteredTerms, 0, 3) as $term) {
                     $sub->orWhere('title', 'like', "%{$term}%")
-                        ->orWhere('abstract', 'like', "%{$term}%")
                         ->orWhere('subject_csa', 'like', "%{$term}%");
                 }
             });
+            $hasSpecificFilter = true;
         }
 
-        $results = $dbQuery->orderBy('rl_date', 'desc')->take($limit)->get();
-
-        // Fallback jika tidak ada hasil spesifik: berikan publikasi kompendium terbaru (KDA terbaru)
-        if ($results->isEmpty()) {
-            $results = Publication::where('is_featured', true)
-                ->orderBy('rl_date', 'desc')
-                ->take(3)
-                ->get();
+        // 5. Fallback selektif: HANYA berikan 1 buku unggulan jika user memang meminta publikasi/buku
+        if (!$hasSpecificFilter) {
+            if (Str::contains($cleanQuery, ['publikasi', 'buku', 'kda', 'kompendium', 'arsip', 'laporan'])) {
+                return Publication::where('is_featured', true)
+                    ->orderBy('rl_date', 'desc')
+                    ->take(1)
+                    ->get();
+            }
+            return collect();
         }
 
-        return $results;
+        return $dbQuery->orderBy('rl_date', 'desc')->take($limit)->get();
     }
 
     /**

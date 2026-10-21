@@ -217,8 +217,8 @@ class ChatService
             $articles = [$searchResult['bestMatch']];
         }
 
-        // C2. Deep Research Dokumen Publikasi Resmi BPS Karanganyar (Domain 3313)
-        $publications = $this->publicationService->searchForDeepResearch($message, 4);
+        // C2. Deep Research Dokumen Publikasi Resmi BPS Karanganyar (Maksimal 2 dokumen relevan untuk efisiensi token)
+        $publications = $this->publicationService->searchForDeepResearch($message, 2);
 
         $sourcesCollection = collect($articles)
             ->filter(fn($a) => !empty($a->source_title))
@@ -421,8 +421,8 @@ class ChatService
             $articles = [$searchResult['bestMatch']];
         }
 
-        // C2. Deep Research Dokumen Publikasi Resmi BPS Karanganyar (Domain 3313)
-        $publications = $this->publicationService->searchForDeepResearch($message, 4);
+        // C2. Deep Research Dokumen Publikasi Resmi BPS Karanganyar (Maksimal 2 dokumen relevan)
+        $publications = $this->publicationService->searchForDeepResearch($message, 2);
 
         $sourcesCollection = collect($articles)
             ->filter(fn($a) => !empty($a->source_title))
