@@ -36,21 +36,71 @@ class PublicationController extends Controller
             $query->whereYear('rl_date', $year);
         }
 
-        // Filter kategori (KDA / Kecamatan / Lainnya)
-        if ($request->filled('category')) {
-            $category = $request->input('category');
-            if ($category === 'kda') {
+        // Filter kategori tematik
+        $activeCategory = $request->input('category');
+        if ($activeCategory) {
+            if ($activeCategory === 'kda') {
                 $query->where('title', 'like', '%Kabupaten Karanganyar Dalam Angka%');
-            } elseif ($category === 'kecamatan') {
+            } elseif ($activeCategory === 'kecamatan') {
                 $query->where('title', 'like', '%Kecamatan%Dalam Angka%');
-            } elseif ($category === 'statistik_daerah') {
+            } elseif ($activeCategory === 'sosial') {
+                $query->where(function ($q) {
+                    $q->where('title', 'like', '%Sosial%')
+                      ->orWhere('title', 'like', '%Kependudukan%')
+                      ->orWhere('title', 'like', '%Kemiskinan%')
+                      ->orWhere('title', 'like', '%Pembangunan Manusia%')
+                      ->orWhere('title', 'like', '%Tenaga Kerja%')
+                      ->orWhere('title', 'like', '%Pendidikan%')
+                      ->orWhere('title', 'like', '%Kesehatan%')
+                      ->orWhere('title', 'like', '%Gender%');
+                });
+            } elseif ($activeCategory === 'ekonomi') {
+                $query->where(function ($q) {
+                    $q->where('title', 'like', '%Produk Domestik Regional Bruto%')
+                      ->orWhere('title', 'like', '%PDRB%')
+                      ->orWhere('title', 'like', '%Pengeluaran Konsumsi%')
+                      ->orWhere('title', 'like', '%Ekonomi%')
+                      ->orWhere('title', 'like', '%Inflasi%')
+                      ->orWhere('title', 'like', '%Perdagangan%')
+                      ->orWhere('title', 'like', '%Harga%');
+                });
+            } elseif ($activeCategory === 'pertanian') {
+                $query->where(function ($q) {
+                    $q->where('title', 'like', '%Pertanian%')
+                      ->orWhere('title', 'like', '%Padi%')
+                      ->orWhere('title', 'like', '%Tanaman Pangan%')
+                      ->orWhere('title', 'like', '%Hortikultura%')
+                      ->orWhere('title', 'like', '%Peternakan%')
+                      ->orWhere('title', 'like', '%Perikanan%')
+                      ->orWhere('title', 'like', '%Perkebunan%');
+                });
+            } elseif ($activeCategory === 'industri') {
+                $query->where(function ($q) {
+                    $q->where('title', 'like', '%Industri%')
+                      ->orWhere('title', 'like', '%Konstruksi%')
+                      ->orWhere('title', 'like', '%Transportasi%')
+                      ->orWhere('title', 'like', '%Pariwisata%')
+                      ->orWhere('title', 'like', '%Hotel%')
+                      ->orWhere('title', 'like', '%Energi%');
+                });
+            } elseif ($activeCategory === 'statistik_daerah') {
                 $query->where('title', 'like', '%Statistik Daerah%');
             }
         }
 
-        $publications = $query->orderBy('rl_date', 'desc')
-            ->paginate(12)
-            ->withQueryString();
+        // Pengurutan (Sorting)
+        $activeSort = $request->input('sort', 'latest');
+        if ($activeSort === 'oldest') {
+            $query->orderBy('rl_date', 'asc');
+        } elseif ($activeSort === 'title_asc') {
+            $query->orderBy('title', 'asc');
+        } elseif ($activeSort === 'title_desc') {
+            $query->orderBy('title', 'desc');
+        } else {
+            $query->orderBy('rl_date', 'desc');
+        }
+
+        $publications = $query->paginate(12)->withQueryString();
 
         $stats = $this->publicationService->getStatistics();
         $availableYears = Publication::selectRaw('YEAR(rl_date) as year')
@@ -59,11 +109,62 @@ class PublicationController extends Controller
             ->orderBy('year', 'desc')
             ->pluck('year');
 
-        return view('publications.index', compact('publications', 'stats', 'availableYears'));
+        // Hitungan per kategori untuk badge pill
+        $categoryCounts = [
+            'all' => Publication::count(),
+            'kda' => Publication::where('title', 'like', '%Kabupaten Karanganyar Dalam Angka%')->count(),
+            'kecamatan' => Publication::where('title', 'like', '%Kecamatan%Dalam Angka%')->count(),
+            'sosial' => Publication::where(function ($q) {
+                $q->where('title', 'like', '%Sosial%')
+                  ->orWhere('title', 'like', '%Kependudukan%')
+                  ->orWhere('title', 'like', '%Kemiskinan%')
+                  ->orWhere('title', 'like', '%Pembangunan Manusia%')
+                  ->orWhere('title', 'like', '%Tenaga Kerja%')
+                  ->orWhere('title', 'like', '%Pendidikan%')
+                  ->orWhere('title', 'like', '%Kesehatan%')
+                  ->orWhere('title', 'like', '%Gender%');
+            })->count(),
+            'ekonomi' => Publication::where(function ($q) {
+                $q->where('title', 'like', '%Produk Domestik Regional Bruto%')
+                  ->orWhere('title', 'like', '%PDRB%')
+                  ->orWhere('title', 'like', '%Pengeluaran Konsumsi%')
+                  ->orWhere('title', 'like', '%Ekonomi%')
+                  ->orWhere('title', 'like', '%Inflasi%')
+                  ->orWhere('title', 'like', '%Perdagangan%')
+                  ->orWhere('title', 'like', '%Harga%');
+            })->count(),
+            'pertanian' => Publication::where(function ($q) {
+                $q->where('title', 'like', '%Pertanian%')
+                  ->orWhere('title', 'like', '%Padi%')
+                  ->orWhere('title', 'like', '%Tanaman Pangan%')
+                  ->orWhere('title', 'like', '%Hortikultura%')
+                  ->orWhere('title', 'like', '%Peternakan%')
+                  ->orWhere('title', 'like', '%Perikanan%')
+                  ->orWhere('title', 'like', '%Perkebunan%');
+            })->count(),
+            'industri' => Publication::where(function ($q) {
+                $q->where('title', 'like', '%Industri%')
+                  ->orWhere('title', 'like', '%Konstruksi%')
+                  ->orWhere('title', 'like', '%Transportasi%')
+                  ->orWhere('title', 'like', '%Pariwisata%')
+                  ->orWhere('title', 'like', '%Hotel%')
+                  ->orWhere('title', 'like', '%Energi%');
+            })->count(),
+            'statistik_daerah' => Publication::where('title', 'like', '%Statistik Daerah%')->count(),
+        ];
+
+        return view('publications.index', compact(
+            'publications',
+            'stats',
+            'availableYears',
+            'categoryCounts',
+            'activeCategory',
+            'activeSort'
+        ));
     }
 
     /**
-     * Detail satu publikasi.
+     * Detail satu publikasi resmi BPS Karanganyar.
      */
     public function show(string $slugOrId)
     {
@@ -79,6 +180,31 @@ class PublicationController extends Controller
             ->take(4)
             ->get();
 
-        return view('publications.show', compact('publication', 'related'));
+        // Tentukan kategori topik publikasi
+        $titleLower = Str::lower($publication->title);
+        $topicTag = 'Publikasi Resmi BPS';
+        if (Str::contains($titleLower, 'kabupaten karanganyar dalam angka')) {
+            $topicTag = 'Kompendium KDA';
+        } elseif (Str::contains($titleLower, 'dalam angka') && Str::contains($titleLower, 'kecamatan')) {
+            $topicTag = 'Kecamatan Dalam Angka';
+        } elseif (Str::contains($titleLower, ['pdrb', 'produk domestik', 'ekonomi', 'konsumsi'])) {
+            $topicTag = 'Ekonomi & PDRB';
+        } elseif (Str::contains($titleLower, ['kemiskinan', 'sosial', 'kependudukan', 'pembangunan manusia', 'tenaga kerja'])) {
+            $topicTag = 'Sosial & Kependudukan';
+        } elseif (Str::contains($titleLower, ['pertanian', 'padi', 'tanaman', 'hortikultura'])) {
+            $topicTag = 'Pertanian & Pangan';
+        } elseif (Str::contains($titleLower, 'statistik daerah')) {
+            $topicTag = 'Statistik Daerah';
+        }
+
+        // Siapkan prompt rekomendasi untuk KARTA AI
+        $cleanTitle = trim($publication->title);
+        $aiPrompts = [
+            "Jelaskan ringkasan eksekutif dan poin data paling penting dari dokumen {$cleanTitle}!",
+            "Apa saja indikator dan angka statistik kunci yang tercatat dalam {$cleanTitle}?",
+            "Bagaimana tren perkembangan data dalam publikasi {$cleanTitle} jika dibandingkan dengan periode sebelumnya?",
+        ];
+
+        return view('publications.show', compact('publication', 'related', 'topicTag', 'aiPrompts'));
     }
 }
