@@ -317,26 +317,26 @@
             @foreach($infographics ?? [] as $info)
                 <div class="infographic-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#003c80] transition-all flex flex-col justify-between overflow-hidden group" data-category="{{ $info['category'] }}">
                     {{-- Card Visual Top Banner --}}
-                    <div class="p-6 bg-gradient-to-br {{ $info['color_gradient'] }} text-white relative overflow-hidden">
+                    <div class="p-6 text-white relative overflow-hidden" style="{{ $info['gradient_css'] }}">
                         {{-- Subtle background pattern --}}
-                        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                        <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
                         
                         <div class="relative z-10 flex items-start justify-between gap-3">
                             <div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider {{ $info['badge_color'] }} inline-block mb-2 shadow-xs">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-block mb-2 shadow-xs backdrop-blur-md" style="{{ $info['badge_style'] }}">
                                     {{ $info['category_label'] }}
                                 </span>
-                                <span class="block text-blue-200 text-xs font-semibold">{{ $info['period'] }}</span>
+                                <span class="block text-blue-100 text-xs font-semibold">{{ $info['period'] }}</span>
                             </div>
-                            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 flex items-center justify-center text-white shrink-0 shadow-inner group-hover:scale-110 transition-transform">
-                                <span class="iconify text-2xl" data-icon="{{ $info['icon'] }}"></span>
+                            <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                                <span class="iconify text-2xl text-white" data-icon="{{ $info['icon'] }}"></span>
                             </div>
                         </div>
 
                         <div class="relative z-10 mt-4">
                             <div class="flex items-baseline gap-2">
-                                <span class="text-3xl sm:text-4xl font-black text-white tracking-tight">{{ $info['metric_value'] }}</span>
-                                <span class="text-xs sm:text-sm font-bold text-amber-300">{{ $info['metric_unit'] }}</span>
+                                <span class="text-3xl sm:text-4xl font-black text-white tracking-tight drop-shadow-sm">{{ $info['metric_value'] }}</span>
+                                <span class="text-xs sm:text-sm font-black text-amber-300 drop-shadow-xs">{{ $info['metric_unit'] }}</span>
                             </div>
                             <p class="text-xs text-blue-100 mt-1 font-medium">{{ $info['metric_note'] }}</p>
                         </div>
@@ -1020,10 +1020,15 @@ function openInfographicModal(id) {
     document.getElementById('modal-metric-note').textContent = item.metric_note;
     document.getElementById('modal-source-text').textContent = item.sources;
 
-    // Header gradient
+    // Header gradient via style attribute
     const headerEl = document.getElementById('modal-header-bg');
-    if (headerEl) {
-        headerEl.className = 'p-6 text-white bg-gradient-to-r ' + item.color_gradient + ' flex items-start justify-between gap-4';
+    if (headerEl && item.gradient_css) {
+        headerEl.setAttribute('style', item.gradient_css);
+    }
+
+    const badgeEl = document.getElementById('modal-category-badge');
+    if (badgeEl && item.badge_style) {
+        badgeEl.setAttribute('style', item.badge_style);
     }
 
     // Points
