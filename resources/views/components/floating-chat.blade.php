@@ -1,5 +1,20 @@
 {{-- Floating Chat Widget Component (BPS Kabupaten Karanganyar) --}}
-<div id="floating-chat-container" class="fixed bottom-5 right-5 z-50 font-sans">
+<div id="floating-chat-container" class="fixed bottom-5 right-5 z-50 font-sans flex flex-col items-end">
+
+    {{-- Proactive Subtle Greeting Tooltip (Non-Alay, Auto-Dismissible) --}}
+    <div id="floating-greeting-tooltip" class="hidden mb-2.5 max-w-[270px] bg-white text-slate-800 p-3 rounded-2xl border border-slate-200 shadow-xl shadow-slate-900/10 text-xs relative transition-all">
+        <button type="button" onclick="dismissFloatingTooltip(event)" class="absolute top-2 right-2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer" title="Tutup">
+            <span class="iconify text-xs" data-icon="lucide:x"></span>
+        </button>
+        <div class="flex items-start gap-2 pr-4 cursor-pointer" onclick="openFloatingChatFromTooltip()">
+            <span class="iconify text-base text-[#003c80] shrink-0 mt-0.5" data-icon="lucide:help-circle"></span>
+            <div>
+                <p class="font-bold text-slate-900 text-[11px] leading-tight">Butuh Data Statistik?</p>
+                <p class="text-[10.5px] text-slate-600 mt-0.5 leading-snug">Konsultasikan gratis ke KARTA AI BPS Karanganyar.</p>
+            </div>
+        </div>
+        <div class="absolute -bottom-1.5 right-8 w-3 h-3 bg-white border-b border-r border-slate-200 rotate-45"></div>
+    </div>
 
     {{-- Chat Bubble Trigger Button --}}
     <button id="floating-chat-trigger"
@@ -45,11 +60,26 @@
             </div>
 
             <div class="flex items-center gap-1 shrink-0">
+                {{-- Width Toggle (Desktop Expand) --}}
+                <button type="button"
+                        id="floating-expand-btn"
+                        onclick="toggleFloatingWidth()"
+                        class="hidden sm:flex p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors cursor-pointer"
+                        title="Mode Lebar / Standar">
+                    <span id="floating-expand-icon" class="iconify text-sm" data-icon="lucide:maximize-2"></span>
+                </button>
+                {{-- Reset Button --}}
+                <button type="button"
+                        onclick="resetFloatingChat()"
+                        class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors cursor-pointer"
+                        title="Mulai Sesi Baru">
+                    <span class="iconify text-sm" data-icon="lucide:refresh-cw"></span>
+                </button>
                 {{-- Expand to Full Chat Page --}}
                 <a href="{{ route('chat.index') }}"
                    class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors"
-                   title="Buka Layar Penuh">
-                    <span class="iconify text-sm" data-icon="lucide:maximize-2"></span>
+                   title="Buka Halaman Penuh">
+                    <span class="iconify text-sm" data-icon="lucide:external-link"></span>
                 </a>
                 {{-- Close Button --}}
                 <button type="button"
@@ -132,6 +162,7 @@
 
 <script>
 let isFloatingOpen = false;
+let isFloatingWide = false;
 const floatingTrigger = document.getElementById('floating-chat-trigger');
 const floatingModal = document.getElementById('floating-chat-modal');
 const floatingMessages = document.getElementById('floating-chat-messages');
@@ -142,6 +173,7 @@ const floatingTyping = document.getElementById('floating-typing');
 
 function toggleFloatingChat() {
     isFloatingOpen = !isFloatingOpen;
+    dismissFloatingTooltip();
     if (isFloatingOpen) {
         floatingTrigger.classList.add('hidden');
         floatingModal.classList.remove('hidden');
@@ -152,6 +184,56 @@ function toggleFloatingChat() {
         floatingTrigger.classList.remove('hidden');
     }
 }
+
+function toggleFloatingWidth() {
+    isFloatingWide = !isFloatingWide;
+    const modal = document.getElementById('floating-chat-modal');
+    const icon = document.getElementById('floating-expand-icon');
+    const btn = document.getElementById('floating-expand-btn');
+    if (!modal) return;
+
+    if (isFloatingWide) {
+        modal.classList.remove('sm:w-[390px]');
+        modal.classList.add('sm:w-[560px]');
+        if (icon) icon.setAttribute('data-icon', 'lucide:minimize-2');
+        if (btn) btn.setAttribute('title', 'Kembalikan Ukuran Standar');
+    } else {
+        modal.classList.remove('sm:w-[560px]');
+        modal.classList.add('sm:w-[390px]');
+        if (icon) icon.setAttribute('data-icon', 'lucide:maximize-2');
+        if (btn) btn.setAttribute('title', 'Mode Lebar');
+    }
+    if (window.Iconify && typeof window.Iconify.scan === 'function') {
+        window.Iconify.scan(btn);
+    }
+}
+
+function dismissFloatingTooltip(e) {
+    if (e) e.stopPropagation();
+    const tooltip = document.getElementById('floating-greeting-tooltip');
+    if (tooltip) tooltip.classList.add('hidden');
+    sessionStorage.setItem('bps_karta_tooltip_shown', '1');
+}
+
+function openFloatingChatFromTooltip() {
+    dismissFloatingTooltip();
+    toggleFloatingChat();
+}
+
+// Proactive subtle greeting after 4.5 seconds
+document.addEventListener('DOMContentLoaded', () => {
+    if (!sessionStorage.getItem('bps_karta_tooltip_shown')) {
+        setTimeout(() => {
+            const tooltip = document.getElementById('floating-greeting-tooltip');
+            if (tooltip && !isFloatingOpen) {
+                tooltip.classList.remove('hidden');
+                setTimeout(() => {
+                    dismissFloatingTooltip();
+                }, 10000);
+            }
+        }, 4500);
+    }
+});
 
 floatingInput?.addEventListener('input', function() {
     floatingSendBtn.disabled = this.value.trim().length === 0;
@@ -174,6 +256,13 @@ floatingForm?.addEventListener('submit', function(e) {
     e.preventDefault();
     const text = floatingInput.value.trim();
     if (!text) return;
+
+    // Deteksi jika pengguna mengetik intent untuk reset percakapan
+    if (/^(mulai\s+baru|ulang\s+dari\s+awal|reset\s+chat|reset\s+percakapan|mulai\s+lagi|restart\s+chat|clear\s+chat|mulai\s+ulang)$/i.test(text)) {
+        floatingInput.value = '';
+        resetFloatingChat();
+        return;
+    }
 
     // Sembunyikan quick chips
     const chips = document.getElementById('floating-quick-chips');
@@ -217,12 +306,13 @@ floatingForm?.addEventListener('submit', function(e) {
         }
 
         const botMsg = data.bot_message || (typeof data.reply === 'object' ? data.reply : { content: data.reply });
-        let replyText = botMsg?.content || (typeof data.reply === 'string' ? data.reply : 'Terima kasih atas pertanyaan Anda.');
+        let replyText = botMsg?.content || (typeof data.reply === 'string' ? data.reply : '');
         
         // Bersihkan blok chart untuk tampilan mini di widget
-        replyText = replyText.replace(/```chart\s*\{[\s\S]*?\}\s*```/g, '').trim();
-
-        appendFloatingMessage('bot', replyText);
+        if (replyText && replyText.trim() !== '') {
+            replyText = replyText.replace(/```chart\s*\{[\s\S]*?\}\s*```/g, '').trim();
+            appendFloatingMessage('bot', replyText);
+        }
     })
     .catch(() => {
         floatingTyping.classList.add('hidden');
@@ -304,6 +394,21 @@ function appendFloatingMessage(sender, text) {
                     const t = typeof token === 'object' ? token.text : token;
                     return '<span class="font-medium text-slate-800">' + t + '</span>';
                 };
+                renderer.table = function(header, body) {
+                    return '<div class="my-2.5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xs">' +
+                        '<div class="overflow-x-auto"><table class="w-full text-[11px] text-left divide-y divide-slate-200 border-collapse">' +
+                            header +
+                            '<tbody class="divide-y divide-slate-100 bg-white">' + body + '</tbody>' +
+                        '</table></div>' +
+                    '</div>';
+                };
+                renderer.tablecell = function(content, flags) {
+                    const align = flags.align ? `text-${flags.align}` : 'text-left';
+                    if (flags.header) {
+                        return `<th class="px-2.5 py-1.5 bg-[#002b6a] text-white font-bold text-[10px] uppercase tracking-wider ${align}">${content}</th>`;
+                    }
+                    return `<td class="px-2.5 py-1.5 text-slate-700 text-[11px] whitespace-nowrap ${align}">${content}</td>`;
+                };
                 marked.use({ renderer });
                 formattedText = marked.parse(cleanedText, { breaks: true, gfm: true });
                 formattedText = formattedText.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
@@ -381,5 +486,25 @@ function escapeHtmlMini(str) {
     const d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
+}
+
+function resetFloatingChat() {
+    localStorage.removeItem('bps_chat_session');
+    const newSession = 'bps_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now();
+    localStorage.setItem('bps_chat_session', newSession);
+    const messagesContainer = document.getElementById('floating-chat-messages');
+    if (messagesContainer) {
+        const welcome = messagesContainer.firstElementChild;
+        messagesContainer.innerHTML = '';
+        if (welcome) messagesContainer.appendChild(welcome);
+    }
+    const chips = document.getElementById('floating-quick-chips');
+    if (chips) chips.classList.remove('hidden');
+    if (typeof Toast !== 'undefined') {
+        Toast.fire({
+            icon: 'success',
+            title: 'Sesi percakapan baru dimulai!'
+        });
+    }
 }
 </script>

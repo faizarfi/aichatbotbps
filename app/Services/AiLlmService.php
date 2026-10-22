@@ -46,7 +46,7 @@ class AiLlmService
     /**
      * Generate jawaban cerdas menggunakan LLM dengan teknik RAG (Retrieval-Augmented Generation) & Deep Research Publikasi.
      */
-    public function generateAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', $publications = []): ?string
+    public function generateAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', mixed $publications = []): ?string
     {
         if (!$this->isConfigured()) {
             return null;
@@ -71,7 +71,6 @@ class AiLlmService
 
             // Mode B: OpenAI-Compatible Gateway (9router / OpenRouter / Local Gateway)
             return $this->callOpenAiGateway($cleanUserMessage, $systemPrompt, $chatHistory);
-
         } catch (\Throwable $e) {
             Log::error('AI LLM Gateway Exception: ' . $e->getMessage());
             return null;
@@ -81,7 +80,7 @@ class AiLlmService
     /**
      * Generate balasan cerdas dengan streaming token real-time (Server-Sent Events) & Deep Research Publikasi.
      */
-    public function streamAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', ?callable $onChunk = null, ?callable $onReset = null, $publications = []): ?string
+    public function streamAnswer(string $userMessage, array $knowledgeArticles = [], array $chatHistory = [], ?string $targetLanguage = 'id', ?callable $onChunk = null, ?callable $onReset = null, mixed $publications = []): ?string
     {
         if (!$this->isConfigured()) {
             return null;
@@ -103,7 +102,6 @@ class AiLlmService
             }
 
             return $this->callOpenAiStream($cleanUserMessage, $systemPrompt, $chatHistory, $onChunk);
-
         } catch (\Throwable $e) {
             Log::error('AI LLM Stream Exception: ' . $e->getMessage());
             return null;
@@ -111,24 +109,36 @@ class AiLlmService
     }
 
     /**
-     * Format riwayat percakapan untuk Gemini secara ringkas dan hemat token.
+     * Format riwayat percakapan untuk Gemini secara ringkas, hemat token, dan mematuhi aturan pergantian peran (user -> model).
      */
     protected function formatGeminiHistory(array $chatHistory): array
     {
         $contents = [];
-        // Ambil maksimal 4 giliran chat terakhir (2 putaran Q&A)
-        $recent = array_slice($chatHistory, -4);
+        // Ambil riwayat pesan terbaru (maksimal 6 entri untuk menyusun putaran Q&A yang valid)
+        $recent = array_slice($chatHistory, -6);
 
         foreach ($recent as $hist) {
-            if (isset($hist['sender_type']) && isset($hist['content'])) {
-                $role = $hist['sender_type'] === 'visitor' ? 'user' : 'model';
-                $rawContent = PersonalDataRedactor::redact($hist['content']);
+            if (!isset($hist['sender_type']) || !isset($hist['content'])) {
+                continue;
+            }
+            $text = trim((string) $hist['content']);
+            if ($text === '') {
+                continue;
+            }
 
-                // Pangkas respons asisten lama jika terlalu panjang agar tidak membakar ribuan token
-                if ($role === 'model' && mb_strlen($rawContent) > 350) {
-                    $rawContent = mb_substr($rawContent, 0, 350) . '... [ringkasan jawaban sebelumnya]';
-                }
+            $role = ($hist['sender_type'] === 'visitor') ? 'user' : 'model';
+            $rawContent = PersonalDataRedactor::redact($text);
 
+            // Pangkas respons asisten lama jika terlalu panjang agar tidak membakar ribuan token
+            if ($role === 'model' && mb_strlen($rawContent) > 350) {
+                $rawContent = mb_substr($rawContent, 0, 350) . '... [ringkasan jawaban sebelumnya]';
+            }
+
+            $lastIdx = count($contents) - 1;
+            // Jika terdapat peran berurutan yang sama, gabungkan ke giliran sebelumnya untuk mencegah error HTTP 400 Gemini
+            if ($lastIdx >= 0 && $contents[$lastIdx]['role'] === $role) {
+                $contents[$lastIdx]['parts'][0]['text'] .= "\n" . $rawContent;
+            } else {
                 $contents[] = [
                     'role' => $role,
                     'parts' => [
@@ -136,6 +146,17 @@ class AiLlmService
                     ],
                 ];
             }
+        }
+
+        // Aturan Gemini 1: Percakapan harus dimulai dari peran 'user'
+        while (!empty($contents) && $contents[0]['role'] !== 'user') {
+            array_shift($contents);
+        }
+
+        // Aturan Gemini 2: Pemanggil selalu menambahkan giliran 'user' baru di akhir riwayat.
+        // Maka riwayat sebelum pesan baru HARUS berakhiran 'model' agar polanya tetap selang-seling (user -> model -> user).
+        while (!empty($contents) && end($contents)['role'] === 'user') {
+            array_pop($contents);
         }
 
         return $contents;
@@ -147,22 +168,28 @@ class AiLlmService
     protected function formatOpenAiHistory(array $chatHistory): array
     {
         $messages = [];
-        $recent = array_slice($chatHistory, -4);
+        $recent = array_slice($chatHistory, -6);
 
         foreach ($recent as $hist) {
-            if (isset($hist['sender_type']) && isset($hist['content'])) {
-                $role = $hist['sender_type'] === 'visitor' ? 'user' : 'assistant';
-                $rawContent = PersonalDataRedactor::redact($hist['content']);
-
-                if ($role === 'assistant' && mb_strlen($rawContent) > 350) {
-                    $rawContent = mb_substr($rawContent, 0, 350) . '... [ringkasan jawaban sebelumnya]';
-                }
-
-                $messages[] = [
-                    'role' => $role,
-                    'content' => $rawContent,
-                ];
+            if (!isset($hist['sender_type']) || !isset($hist['content'])) {
+                continue;
             }
+            $text = trim((string) $hist['content']);
+            if ($text === '') {
+                continue;
+            }
+
+            $role = ($hist['sender_type'] === 'visitor') ? 'user' : 'assistant';
+            $rawContent = PersonalDataRedactor::redact($text);
+
+            if ($role === 'assistant' && mb_strlen($rawContent) > 350) {
+                $rawContent = mb_substr($rawContent, 0, 350) . '... [ringkasan jawaban sebelumnya]';
+            }
+
+            $messages[] = [
+                'role' => $role,
+                'content' => $rawContent,
+            ];
         }
 
         return $messages;
@@ -582,7 +609,6 @@ class AiLlmService
                 if (in_array($status, [429, 503, 404, 500])) {
                     continue;
                 }
-
             } catch (\Throwable $e) {
                 $lastError = "Model {$candidateModel} exception: " . $e->getMessage();
                 Log::warning("Google AI Studio ({$candidateModel}) error: " . $e->getMessage());
@@ -663,7 +689,7 @@ class AiLlmService
     /**
      * Format publikasi resmi BPS Karanganyar hasil Deep Research menjadi grounding ringkas hemat token.
      */
-    protected function buildPublicationContext($publications): string
+    protected function buildPublicationContext(mixed $publications = []): string
     {
         if (empty($publications) || (is_countable($publications) && count($publications) === 0)) {
             return '';
@@ -804,11 +830,11 @@ class AiLlmService
 
         $contextBlock = !empty($context) ? "\n[KONTEKS DATA & PUBLIKASI BPS]:\n{$context}\n" : '';
 
-        return <<<PROMPT
+        $prompt = <<<'PROMPT'
 Kamu adalah "KARTA" (Konsultan AI Riset & Terpadu Angka) — Asisten Virtual Cerdas Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar, Jawa Tengah (Kode MFD: 3313, Rilis Data Resmi: 2026).
 Nama KARTA: Konsultan (Statistik/Metodologi), AI (Deep Research RAG BPS), Riset (Mendukung penelitian skripsi Rp0/OPD), Terpadu (PST Satu Pintu), Angka (Fakta data valid). Jika ditanya identitas, jelaskan makna ini dengan santun dan bangga.
 
-{$langDirective}
+[[LANG_DIRECTIVE]]
 
 ATURAN FORMAT PENULISAN:
 1. DILARANG KERAS MENGGUNAKAN EMOJI UNICODE (seperti pin, grafik, buku, jalan, dsb).
@@ -877,7 +903,13 @@ DATA STATISTIK RESMI KABUPATEN KARANGANYAR 2026 (KDA 2026):
    - Tanaman Pangan: Luas panen padi 51.200 ha, Produksi GKG 285.000 ton (Lumbung Pangan Soloraya). Sentra: Mojogedang, Jumapolo, Tasikmadu, Kebakkramat, Jatipuro.
    - Komoditas Unggulan: Sentra durian tersohor di Kecamatan Jumantono (didukung Jenawi dan Kerjo); Kebun Teh Kemuning di Ngargoyoso dan Jenawi; Sayuran lereng Gunung Lawu (wortel, kubis, daun bawang) di Tawangmangu dan Ngargoyoso.
    - Pariwisata & Perhotelan: Wisata alam & budaya lereng Lawu (Air Terjun Grojogan Sewu, Candi Cetho, Candi Sukuh, Telaga Madirda, Astana Giribangun). TPK Hotel rata-rata 48%-55% (hari kerja) dan >80% (akhir pekan/libur).
-{$contextBlock}
+[[CONTEXT_BLOCK]]
 PROMPT;
+
+        return str_replace(
+            ['[[LANG_DIRECTIVE]]', '[[CONTEXT_BLOCK]]'],
+            [$langDirective, $contextBlock],
+            $prompt
+        );
     }
 }

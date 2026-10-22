@@ -20,8 +20,11 @@ class ChatService
     public function getOrCreateConversation(?string $sessionToken, ?string $visitorName = null): Conversation
     {
         if ($sessionToken) {
-            $conversation = Conversation::where('visitor_session', $sessionToken)
-                ->orWhere('public_id', $sessionToken)
+            $conversation = Conversation::where(function ($q) use ($sessionToken) {
+                    $q->where('visitor_session', $sessionToken)
+                      ->orWhere('public_id', $sessionToken);
+                })
+                ->latest('id')
                 ->first();
 
             if ($conversation) {
@@ -62,7 +65,12 @@ class ChatService
             'last_message_at' => now(),
         ]);
 
-        // 2. Jika percakapan sedang ditangani oleh petugas manusia, bot tidak menjawab otomatis
+        // 2. Jika percakapan berstatus closed, buka kembali sebagai percakapan bot
+        if ($conversation->status === 'closed') {
+            $conversation->update(['status' => 'bot', 'assigned_to' => null]);
+        }
+
+        // 3. Jika percakapan sedang ditangani oleh petugas manusia, bot tidak menjawab otomatis
         if ($conversation->status === 'handled') {
             return [
                 'conversation' => $conversation,
@@ -76,8 +84,48 @@ class ChatService
             ];
         }
 
-        // 3. Deteksi Intent & Generate Jawaban Cerdas
-        $replyData = $this->generateBotReply($conversation, $messageText, $language);
+        // 4. Jika pengunjung sedang dalam antrean petugas (waiting)
+        if ($conversation->status === 'waiting') {
+            if ($this->isCancelOrResetIntent($messageText)) {
+                $conversation->update(['status' => 'bot', 'assigned_to' => null]);
+                $ackText = "Antrean petugas telah dibatalkan. Anda telah kembali terhubung dengan Asisten AI BPS Karanganyar. Silakan ajukan pertanyaan seputar data statistik.";
+                $botMsg = Message::create([
+                    'conversation_id' => $conversation->id,
+                    'sender_type' => 'bot',
+                    'content' => $ackText,
+                ]);
+                return [
+                    'conversation' => $conversation,
+                    'visitor_message' => $visitorMessage,
+                    'bot_message' => $botMsg,
+                    'reply' => $ackText,
+                    'status' => 'bot',
+                    'sources' => [],
+                    'quick_options' => ['Kondisi Jalan Karanganyar', 'Grafik Kemiskinan', 'Grafik IPM', 'Hubungi Petugas'],
+                ];
+            }
+
+            $waitingNotice = "Pesan Anda telah diteruskan ke antrean petugas BPS Kabupaten Karanganyar. Petugas kami akan segera merespons di sesi ini. Mohon menunggu sejenak.";
+            $botMsg = Message::create([
+                'conversation_id' => $conversation->id,
+                'sender_type' => 'bot',
+                'content' => $waitingNotice,
+            ]);
+
+            return [
+                'conversation' => $conversation,
+                'visitor_message' => $visitorMessage,
+                'bot_message' => $botMsg,
+                'reply' => $waitingNotice,
+                'status' => 'waiting',
+                'officer_name' => null,
+                'sources' => [],
+                'quick_options' => ['Batalkan Antrean', 'Mulai Baru'],
+            ];
+        }
+
+        // 5. Deteksi Intent & Generate Jawaban Cerdas (kecualikan pesan saat ini agar tidak duplikat di LLM)
+        $replyData = $this->generateBotReply($conversation, $messageText, $language, $visitorMessage->id);
         $chart = $this->resolveChartForMessage($messageText, $replyData['reply']);
 
         // Jika ada grafik data riil dan belum tersemat di reply, sematkan format blok kode ```chart
@@ -85,7 +133,7 @@ class ChatService
             $replyData['reply'] .= "\n\n```chart\n" . json_encode($chart, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n```";
         }
 
-        // 4. Simpan pesan balasan bot ke database
+        // 6. Simpan pesan balasan bot ke database
         $botMessage = Message::create([
             'conversation_id' => $conversation->id,
             'sender_type' => 'bot',
@@ -131,7 +179,12 @@ class ChatService
             'last_message_at' => now(),
         ]);
 
-        // 2. Jika percakapan sedang ditangani oleh petugas manusia, bot tidak menjawab otomatis
+        // 2. Jika percakapan berstatus closed, buka kembali sebagai percakapan bot
+        if ($conversation->status === 'closed') {
+            $conversation->update(['status' => 'bot', 'assigned_to' => null]);
+        }
+
+        // 3. Jika percakapan sedang ditangani oleh petugas manusia, bot tidak menjawab otomatis
         if ($conversation->status === 'handled') {
             return [
                 'conversation' => $conversation,
@@ -145,8 +198,54 @@ class ChatService
             ];
         }
 
-        // 3. Deteksi Intent & Generate Jawaban Cerdas (dengan streaming)
-        $replyData = $this->generateBotReplyStream($conversation, $messageText, $language, $onChunk, $onReset);
+        // 4. Jika pengunjung sedang dalam antrean petugas (waiting)
+        if ($conversation->status === 'waiting') {
+            if ($this->isCancelOrResetIntent($messageText)) {
+                $conversation->update(['status' => 'bot', 'assigned_to' => null]);
+                $ackText = "Antrean petugas telah dibatalkan. Anda telah kembali terhubung dengan Asisten AI BPS Karanganyar. Silakan ajukan pertanyaan seputar data statistik.";
+                if ($onChunk) {
+                    $onChunk($ackText);
+                }
+                $botMsg = Message::create([
+                    'conversation_id' => $conversation->id,
+                    'sender_type' => 'bot',
+                    'content' => $ackText,
+                ]);
+                return [
+                    'conversation' => $conversation,
+                    'visitor_message' => $visitorMessage,
+                    'bot_message' => $botMsg,
+                    'reply' => $ackText,
+                    'status' => 'bot',
+                    'sources' => [],
+                    'quick_options' => ['Kondisi Jalan Karanganyar', 'Grafik Kemiskinan', 'Grafik IPM', 'Hubungi Petugas'],
+                ];
+            }
+
+            $waitingNotice = "Pesan Anda telah diteruskan ke antrean petugas BPS Kabupaten Karanganyar. Petugas kami akan segera merespons di sesi ini. Mohon menunggu sejenak.";
+            if ($onChunk) {
+                $onChunk($waitingNotice);
+            }
+            $botMsg = Message::create([
+                'conversation_id' => $conversation->id,
+                'sender_type' => 'bot',
+                'content' => $waitingNotice,
+            ]);
+
+            return [
+                'conversation' => $conversation,
+                'visitor_message' => $visitorMessage,
+                'bot_message' => $botMsg,
+                'reply' => $waitingNotice,
+                'status' => 'waiting',
+                'officer_name' => null,
+                'sources' => [],
+                'quick_options' => ['Batalkan Antrean', 'Mulai Baru'],
+            ];
+        }
+
+        // 5. Deteksi Intent & Generate Jawaban Cerdas (dengan streaming, kecualikan pesan saat ini)
+        $replyData = $this->generateBotReplyStream($conversation, $messageText, $language, $onChunk, $onReset, $visitorMessage->id);
         $chart = $this->resolveChartForMessage($messageText, $replyData['reply']);
 
         // Jika ada grafik data riil dan belum tersemat di reply, sematkan format blok kode ```chart
@@ -183,11 +282,37 @@ class ChatService
     }
 
     /**
-     * Generate bot reply dengan streaming support.
+     * Cek apakah pesan pengunjung merupakan permintaan batal antrean / kembali ke bot.
      */
-    protected function generateBotReplyStream(Conversation $conversation, string $message, ?string $language = 'id', ?callable $onChunk = null, ?callable $onReset = null): array
+    protected function isCancelOrResetIntent(string $message): bool
     {
         $lower = Str::lower($message);
+        return (bool) (preg_match('/^(mulai\s+baru|ulang\s+dari\s+awal|reset\s+chat|reset\s+percakapan|mulai\s+lagi|restart\s+chat|clear\s+chat|mulai\s+ulang)\b/i', $lower)
+            || preg_match('/\b(batal|batalkan\s+antrean|kembali\s+ke\s+(ai|bot)|tanya\s+ke\s+bot)\b/i', $lower));
+    }
+
+    /**
+     * Generate bot reply dengan streaming support.
+     */
+    protected function generateBotReplyStream(Conversation $conversation, string $message, ?string $language = 'id', ?callable $onChunk = null, ?callable $onReset = null, ?int $excludeMessageId = null): array
+    {
+        $lower = Str::lower($message);
+
+        // A0. Permintaan Mulai Baru / Reset Percakapan
+        if (preg_match('/^(mulai\s+baru|ulang\s+dari\s+awal|reset\s+chat|reset\s+percakapan|mulai\s+lagi|restart\s+chat|clear\s+chat|mulai\s+ulang)\b/i', $lower)) {
+            $text = "Baik! Sesi percakapan konsultasi statistik telah disegarkan kembali.\n\nSilakan ajukan pertanyaan atau topik baru seputar data statistik resmi BPS Kabupaten Karanganyar (seperti data kemiskinan, IPM, jalan kabupaten, atau kependudukan 17 kecamatan).";
+            if ($onChunk) {
+                $onChunk($text);
+            }
+            return [
+                'reply' => $text,
+                'sources' => [],
+                'confidence' => 1.0,
+                'is_fallback' => false,
+                'conversation_status' => 'bot',
+                'quick_options' => ['Kondisi Jalan Karanganyar', 'Grafik Kemiskinan', 'Grafik IPM', 'Hubungi Petugas'],
+            ];
+        }
 
         // A. Permintaan Hubungi Petugas Manusia
         if (preg_match('/\b(hubungi|bicara\s+dengan|ngobrol\s+dengan|sambungkan\s+ke|chat\s+dengan|minta\s+bantuan)\s+(petugas|operator|admin|cs|manusia)\b/i', $lower) || in_array($lower, ['hubungi petugas', 'petugas', 'operator', 'cs', 'admin', 'bantuan manusia'], true)) {
@@ -238,8 +363,11 @@ class ChatService
 
         // D. Panggil AI LLM dengan streaming dan Deep Research Publikasi
         if ($this->aiService->isConfigured()) {
-            $history = $conversation->messages()
-                ->latest()
+            $historyQuery = $conversation->messages();
+            if ($excludeMessageId) {
+                $historyQuery->where('id', '!=', $excludeMessageId);
+            }
+            $history = $historyQuery->latest()
                 ->take(6)
                 ->get()
                 ->reverse()
@@ -393,9 +521,21 @@ class ChatService
     /**
      * Logika respon bot dengan AI LLM Gateway (9router / OpenRouter) & Basis Pengetahuan RAG.
      */
-    protected function generateBotReply(Conversation $conversation, string $message, ?string $language = 'id'): array
+    protected function generateBotReply(Conversation $conversation, string $message, ?string $language = 'id', ?int $excludeMessageId = null): array
     {
         $lower = Str::lower($message);
+
+        // A0. Permintaan Mulai Baru / Reset Percakapan
+        if (preg_match('/^(mulai\s+baru|ulang\s+dari\s+awal|reset\s+chat|reset\s+percakapan|mulai\s+lagi|restart\s+chat|clear\s+chat|mulai\s+ulang)\b/i', $lower)) {
+            return [
+                'reply' => "Baik! Sesi percakapan konsultasi statistik telah disegarkan kembali.\n\nSilakan ajukan pertanyaan atau topik baru seputar data statistik resmi BPS Kabupaten Karanganyar (seperti data kemiskinan, IPM, jalan kabupaten, atau kependudukan 17 kecamatan).",
+                'sources' => [],
+                'confidence' => 1.0,
+                'is_fallback' => false,
+                'conversation_status' => 'bot',
+                'quick_options' => ['Kondisi Jalan Karanganyar', 'Grafik Kemiskinan', 'Grafik IPM', 'Hubungi Petugas'],
+            ];
+        }
 
         // A. Permintaan Hubungi Petugas Manusia (Hanya jika benar-benar eksplisit meminta sambung ke staf)
         if (preg_match('/\b(hubungi|bicara\s+dengan|ngobrol\s+dengan|sambungkan\s+ke|chat\s+dengan|minta\s+bantuan)\s+(petugas|operator|admin|cs|manusia)\b/i', $lower) || in_array($lower, ['hubungi petugas', 'petugas', 'operator', 'cs', 'admin', 'bantuan manusia'], true)) {
@@ -442,8 +582,11 @@ class ChatService
 
         // D. Coba panggil AI LLM Gateway (Google AI Studio Gemini) dengan RAG & Deep Research Publikasi
         if ($this->aiService->isConfigured()) {
-            $history = $conversation->messages()
-                ->latest()
+            $historyQuery = $conversation->messages();
+            if ($excludeMessageId) {
+                $historyQuery->where('id', '!=', $excludeMessageId);
+            }
+            $history = $historyQuery->latest()
                 ->take(6)
                 ->get()
                 ->reverse()

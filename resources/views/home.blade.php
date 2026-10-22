@@ -3,13 +3,67 @@
 @section('title', 'Portal Pelayanan Statistik Terpadu')
 @section('meta_description', 'Portal resmi Pelayanan Statistik Terpadu (PST) BPS Kabupaten Karanganyar. Akses indikator strategis 2026, data mikro tarif Rp0,- mahasiswa, rekomendasi ROMANTIK, WebAPI developer, dan konsultasi data online.')
 
+@push('styles')
+<style>
+    .info-banner-sosial { background: linear-gradient(135deg, #002b6a 0%, #005b9f 60%, #003c80 100%); }
+    .info-banner-ipm { background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #047857 100%); }
+    .info-banner-kemiskinan { background: linear-gradient(135deg, #7c2d12 0%, #c2410c 60%, #ea580c 100%); }
+    .info-banner-pertanian { background: linear-gradient(135deg, #14532d 0%, #16a34a 60%, #15803d 100%); }
+    .info-banner-pdrb { background: linear-gradient(135deg, #0369a1 0%, #0284c7 60%, #005b9f 100%); }
+    .info-banner-sensus { background: linear-gradient(135deg, #3b0764 0%, #6b21a8 60%, #4c1d95 100%); }
+    .info-badge-glass { background: rgba(255, 255, 255, 0.22); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.35); }
+</style>
+@endpush
+
 @section('content')
 {{-- HERO SECTION: Official Prestigious BPS Gateway --}}
 <section class="relative bg-gradient-to-br from-[#002b6a] via-[#003c80] to-[#043277] text-white pt-10 pb-20 lg:pt-14 lg:pb-28 overflow-hidden border-b-4 border-[#f7941d]">
-    {{-- Institutional subtle pattern --}}
+    {{-- Institutional subtle pattern & Geographic Topography Overlay --}}
     <div class="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
     
+    {{-- Subtle Vector Watermark: Topographical Geo-Contour Karanganyar (Lawu Elevation & 17 Districts) --}}
+    <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-15 select-none" aria-hidden="true">
+        <svg class="w-full h-full object-cover" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {{-- Topographic contour lines representing Karanganyar slope from Bengawan Solo basin to Mt. Lawu (3.265m) --}}
+            <path d="M-50,520 C220,480 340,560 600,490 C860,420 1020,460 1200,380 C1340,320 1400,280 1500,240" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="4 4"/>
+            <path d="M-30,440 C180,410 380,460 640,400 C900,340 1060,370 1250,290 C1380,230 1440,190 1520,160" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.6"/>
+            <path d="M-10,360 C240,320 420,370 680,310 C940,250 1100,270 1290,200 C1400,150 1460,110 1540,70" stroke="#f7941d" stroke-width="1.2" stroke-opacity="0.5"/>
+            <path d="M20,280 C280,240 460,280 720,210 C980,150 1150,170 1340,110 C1430,70 1480,40 1550,10" stroke="#38bdf8" stroke-width="1" stroke-dasharray="6 6"/>
+            
+            {{-- Geo-coordinate reference marks (7°35'S 110°57'E) --}}
+            <circle cx="1180" cy="220" r="4" fill="#f7941d"/>
+            <circle cx="1180" cy="220" r="14" stroke="#f7941d" stroke-width="1" stroke-opacity="0.4"/>
+            <text x="1200" y="225" fill="#ffffff" fill-opacity="0.45" font-size="10" font-family="monospace">Puncak Lawu 3.265 m</text>
+            
+            <circle cx="280" cy="460" r="3.5" fill="#38bdf8"/>
+            <text x="295" y="464" fill="#ffffff" fill-opacity="0.4" font-size="9" font-family="monospace">7°35'45"S 110°57'12"E (Pusat BPS)</text>
+        </svg>
+    </div>
+
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Side Telemetry Cards (Desktop Executive View - Non-Alay, Pure Official Statistics) --}}
+        <div class="hidden xl:flex items-center justify-between absolute inset-x-8 top-12 pointer-events-none">
+            {{-- Left Pill: Wilayah & Geospasial --}}
+            <div class="pointer-events-auto bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 text-left max-w-[210px] shadow-lg shadow-black/10 transition-all hover:bg-white/15">
+                <div class="flex items-center gap-2 mb-1.5 text-sky-300">
+                    <span class="iconify text-base" data-icon="lucide:map-pin"></span>
+                    <span class="text-[10px] font-black uppercase tracking-wider text-blue-200">Wilayah Karanganyar</span>
+                </div>
+                <div class="text-xs font-black text-white">17 Kecamatan • 177 Desa</div>
+                <p class="text-[10px] text-blue-100/80 mt-0.5 leading-snug">Data Wilkerstat SHP & KDA kompendium resmi 2026</p>
+            </div>
+
+            {{-- Right Pill: Standar Layanan PST --}}
+            <div class="pointer-events-auto bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 text-left max-w-[210px] shadow-lg shadow-black/10 transition-all hover:bg-white/15">
+                <div class="flex items-center gap-2 mb-1.5 text-amber-300">
+                    <span class="iconify text-base" data-icon="lucide:shield-check"></span>
+                    <span class="text-[10px] font-black uppercase tracking-wider text-amber-200">Standar PST Terpadu</span>
+                </div>
+                <div class="text-xs font-black text-white">Bebas Tarif PNBP (Rp0,-)</div>
+                <p class="text-[10px] text-blue-100/80 mt-0.5 leading-snug">Data mikro skripsi mahasiswa & rekomendasi ROMANTIK</p>
+            </div>
+        </div>
+
         <div class="text-center max-w-3xl mx-auto space-y-4 sm:space-y-5">
             {{-- Official Agency Badge --}}
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-slate-100 text-xs font-black shadow-sm">
@@ -33,9 +87,10 @@
                 Layanan satu pintu penyediaan data statistik berkualitas, konsultasi statistik cerdas, permohonan data mikro (PP 86/2021), rekomendasi survei (ROMANTIK), dan katalog 460+ publikasi resmi.
             </p>
 
-            <div class="inline-flex items-center gap-2 text-xs font-bold text-amber-300">
-                <span class="iconify text-sm" data-icon="lucide:heart"></span>
-                <span>Siap Melayani dengan Profesional, Integritas, dan Amanah #MelayaniDenganHati</span>
+            {{-- Real-Time PST Service Desk Status --}}
+            <div id="live-pst-status-bar" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-bold bg-black/20 backdrop-blur-sm border border-white/15 text-slate-200">
+                <span id="live-pst-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="live-pst-text">Memeriksa jadwal layanan PST...</span>
             </div>
 
             {{-- Official Prominent Search Bar --}}
@@ -45,11 +100,11 @@
                         <span class="iconify text-xl text-[#003c80]" data-icon="lucide:search"></span>
                     </div>
                     <input type="text"
-                           name="q"
-                           placeholder="Tanyakan ke KARTA: data jalan, kemiskinan, IPM, data mikro, publikasi..."
-                           class="w-full py-2.5 px-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium">
+                        name="q"
+                        placeholder="Tanyakan ke KARTA: data jalan, kemiskinan, IPM, data mikro, publikasi..."
+                        class="w-full py-2.5 px-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent outline-none font-medium">
                     <button type="submit"
-                            class="px-5 sm:px-7 py-2.5 sm:py-3 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl transition-all shadow-md shadow-orange-500/20 shrink-0 flex items-center gap-1.5 cursor-pointer">
+                        class="px-5 sm:px-7 py-2.5 sm:py-3 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl transition-all shadow-md shadow-orange-500/20 shrink-0 flex items-center gap-1.5 cursor-pointer">
                         <span>Tanya KARTA</span>
                         <span class="iconify text-base" data-icon="lucide:arrow-right"></span>
                     </button>
@@ -118,6 +173,11 @@
                 'unit' => '',
                 'sub' => '72,40 Ribu Jiwa',
                 'source' => 'Susenas 2026',
+                'trend' => 'positive',
+                'trend_label' => 'Turun 0,36%',
+                'trend_icon' => 'lucide:arrow-down-right',
+                'sparkline_color' => '#10b981',
+                'sparkline_path' => 'M 0,22 Q 25,18 45,12 T 90,6',
                 'icon' => 'lucide:trending-down',
                 'color' => 'text-[#ea580c]',
                 'badge' => 'bg-orange-50 text-[#ea580c]',
@@ -128,6 +188,11 @@
                 'unit' => '',
                 'sub' => 'Status: TINGGI',
                 'source' => 'AHH: 78,12 Thn',
+                'trend' => 'positive',
+                'trend_label' => 'Naik +0,42',
+                'trend_icon' => 'lucide:arrow-up-right',
+                'sparkline_color' => '#0284c7',
+                'sparkline_path' => 'M 0,20 Q 25,14 50,10 T 90,4',
                 'icon' => 'lucide:award',
                 'color' => 'text-[#003c80]',
                 'badge' => 'bg-blue-50 text-[#003c80]',
@@ -138,6 +203,11 @@
                 'unit' => '',
                 'sub' => 'Harga Konstan',
                 'source' => 'ADHB Rp 44,8 T',
+                'trend' => 'positive',
+                'trend_label' => 'Laju +0,31%',
+                'trend_icon' => 'lucide:arrow-up-right',
+                'sparkline_color' => '#00a651',
+                'sparkline_path' => 'M 0,18 Q 30,15 60,8 T 90,4',
                 'icon' => 'lucide:trending-up',
                 'color' => 'text-[#00a651]',
                 'badge' => 'bg-emerald-50 text-[#00a651]',
@@ -148,6 +218,11 @@
                 'unit' => 'Jiwa',
                 'sub' => '17 Kecamatan',
                 'source' => 'KDA Bab 3',
+                'trend' => 'neutral',
+                'trend_label' => '+0,78% thn',
+                'trend_icon' => 'lucide:users',
+                'sparkline_color' => '#64748b',
+                'sparkline_path' => 'M 0,16 Q 30,12 60,8 T 90,4',
                 'icon' => 'lucide:users',
                 'color' => 'text-slate-900',
                 'badge' => 'bg-slate-100 text-slate-800',
@@ -158,6 +233,11 @@
                 'unit' => '',
                 'sub' => 'TPAK: 72,40%',
                 'source' => 'Sakernas 2026',
+                'trend' => 'positive',
+                'trend_label' => 'Turun 0,22%',
+                'trend_icon' => 'lucide:arrow-down-right',
+                'sparkline_color' => '#6366f1',
+                'sparkline_path' => 'M 0,22 Q 25,18 55,14 T 90,6',
                 'icon' => 'lucide:briefcase',
                 'color' => 'text-indigo-600',
                 'badge' => 'bg-indigo-50 text-indigo-700',
@@ -168,6 +248,11 @@
                 'unit' => '',
                 'sub' => 'IHK: 125,85',
                 'source' => 'SBH Karanganyar',
+                'trend' => 'neutral',
+                'trend_label' => 'Terkendali',
+                'trend_icon' => 'lucide:check',
+                'sparkline_color' => '#0d9488',
+                'sparkline_path' => 'M 0,12 Q 30,8 60,14 T 90,10',
                 'icon' => 'lucide:percent',
                 'color' => 'text-teal-600',
                 'badge' => 'bg-teal-50 text-teal-700',
@@ -176,20 +261,39 @@
         @endphp
 
         @foreach($macroStats as $ms)
-        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-md hover:shadow-lg transition-all flex flex-col justify-between">
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-md hover:shadow-xl hover:border-blue-300 transition-all flex flex-col justify-between group">
             <div>
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider truncate">{{ $ms['label'] }}</span>
-                    <div class="w-7 h-7 rounded-lg {{ $ms['badge'] }} flex items-center justify-center shrink-0">
+                    <div class="w-7 h-7 rounded-lg {{ $ms['badge'] }} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                         <span class="iconify text-sm" data-icon="{{ $ms['icon'] }}"></span>
                     </div>
                 </div>
-                <div class="flex items-baseline gap-0.5">
-                    <span class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{{ $ms['value'] }}</span>
-                    @if($ms['unit'])<span class="text-[10px] font-bold text-slate-500">{{ $ms['unit'] }}</span>@endif
+                
+                <div class="flex items-baseline justify-between gap-1">
+                    <div class="flex items-baseline gap-0.5">
+                        <span class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{{ $ms['value'] }}</span>
+                        @if($ms['unit'])<span class="text-[10px] font-bold text-slate-500">{{ $ms['unit'] }}</span>@endif
+                    </div>
+                    
+                    {{-- Trend Pill (Clean & Non-Alay) --}}
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9.5px] font-bold {{ $ms['trend'] === 'positive' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                        <span class="iconify text-[10px]" data-icon="{{ $ms['trend_icon'] }}"></span>
+                        <span>{{ $ms['trend_label'] }}</span>
+                    </span>
                 </div>
-                <p class="text-[11px] text-slate-600 font-semibold mt-0.5 truncate">{{ $ms['sub'] }}</p>
+                
+                <div class="flex items-center justify-between mt-1">
+                    <p class="text-[11px] text-slate-600 font-semibold truncate">{{ $ms['sub'] }}</p>
+                    {{-- Micro Sparkline (Clean official visual) --}}
+                    <div class="w-12 h-4 shrink-0 opacity-80" title="Tren Indikator">
+                        <svg viewBox="0 0 90 24" class="w-full h-full overflow-visible">
+                            <path d="{{ $ms['sparkline_path'] }}" fill="none" stroke="{{ $ms['sparkline_color'] }}" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
             </div>
+            
             <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between text-[9px] text-slate-400 font-medium">
                 <span class="truncate">{{ $ms['source'] }}</span>
                 <span class="iconify text-emerald-600 shrink-0" data-icon="lucide:check-circle-2"></span>
@@ -315,75 +419,76 @@
         {{-- Infographics Cards Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="infographics-grid">
             @foreach($infographics ?? [] as $info)
-                <div class="infographic-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#003c80] transition-all flex flex-col justify-between overflow-hidden group" data-category="{{ $info['category'] }}">
-                    {{-- Card Visual Top Banner --}}
-                    <div class="p-6 text-white relative overflow-hidden" style="{{ $info['gradient_css'] }}">
-                        {{-- Subtle background pattern --}}
-                        <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-                        
-                        <div class="relative z-10 flex items-start justify-between gap-3">
-                            <div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-block mb-2 shadow-xs backdrop-blur-md" style="{{ $info['badge_style'] }}">
-                                    {{ $info['category_label'] }}
-                                </span>
-                                <span class="block text-blue-100 text-xs font-semibold">{{ $info['period'] }}</span>
-                            </div>
-                            <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-110 transition-transform">
-                                <span class="iconify text-2xl text-white" data-icon="{{ $info['icon'] }}"></span>
-                            </div>
-                        </div>
+            <div class="infographic-card bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-[#003c80] transition-all flex flex-col justify-between overflow-hidden group" data-category="{{ $info['category'] }}">
+                {{-- Card Visual Top Banner --}}
+                <div class="p-6 text-white relative overflow-hidden info-banner-{{ $info['category'] }}">
+                    {{-- Subtle background pattern --}}
+                    <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
-                        <div class="relative z-10 mt-4">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl sm:text-4xl font-black text-white tracking-tight drop-shadow-sm">{{ $info['metric_value'] }}</span>
-                                <span class="text-xs sm:text-sm font-black text-amber-300 drop-shadow-xs">{{ $info['metric_unit'] }}</span>
-                            </div>
-                            <p class="text-xs text-blue-100 mt-1 font-medium">{{ $info['metric_note'] }}</p>
+                    <div class="relative z-10 flex items-start justify-between gap-3">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-block mb-2 shadow-xs backdrop-blur-md info-badge-glass">
+                                {{ $info['category_label'] }}
+                            </span>
+                            <span class="block text-blue-100 text-xs font-semibold">{{ $info['period'] }}</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                            <span class="iconify text-2xl text-white" data-icon="{{ $info['icon'] }}"></span>
                         </div>
                     </div>
 
-                    {{-- Card Body --}}
-                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
-                        <div>
-                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-[#003c80] transition-colors mb-3">
-                                {{ $info['title'] }}
-                            </h3>
+                    <div class="relative z-10 mt-4">
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl sm:text-4xl font-black text-white tracking-tight drop-shadow-sm">{{ $info['metric_value'] }}</span>
+                            <span class="text-xs sm:text-sm font-black text-amber-300 drop-shadow-xs">{{ $info['metric_unit'] }}</span>
+                        </div>
+                        <p class="text-xs text-blue-100 mt-1 font-medium">{{ $info['metric_note'] }}</p>
+                    </div>
+                </div>
 
-                            <ul class="space-y-2 text-xs text-slate-600">
-                                @foreach($info['points'] as $pt)
-                                    <li class="flex items-start gap-2">
-                                        <span class="iconify text-sm text-[#00a651] shrink-0 mt-0.5" data-icon="lucide:check-circle-2"></span>
-                                        <span class="leading-relaxed">{{ $pt }}</span>
-                                    </li>
-                                @endforeach
-                            </ul>
+                {{-- Card Body --}}
+                <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-[#003c80] transition-colors mb-3">
+                            {{ $info['title'] }}
+                        </h3>
+
+                        <ul class="space-y-2 text-xs text-slate-600">
+                            @foreach($info['points'] as $pt)
+                            <li class="flex items-start gap-2">
+                                <span class="iconify text-sm text-[#00a651] shrink-0 mt-0.5" data-icon="lucide:check-circle-2"></span>
+                                <span class="leading-relaxed">{{ $pt }}</span>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    {{-- Card Footer Actions --}}
+                    <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
+                        <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1 truncate" title="{{ $info['sources'] }}">
+                            <span class="iconify text-xs text-slate-400 shrink-0" data-icon="lucide:database"></span>
+                            <span class="truncate">Sumber: {{ $info['sources'] }}</span>
                         </div>
 
-                        {{-- Card Footer Actions --}}
-                        <div class="pt-4 border-t border-slate-100 flex flex-col gap-2">
-                            <div class="text-[11px] text-slate-400 font-mono flex items-center gap-1 truncate" title="{{ $info['sources'] }}">
-                                <span class="iconify text-xs text-slate-400 shrink-0" data-icon="lucide:database"></span>
-                                <span class="truncate">Sumber: {{ $info['sources'] }}</span>
-                            </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button type="button"
+                                data-id="{{ $info['id'] }}"
+                                onclick="openInfographicModal(this.dataset.id)"
+                                class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-sm text-[#003c80]" data-icon="lucide:zoom-in"></span>
+                                <span>Detail Ringkasan</span>
+                            </button>
 
-                            <div class="flex items-center gap-2 pt-1">
-                                <button type="button"
-                                        onclick="openInfographicModal('{{ $info['id'] }}')"
-                                        class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                                    <span class="iconify text-sm text-[#003c80]" data-icon="lucide:zoom-in"></span>
-                                    <span>Detail Ringkasan</span>
-                                </button>
-
-                                <a href="{{ route('chat.index', ['q' => $info['ai_prompt']]) }}"
-                                   class="py-2 px-3 bg-[#003c80] hover:bg-[#002b6a] active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0"
-                                   title="Tanyakan infografis ini ke KARTA AI">
-                                    <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
-                                    <span>Tanya KARTA</span>
-                                </a>
-                            </div>
+                            <a href="{{ route('chat.index', ['q' => $info['ai_prompt']]) }}"
+                                class="py-2 px-3 bg-[#003c80] hover:bg-[#002b6a] active:scale-95 text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0"
+                                title="Tanyakan infografis ini ke KARTA AI">
+                                <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
+                                <span>Tanya KARTA</span>
+                            </a>
                         </div>
                     </div>
                 </div>
+            </div>
             @endforeach
         </div>
 
@@ -493,16 +598,16 @@
                 {{-- Cover Image --}}
                 <div class="relative bg-slate-100 aspect-[3/4] overflow-hidden flex items-center justify-center p-3 border-b border-slate-100">
                     @if($pub->cover_url)
-                        <img src="{{ $pub->cover_url }}"
-                             alt="Cover {{ $pub->title }}"
-                             loading="lazy"
-                             class="max-h-full max-w-full object-contain rounded-md shadow-xs group-hover:scale-105 transition-transform duration-300"
-                             onerror="this.onerror=null; this.src='https://web-api.bps.go.id/images/default.png';">
+                    <img src="{{ $pub->cover_url }}"
+                        alt="Cover {{ $pub->title }}"
+                        loading="lazy"
+                        class="max-h-full max-w-full object-contain rounded-md shadow-xs group-hover:scale-105 transition-transform duration-300"
+                        onerror="this.onerror=null; this.src='https://web-api.bps.go.id/images/default.png';">
                     @else
-                        <div class="w-full h-full flex flex-col items-center justify-center bg-blue-50/50 text-[#003c80] p-4 text-center">
-                            <span class="iconify text-3xl mb-1 text-[#003c80]/40" data-icon="lucide:book-open"></span>
-                            <span class="text-[10px] font-bold">BPS Karanganyar</span>
-                        </div>
+                    <div class="w-full h-full flex flex-col items-center justify-center bg-blue-50/50 text-[#003c80] p-4 text-center">
+                        <span class="iconify text-3xl mb-1 text-[#003c80]/40" data-icon="lucide:book-open"></span>
+                        <span class="text-[10px] font-bold">BPS Karanganyar</span>
+                    </div>
                     @endif
 
                     <div class="absolute top-2 left-2">
@@ -534,16 +639,16 @@
                     <div class="pt-2.5 border-t border-slate-100 flex items-center gap-1.5">
                         @if($pub->pdf_url)
                         <a href="{{ $pub->pdf_url }}"
-                           target="_blank"
-                           rel="noopener"
-                           class="flex-1 py-1.5 px-2.5 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-[11px] font-black rounded-xl transition-all shadow-xs flex items-center justify-center gap-1">
+                            target="_blank"
+                            rel="noopener"
+                            class="flex-1 py-1.5 px-2.5 bg-[#f7941d] hover:bg-[#e07e0c] active:scale-95 text-white text-[11px] font-black rounded-xl transition-all shadow-xs flex items-center justify-center gap-1">
                             <span class="iconify text-sm" data-icon="lucide:download"></span>
                             <span>Unduh</span>
                         </a>
                         @endif
                         <a href="{{ route('chat.index', ['q' => 'Apa isi data penting dari publikasi ' . $pub->title . '?']) }}"
-                           class="p-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#003c80] border border-blue-200 transition-colors"
-                           title="Konsultasikan ke Bot AI">
+                            class="p-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#003c80] border border-blue-200 transition-colors"
+                            title="Konsultasikan ke Bot AI">
                             <span class="iconify text-sm text-[#f7941d]" data-icon="lucide:bot"></span>
                         </a>
                     </div>
@@ -586,7 +691,7 @@
         </div>
 
         @php
-            $bpsTaxonomy = \App\Services\KnowledgeSearchService::getBpsCategories();
+        $bpsTaxonomy = \App\Services\KnowledgeSearchService::getBpsCategories();
         @endphp
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -609,7 +714,7 @@
                         @foreach($cat['subjects'] as $sKey => $sub)
                         <li class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors group">
                             <a href="{{ route('chat.index', ['q' => 'Data statistik resmi subjek ' . $sub['name'] . ' Kabupaten Karanganyar']) }}"
-                               class="text-slate-700 hover:text-[#005b9f] font-medium flex items-center gap-2 flex-1 pr-2">
+                                class="text-slate-700 hover:text-[#005b9f] font-medium flex items-center gap-2 flex-1 pr-2">
                                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-[#005b9f] transition-colors"></span>
                                 <span class="line-clamp-1">{{ $sub['name'] }}</span>
                                 @if(isset($sub['code']))
@@ -617,8 +722,8 @@
                                 @endif
                             </a>
                             <a href="{{ $sub['url'] }}" target="_blank" rel="noopener"
-                               class="text-slate-400 hover:text-[#005b9f] p-1 rounded-lg hover:bg-blue-50 transition-colors shrink-0"
-                               title="Buka Tabel Statistik di Portal BPS Karanganyar">
+                                class="text-slate-400 hover:text-[#005b9f] p-1 rounded-lg hover:bg-blue-50 transition-colors shrink-0"
+                                title="Buka Tabel Statistik di Portal BPS Karanganyar">
                                 <span class="iconify text-xs" data-icon="lucide:external-link"></span>
                             </a>
                         </li>
@@ -630,7 +735,7 @@
                 <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
                     <span class="text-[11px] text-slate-400">Portal BPS Karanganyar</span>
                     <a href="{{ route('chat.index', ['q' => 'Konsultasi statistik kategori ' . $cat['name']]) }}"
-                       class="text-xs font-bold text-[#005b9f] hover:text-[#04325e] flex items-center gap-1">
+                        class="text-xs font-bold text-[#005b9f] hover:text-[#04325e] flex items-center gap-1">
                         <span>Konsultasi Topik Ini</span>
                         <span class="iconify text-xs" data-icon="lucide:chevron-right"></span>
                     </a>
@@ -967,8 +1072,12 @@
                 <span class="iconify text-emerald-600" data-icon="lucide:shield-check"></span>
                 <span>Data resmi domain 3313 BPS Karanganyar</span>
             </span>
-            <div class="flex items-center gap-2 w-full sm:w-auto">
-                <button type="button" onclick="closeInfographicModal()" class="w-1/2 sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold transition-all cursor-pointer">
+            <div class="flex items-center gap-2 w-full sm:w-auto flex-wrap sm:flex-nowrap">
+                <button type="button" onclick="copyInfographicQuote()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs active:scale-95">
+                    <span class="iconify text-sm text-slate-600" data-icon="lucide:copy"></span>
+                    <span id="modal-copy-btn-text">Salin Kutipan Data</span>
+                </button>
+                <button type="button" onclick="closeInfographicModal()" class="w-1/2 sm:w-auto px-4 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition-all cursor-pointer">
                     Tutup
                 </button>
                 <a id="modal-ai-link" href="#" class="w-1/2 sm:w-auto px-5 py-2.5 rounded-xl bg-[#003c80] hover:bg-[#002b6a] text-white text-xs font-black transition-all shadow-md flex items-center justify-center gap-1.5">
@@ -981,103 +1090,181 @@
 </div>
 @endsection
 
+<script id="infographics-json-data" type="application/json">@json($infographics ?? [])</script>
 @push('scripts')
 <script>
-const infographicDataset = @json($infographics ?? []);
+    const infographicDataset = JSON.parse(document.getElementById('infographics-json-data')?.textContent || '[]');
+    let activeInfographicItem = null;
 
-function filterInfographics(category) {
-    // Update active tab buttons
-    document.querySelectorAll('.info-tab-btn').forEach(btn => {
-        if (btn.getAttribute('data-infofilter') === category) {
-            btn.classList.add('bg-[#003c80]', 'text-white', 'shadow-xs');
-            btn.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
-        } else {
-            btn.classList.remove('bg-[#003c80]', 'text-white', 'shadow-xs');
-            btn.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
-        }
-    });
-
-    // Filter cards
-    const cards = document.querySelectorAll('.infographic-card');
-    cards.forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-}
-
-function openInfographicModal(id) {
-    const item = infographicDataset.find(x => x.id === id);
-    if (!item) return;
-
-    document.getElementById('modal-title').textContent = item.title;
-    document.getElementById('modal-period').textContent = item.period;
-    document.getElementById('modal-category-badge').textContent = item.category_label;
-    document.getElementById('modal-metric-val').textContent = item.metric_value;
-    document.getElementById('modal-metric-unit').textContent = item.metric_unit;
-    document.getElementById('modal-metric-note').textContent = item.metric_note;
-    document.getElementById('modal-source-text').textContent = item.sources;
-
-    // Header gradient via style attribute
-    const headerEl = document.getElementById('modal-header-bg');
-    if (headerEl && item.gradient_css) {
-        headerEl.setAttribute('style', item.gradient_css);
-    }
-
-    const badgeEl = document.getElementById('modal-category-badge');
-    if (badgeEl && item.badge_style) {
-        badgeEl.setAttribute('style', item.badge_style);
-    }
-
-    // Points
-    const listEl = document.getElementById('modal-points-list');
-    listEl.innerHTML = '';
-    if (Array.isArray(item.points)) {
-        item.points.forEach(pt => {
-            const li = document.createElement('li');
-            li.className = 'flex items-start gap-2.5';
-            li.innerHTML = '<span class="iconify text-base text-[#00a651] shrink-0 mt-0.5" data-icon="lucide:check-circle-2"></span><span class="leading-relaxed">' + pt + '</span>';
-            listEl.appendChild(li);
+    function filterInfographics(category) {
+        // Update active tab buttons
+        document.querySelectorAll('.info-tab-btn').forEach(btn => {
+            if (btn.getAttribute('data-infofilter') === category) {
+                btn.classList.add('bg-[#003c80]', 'text-white', 'shadow-xs');
+                btn.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+            } else {
+                btn.classList.remove('bg-[#003c80]', 'text-white', 'shadow-xs');
+                btn.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+            }
         });
-    }
 
-    // AI link
-    const aiLink = document.getElementById('modal-ai-link');
-    if (aiLink) {
-        aiLink.href = '{{ route("chat.index") }}?q=' + encodeURIComponent(item.ai_prompt);
-    }
-
-    const modal = document.getElementById('infographic-modal');
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeInfographicModal() {
-    const modal = document.getElementById('infographic-modal');
-    if (modal) {
-        modal.classList.add('hidden');
-    }
-    document.body.style.overflow = '';
-}
-
-// Close modal when clicking backdrop or escape
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('infographic-modal');
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeInfographicModal();
+        // Filter cards
+        const cards = document.querySelectorAll('.infographic-card');
+        cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
             }
         });
     }
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeInfographicModal();
+    function openInfographicModal(id) {
+        const item = infographicDataset.find(x => x.id === id);
+        if (!item) return;
+        activeInfographicItem = item;
+
+        document.getElementById('modal-title').textContent = item.title;
+        document.getElementById('modal-period').textContent = item.period;
+        document.getElementById('modal-category-badge').textContent = item.category_label;
+        document.getElementById('modal-metric-val').textContent = item.metric_value;
+        document.getElementById('modal-metric-unit').textContent = item.metric_unit;
+        document.getElementById('modal-metric-note').textContent = item.metric_note;
+        document.getElementById('modal-source-text').textContent = item.sources;
+
+        // Reset copy button
+        const copyBtnText = document.getElementById('modal-copy-btn-text');
+        if (copyBtnText) copyBtnText.textContent = 'Salin Kutipan Data';
+
+        // Header gradient via style attribute
+        const headerEl = document.getElementById('modal-header-bg');
+        if (headerEl && item.gradient_css) {
+            headerEl.setAttribute('style', item.gradient_css);
         }
+
+        const badgeEl = document.getElementById('modal-category-badge');
+        if (badgeEl && item.badge_style) {
+            badgeEl.setAttribute('style', item.badge_style);
+        }
+
+        // Points
+        const listEl = document.getElementById('modal-points-list');
+        listEl.innerHTML = '';
+        if (Array.isArray(item.points)) {
+            item.points.forEach(pt => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-2.5';
+                li.innerHTML = '<span class="iconify text-base text-[#00a651] shrink-0 mt-0.5" data-icon="lucide:check-circle-2"></span><span class="leading-relaxed">' + pt + '</span>';
+                listEl.appendChild(li);
+            });
+        }
+
+        // AI link
+        const aiLink = document.getElementById('modal-ai-link');
+        if (aiLink) {
+            aiLink.href = '{{ route("chat.index") }}?q=' + encodeURIComponent(item.ai_prompt);
+        }
+
+        const modal = document.getElementById('infographic-modal');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeInfographicModal() {
+        const modal = document.getElementById('infographic-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        document.body.style.overflow = '';
+    }
+
+    function copyInfographicQuote() {
+        if (!activeInfographicItem) return;
+        const pts = Array.isArray(activeInfographicItem.points) 
+            ? activeInfographicItem.points.map(p => '• ' + p).join('\n') 
+            : '';
+        const quote = `[DATA STATISTIK RESMI BPS KARANGANYAR]\n${activeInfographicItem.title} (${activeInfographicItem.period})\nIndikator Utama: ${activeInfographicItem.metric_value} ${activeInfographicItem.metric_unit} (${activeInfographicItem.metric_note})\n\nFakta Kunci:\n${pts}\n\nSumber Resmi: ${activeInfographicItem.sources}\n(Rujukan resmi Pelayanan Statistik Terpadu BPS Kabupaten Karanganyar)`;
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(quote).then(() => {
+                const copyBtnText = document.getElementById('modal-copy-btn-text');
+                if (copyBtnText) copyBtnText.textContent = 'Kutipan Tersalin!';
+                setTimeout(() => {
+                    if (copyBtnText) copyBtnText.textContent = 'Salin Kutipan Data';
+                }, 2500);
+            });
+        }
+    }
+
+    function checkPstOperatingHours() {
+        const statusBar = document.getElementById('live-pst-status-bar');
+        const dot = document.getElementById('live-pst-dot');
+        const text = document.getElementById('live-pst-text');
+        if (!statusBar || !dot || !text) return;
+
+        // WIB Time: UTC+7
+        const now = new Date();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const wib = new Date(utc + (3600000 * 7));
+
+        const day = wib.getDay(); // 0 Sun, 1 Mon ... 5 Fri, 6 Sat
+        const hour = wib.getHours();
+        const minute = wib.getMinutes();
+        const currentTime = hour * 60 + minute;
+
+        let isOpen = false;
+        let scheduleText = '';
+
+        if (day >= 1 && day <= 4) {
+            // Senin - Kamis: 08.00 - 15.30 WIB
+            if (currentTime >= 480 && currentTime <= 930) {
+                isOpen = true;
+                scheduleText = 'Layanan Tatap Muka PST Sedang Buka Hari Ini (08.00 — 15.30 WIB)';
+            } else {
+                scheduleText = 'Layanan Tatap Muka Tutup • Chatbot KARTA & Konsultasi Online Aktif 24 Jam';
+            }
+        } else if (day === 5) {
+            // Jumat: 08.00 - 15.00 WIB
+            if (currentTime >= 480 && currentTime <= 900) {
+                isOpen = true;
+                scheduleText = 'Layanan Tatap Muka PST Sedang Buka Hari Ini (08.00 — 15.00 WIB)';
+            } else {
+                scheduleText = 'Layanan Tatap Muka Tutup • Chatbot KARTA & Konsultasi Online Aktif 24 Jam';
+            }
+        } else {
+            // Sabtu - Minggu
+            scheduleText = 'Layanan Tatap Muka Libur Akhir Pekan • Chatbot KARTA Aktif 24 Jam';
+        }
+
+        if (isOpen) {
+            dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+            text.textContent = scheduleText;
+            text.className = 'text-emerald-200';
+        } else {
+            dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+            text.textContent = scheduleText;
+            text.className = 'text-amber-100/90';
+        }
+    }
+
+    // Close modal when clicking backdrop or escape & init live hours
+    document.addEventListener('DOMContentLoaded', () => {
+        checkPstOperatingHours();
+
+        const modal = document.getElementById('infographic-modal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeInfographicModal();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeInfographicModal();
+            }
+        });
     });
-});
 </script>
 @endpush

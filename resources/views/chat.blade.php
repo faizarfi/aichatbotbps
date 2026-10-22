@@ -112,42 +112,65 @@
                 </div>
             </div>
 
-            {{-- Quick Topic Chips --}}
-            <div id="quick-questions-wrapper" class="ml-0 sm:ml-12 pt-1 space-y-2">
-                <p class="text-[10px] sm:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">PILIHAN TOPIK LAYANAN PST & STATISTIK 2026:</p>
-                <div class="flex flex-wrap gap-1.5 sm:gap-2">
-                    <button onclick="sendQuickMessage('Bagaimana syarat pengajuan data mikro skripsi mahasiswa tarif Rp0 sesuai PP 86/2021?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-[#ea580c] bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-[#ea580c]" data-icon="lucide:database"></span>
-                        <span>Data Mikro Tarif Rp0</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Apa itu ROMANTIK dan bagaimana alur rekomendasi survei statistik untuk dinas/OPD?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-[#00a651]" data-icon="lucide:file-check-2"></span>
-                        <span>Rekomendasi ROMANTIK</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Berapa panjang jalan rusak di Kabupaten Karanganyar tahun 2026?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-[#003c80] border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-[#003c80]" data-icon="lucide:route"></span>
-                        <span>Jalan Rusak 2026</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Berapa angka kemiskinan dan garis kemiskinan Karanganyar 2026?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-[#003c80] border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-rose-600" data-icon="lucide:trending-down"></span>
-                        <span>Kemiskinan 7,92%</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Bagaimana cara developer mengakses WebAPI BPS untuk integrasi data?')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-purple-700" data-icon="lucide:code-2"></span>
-                        <span>WebAPI Developer</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Jadwal jam buka layanan PST dan kontak WhatsApp resmi')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-slate-700 bg-white hover:bg-blue-50 hover:text-[#003c80] border border-slate-200 hover:border-blue-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-amber-600" data-icon="lucide:clock"></span>
-                        <span>Jadwal & Kontak PST</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Tampilkan grafik tren kemiskinan Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-sky-800 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-[#0093dd]" data-icon="lucide:bar-chart-2"></span>
-                        <span>Grafik Kemiskinan</span>
-                    </button>
-                    <button onclick="sendQuickMessage('Tampilkan grafik capaian IPM Karanganyar')" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-indigo-800 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl shadow-xs transition-all flex items-center gap-1.5 active:scale-98 cursor-pointer">
-                        <span class="iconify text-sm text-indigo-600" data-icon="lucide:line-chart"></span>
-                        <span>Grafik IPM</span>
-                    </button>
+            {{-- Quick Topic Chips (Grouped Official Categories) --}}
+            <div id="quick-questions-wrapper" class="ml-0 sm:ml-12 pt-1 space-y-2.5">
+                <div class="flex items-center justify-between gap-2 border-b border-slate-200/80 pb-1.5">
+                    <span class="text-[10px] sm:text-[11px] font-black text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="iconify text-[#003c80]" data-icon="lucide:sparkles"></span>
+                        <span>TOPIK LAYANAN STATISTIK & PST KARANGANYAR 2026:</span>
+                    </span>
+                    <span class="text-[9.5px] text-slate-400 font-semibold hidden sm:inline">Pilih pertanyaan cepat untuk memulai</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {{-- Kategori 1: Riset & Mahasiswa --}}
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1.5">
+                        <span class="text-[9.5px] font-black text-[#ea580c] uppercase tracking-wider block">1. Riset & Data Mikro</span>
+                        <div class="flex flex-col gap-1">
+                            <button onclick="sendQuickMessage('Bagaimana syarat permohonan data mikro skripsi mahasiswa tarif Rp0 sesuai PP 86/2021?')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-[#ea580c] hover:bg-orange-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-[#ea580c] shrink-0" data-icon="lucide:database"></span>
+                                <span class="truncate">Data Mikro Mahasiswa Tarif Rp0</span>
+                            </button>
+                            <button onclick="sendQuickMessage('Apa itu ROMANTIK dan bagaimana alur rekomendasi survei statistik untuk dinas/OPD?')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-emerald-700 hover:bg-emerald-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-[#00a651] shrink-0" data-icon="lucide:file-check-2"></span>
+                                <span class="truncate">Rekomendasi Survei ROMANTIK</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Kategori 2: Indikator Makro Strategis --}}
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1.5">
+                        <span class="text-[9.5px] font-black text-[#003c80] uppercase tracking-wider block">2. Indikator Strategis 2026</span>
+                        <div class="flex flex-col gap-1">
+                            <button onclick="sendQuickMessage('Berapa angka kemiskinan dan garis kemiskinan Karanganyar 2026?')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-[#003c80] hover:bg-blue-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-rose-600 shrink-0" data-icon="lucide:trending-down"></span>
+                                <span class="truncate">Kemiskinan 7,92% & Garis Kemiskinan</span>
+                            </button>
+                            <button onclick="sendQuickMessage('Tampilkan grafik tren kemiskinan Karanganyar')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-[#003c80] hover:bg-blue-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-[#0093dd] shrink-0" data-icon="lucide:bar-chart-2"></span>
+                                <span class="truncate">Visualisasi Grafik Tren Kemiskinan</span>
+                            </button>
+                            <button onclick="sendQuickMessage('Berapa panjang jalan rusak di Kabupaten Karanganyar tahun 2026?')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-[#003c80] hover:bg-blue-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-slate-600 shrink-0" data-icon="lucide:route"></span>
+                                <span class="truncate">Kondisi Jalan Rusak & Mantap</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Kategori 3: Layanan BPS & Pengembang --}}
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-1.5">
+                        <span class="text-[9.5px] font-black text-purple-800 uppercase tracking-wider block">3. Integrasi Data & Layanan</span>
+                        <div class="flex flex-col gap-1">
+                            <button onclick="sendQuickMessage('Bagaimana cara developer mengakses WebAPI BPS untuk integrasi data?')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-purple-800 hover:bg-purple-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-purple-700 shrink-0" data-icon="lucide:code-2"></span>
+                                <span class="truncate">WebAPI BPS untuk Developer</span>
+                            </button>
+                            <button onclick="sendQuickMessage('Jadwal jam buka layanan PST dan kontak WhatsApp resmi')" class="text-left px-2 py-1 text-[11px] font-medium text-slate-700 hover:text-amber-800 hover:bg-amber-50/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                                <span class="iconify text-xs text-amber-600 shrink-0" data-icon="lucide:clock"></span>
+                                <span class="truncate">Jadwal Operasional & Kontak PST</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -348,6 +371,26 @@ function formatBotContent(raw) {
                 const text = typeof token === 'object' ? token.text : token;
                 return '<span class="font-medium text-slate-800">' + text + '</span>';
             };
+            // Styling tabel statistik resmi BPS (Navy header, clean borders, mobile scroll indicator)
+            renderer.table = function(header, body) {
+                return '<div class="my-3 overflow-hidden rounded-xl border border-slate-200/90 shadow-2xs bg-white">' +
+                    '<div class="px-3 py-1.5 bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 font-bold flex items-center justify-between sm:hidden">' +
+                        '<span class="flex items-center gap-1 text-[#002b6a] font-black"><span class="iconify" data-icon="lucide:table"></span> Tabel Statistik BPS</span>' +
+                        '<span class="text-blue-700 font-medium">Geser ke kanan &rarr;</span>' +
+                    '</div>' +
+                    '<div class="overflow-x-auto"><table class="w-full text-xs text-left divide-y divide-slate-200 border-collapse">' +
+                        header +
+                        '<tbody class="divide-y divide-slate-100 bg-white">' + body + '</tbody>' +
+                    '</table></div>' +
+                '</div>';
+            };
+            renderer.tablecell = function(content, flags) {
+                const align = flags.align ? `text-${flags.align}` : 'text-left';
+                if (flags.header) {
+                    return `<th class="px-3 py-2 bg-[#002b6a] text-white font-bold text-[11px] uppercase tracking-wider ${align}">${content}</th>`;
+                }
+                return `<td class="px-3 py-2 text-slate-700 text-xs whitespace-nowrap ${align}">${content}</td>`;
+            };
             marked.use({ renderer });
             marked.setOptions({
                 gfm: true,
@@ -357,8 +400,6 @@ function formatBotContent(raw) {
             let html = marked.parse(cleaned);
             // Kembalikan tag iconify jika sempat ter-escape entitas HTML-nya oleh parser
             html = html.replace(/&lt;span class="iconify ([^"]*)" data-icon="([^"]*)"&gt;&lt;\/span&gt;/gi, '<span class="iconify $1" data-icon="$2"></span>');
-            html = html.replace(/<table/g, '<div class="overflow-x-auto my-2.5 rounded-xl border border-slate-200/90 shadow-2xs"><table class="w-full text-xs"');
-            html = html.replace(/<\/table>/g, '</table></div>');
             setTimeout(function() {
                 if (window.Iconify && typeof window.Iconify.scan === 'function') {
                     window.Iconify.scan();
@@ -561,9 +602,6 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
             `;
         }
 
-        // Clean text content for text-to-speech
-        const rawContentSafe = displayContent.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '');
-
         wrapper.innerHTML = `
             <div class="flex gap-2 sm:gap-3 w-full max-w-4xl lg:max-w-5xl">
                 <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0 shadow-xs mt-0.5">
@@ -577,11 +615,11 @@ function appendMessageElement(type, content, sources, messageId = null, time = n
                                 KARTA (AI BPS Karanganyar)
                             </span>
                             <div class="flex items-center gap-1.5 shrink-0">
-                                <button type="button" onclick="copyMessageText(this)" data-content="${escapeHtml(rawContentSafe)}" title="Salin Teks Jawaban" class="btn-copy px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 transition-all flex items-center gap-1 cursor-pointer shadow-xs">
+                                <button type="button" onclick="copyMessageText(this)" title="Salin Teks Jawaban" class="btn-copy px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 transition-all flex items-center gap-1 cursor-pointer shadow-xs">
                                     <span class="iconify text-xs sm:text-sm" data-icon="lucide:copy"></span>
                                     <span class="btn-copy-label">Salin</span>
                                 </button>
-                                <button type="button" onclick="speakText('${rawContentSafe}', this)" title="Dengarkan Suara (Text-to-Speech)" class="shrink-0 btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
+                                <button type="button" onclick="speakMessage(this)" title="Dengarkan Suara (Text-to-Speech)" class="shrink-0 btn-tts px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 transition-all flex items-center gap-1 cursor-pointer">
                                     <span class="iconify text-xs sm:text-sm" data-icon="lucide:volume-2"></span>
                                     <span>Dengarkan</span>
                                 </button>
@@ -770,6 +808,14 @@ function stopVoiceRecording() {
 let currentUtterance = null;
 let activeSpeakerBtn = null;
 
+function speakMessage(btnElement) {
+    if (!btnElement) return;
+    const wrapper = btnElement.closest('.chat-msg-wrapper');
+    const bodyEl = wrapper ? wrapper.querySelector('.chat-content-body') : null;
+    const textToSpeak = bodyEl ? bodyEl.innerText : '';
+    speakText(textToSpeak, btnElement);
+}
+
 function speakText(rawText, btnElement) {
     if (!('speechSynthesis' in window)) {
         Swal.fire({
@@ -881,6 +927,13 @@ chatForm.addEventListener('submit', function(e) {
     const text = chatInput.value.trim();
     if (!text) return;
 
+    // Deteksi jika pengguna mengetik intent untuk memulai percakapan baru
+    if (/^(mulai\s+baru|ulang\s+dari\s+awal|reset\s+chat|reset\s+percakapan|mulai\s+lagi|restart\s+chat|clear\s+chat|mulai\s+ulang)$/i.test(text)) {
+        chatInput.value = '';
+        resetConversation();
+        return;
+    }
+
     const qw = document.getElementById('quick-questions-wrapper');
     if (qw) qw.classList.add('hidden');
 
@@ -936,6 +989,7 @@ function sendStreamingMessage(text, tempMsgId) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder('utf-8');
         let streamBuffer = '';
+        let currentEvent = 'message';
 
         function readChunk() {
             return reader.read().then(({ done, value }) => {
@@ -954,7 +1008,6 @@ function sendStreamingMessage(text, tempMsgId) {
                 const lines = streamBuffer.split('\n');
                 streamBuffer = lines.pop();
 
-                let currentEvent = 'message';
                 for (let i = 0; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (line.startsWith('event:')) {
@@ -963,13 +1016,15 @@ function sendStreamingMessage(text, tempMsgId) {
                         const rawData = line.substring(5).trim();
                         try {
                             const data = JSON.parse(rawData);
+                            const thisEvent = currentEvent;
+                            currentEvent = 'message';
 
-                            if (currentEvent === 'init') {
+                            if (thisEvent === 'init') {
                                 if (data.session) {
                                     visitorSession = data.session;
                                     localStorage.setItem('bps_chat_session', visitorSession);
                                 }
-                            } else if (currentEvent === 'reset') {
+                            } else if (thisEvent === 'reset') {
                                 accumulatedText = '';
                                 if (streamingEl) {
                                     const textEl = streamingEl.querySelector('.streaming-text');
@@ -977,7 +1032,7 @@ function sendStreamingMessage(text, tempMsgId) {
                                         textEl.textContent = '';
                                     }
                                 }
-                            } else if (currentEvent === 'chunk') {
+                            } else if (thisEvent === 'chunk') {
                                 if (data.text) {
                                     accumulatedText += data.text;
                                     if (streamingEl) {
@@ -988,7 +1043,7 @@ function sendStreamingMessage(text, tempMsgId) {
                                         scrollToBottom();
                                     }
                                 }
-                            } else if (currentEvent === 'done') {
+                            } else if (thisEvent === 'done') {
                                 isStreamDone = true;
                                 isStreamingActive = false;
                                 if (data.session) {
@@ -1021,18 +1076,20 @@ function sendStreamingMessage(text, tempMsgId) {
                                     seenMessageIds.add(replyId);
                                 }
 
-                                appendMessageElement(
-                                    'bot',
-                                    replyContent,
-                                    replySources,
-                                    replyId,
-                                    replyTime,
-                                    null,
-                                    null,
-                                    data.quick_options || [],
-                                    data.chart || null
-                                );
-                            } else if (currentEvent === 'error') {
+                                if (replyContent && String(replyContent).trim() !== '') {
+                                    appendMessageElement(
+                                        'bot',
+                                        replyContent,
+                                        replySources,
+                                        replyId,
+                                        replyTime,
+                                        null,
+                                        null,
+                                        data.quick_options || [],
+                                        data.chart || null
+                                    );
+                                }
+                            } else if (thisEvent === 'error') {
                                 isStreamDone = true;
                                 isStreamingActive = false;
                                 if (streamingEl) streamingEl.remove();
@@ -1240,7 +1297,7 @@ function cancelOfficerHandoff() {
             })
             .then(r => r.json())
             .then(data => {
-                updateStatusBadge('active');
+                updateStatusBadge(data.status || 'bot');
                 if (data.message) {
                     appendMessageElement('bot', data.message.content, [], data.message.id, data.message.created_at);
                 }
@@ -1304,7 +1361,9 @@ function resetConversation() {
     }).then((result) => {
         if (result.isConfirmed) {
             localStorage.removeItem('bps_chat_session');
-            window.location.reload();
+            const newSession = 'bps_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now();
+            localStorage.setItem('bps_chat_session', newSession);
+            window.location.href = window.location.origin + window.location.pathname;
         }
     });
 }
@@ -1469,7 +1528,9 @@ function escapeHtml(text) {
 }
 
 function copyMessageText(btn) {
-    let text = btn.getAttribute('data-content') || '';
+    const wrapper = btn.closest('.chat-msg-wrapper');
+    const bodyEl = wrapper ? wrapper.querySelector('.chat-content-body') : null;
+    let text = bodyEl ? bodyEl.innerText : (btn.getAttribute('data-content') || '');
     // Clean out chart blocks, icon tags, and excessive asterisks for pure clean text
     let cleanText = text
         .replace(/```chart\s*\{[\s\S]*?\}\s*```/g, '')

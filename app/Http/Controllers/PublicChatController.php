@@ -36,8 +36,11 @@ class PublicChatController extends Controller
         }
 
         $conversation = Conversation::with(['messages.feedback', 'assignedOfficer'])
-            ->where('visitor_session', $sessionToken)
-            ->orWhere('public_id', $sessionToken)
+            ->where(function ($q) use ($sessionToken) {
+                $q->where('visitor_session', $sessionToken)
+                  ->orWhere('public_id', $sessionToken);
+            })
+            ->latest('id')
             ->first();
 
         if (!$conversation) {
@@ -251,8 +254,11 @@ class PublicChatController extends Controller
         $conversation = Conversation::with(['messages' => function ($q) {
             $q->oldest();
         }, 'assignedOfficer'])
-            ->where('visitor_session', $sessionToken)
-            ->orWhere('public_id', $sessionToken)
+            ->where(function ($q) use ($sessionToken) {
+                $q->where('visitor_session', $sessionToken)
+                  ->orWhere('public_id', $sessionToken);
+            })
+            ->latest('id')
             ->first();
 
         if (!$conversation || $conversation->messages->isEmpty()) {
@@ -334,8 +340,11 @@ class PublicChatController extends Controller
             return response()->json(['error' => 'Sesi tidak ditemukan.'], 400);
         }
 
-        $conversation = Conversation::where('visitor_session', $sessionToken)
-            ->orWhere('public_id', $sessionToken)
+        $conversation = Conversation::where(function ($q) use ($sessionToken) {
+                $q->where('visitor_session', $sessionToken)
+                  ->orWhere('public_id', $sessionToken);
+            })
+            ->latest('id')
             ->first();
 
         if (!$conversation) {
@@ -375,8 +384,11 @@ class PublicChatController extends Controller
             return response()->json(['error' => 'Sesi tidak ditemukan.'], 400);
         }
 
-        $conversation = Conversation::where('visitor_session', $sessionToken)
-            ->orWhere('public_id', $sessionToken)
+        $conversation = Conversation::where(function ($q) use ($sessionToken) {
+                $q->where('visitor_session', $sessionToken)
+                  ->orWhere('public_id', $sessionToken);
+            })
+            ->latest('id')
             ->first();
 
         if (!$conversation) {

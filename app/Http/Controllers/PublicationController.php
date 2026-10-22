@@ -172,13 +172,49 @@ class PublicationController extends Controller
             ->orWhere('pub_id', $slugOrId)
             ->firstOrFail();
 
-        $related = Publication::where('id', '!=', $publication->id)
-            ->where(function ($q) use ($publication) {
-                $q->where('title', 'like', '%' . Str::before($publication->title, ' ') . '%');
-            })
-            ->latest('rl_date')
-            ->take(4)
-            ->get();
+        // Cari publikasi terkait yang benar-benar relevan
+        $titleClean = trim(preg_replace('/\b(20\d{2}(-\d{4})?)\b/', '', $publication->title));
+        $titleLower = Str::lower($titleClean);
+
+        $relatedQuery = Publication::where('id', '!=', $publication->id);
+
+        if (preg_match('/kecamatan\s+([a-z]+)/i', $publication->title, $matches)) {
+            // Jika publikasi kecamatan, utamakan edisi tahun lain dari kecamatan yang sama
+            $kecName = $matches[1];
+            $relatedQuery->where('title', 'like', "%{$kecName}%");
+        } elseif (Str::contains($titleLower, ['pdrb', 'produk domestik'])) {
+            $relatedQuery->where(function ($q) {
+                $q->where('title', 'like', '%PDRB%')->orWhere('title', 'like', '%Produk Domestik%');
+            });
+        } elseif (Str::contains($titleLower, 'kesejahteraan')) {
+            $relatedQuery->where('title', 'like', '%Kesejahteraan%');
+        } elseif (Str::contains($titleLower, 'statistik daerah')) {
+            $relatedQuery->where('title', 'like', '%Statistik Daerah%');
+        } elseif (Str::contains($titleLower, 'kabupaten karanganyar dalam angka')) {
+            $relatedQuery->where('title', 'like', '%Kabupaten Karanganyar Dalam Angka%');
+        } else {
+            // Ambil kata kunci signifikan (minimal 4 huruf, bukan kata umum)
+            $words = collect(explode(' ', $titleClean))
+                ->map(fn($w) => trim(preg_replace('/[^a-zA-Z]/', '', $w)))
+                ->filter(fn($w) => strlen($w) >= 4 && !in_array(strtolower($w), ['kabupaten', 'karanganyar', 'dalam', 'angka', 'tahun', 'edisi', 'statistik', 'badan', 'pusat'], true));
+
+            $firstWord = $words->first();
+            if ($firstWord) {
+                $relatedQuery->where('title', 'like', "%{$firstWord}%");
+            }
+        }
+
+        $related = $relatedQuery->latest('rl_date')->take(4)->get();
+
+        // Fallback jika belum mencapai 4 publikasi: lengkapi dengan publikasi resmi terbaru lainnya
+        if ($related->count() < 4) {
+            $existingIds = $related->pluck('id')->push($publication->id)->all();
+            $fallbacks = Publication::whereNotIn('id', $existingIds)
+                ->latest('rl_date')
+                ->take(4 - $related->count())
+                ->get();
+            $related = $related->concat($fallbacks);
+        }
 
         // Tentukan kategori topik publikasi
         $titleLower = Str::lower($publication->title);
